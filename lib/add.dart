@@ -46,7 +46,7 @@ class _AddScreenState extends State<AddScreen> {
                     title: Text(
                       'Keep an eye',
                       textScaleFactor: 1.5,
-                      style: TextStyle(
+                      style: GoogleFonts.lato(
                         color: Colors.white,
                       ),
                     ),
