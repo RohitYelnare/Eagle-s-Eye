@@ -8,13 +8,22 @@ import 'portfolioData.dart';
 
 class DatabaseHelper {
   static final _databaseName = "MyDatabase.db";
-  static final _databaseVersion = 1;
+  static const _databaseVersion = 1;
 
-  static final table = 'my_table';
+  // Contains information about stock symbol and whether it is used in watchscreen
+  static const table = 'my_table';
 
-  static final columnId = '_id';
-  static final columnName = 'name';
-  static final columnAge = 'age';
+  static const columnId = '_id';
+  static const columnName = 'name';
+  static const columnAge = 'age';
+
+  // Contains information on stock bought and its cost
+  static const tableStock = 'my_stock';
+
+  static const stockId = '_id';
+  static const stockName = 'name';
+  static const stockCount = 'count';
+  static const stockCost = 'cost';
 
   // make this a singleton class
   DatabaseHelper._privateConstructor();
@@ -46,6 +55,18 @@ class DatabaseHelper {
             $columnAge INTEGER NOT NULL
           )
           ''');
+    await _onCreateStock(db, version);
+  }
+
+  Future _onCreateStock(Database db, int version) async {
+    await db.execute('''
+          CREATE TABLE $tableStock (
+            $stockId INTEGER PRIMARY KEY,
+            $stockName TEXT NOT NULL,
+            $stockCount INTEGER NOT NULL,
+            $stockCost DECIMAL (6,2) NOT NULL
+          )
+          ''');
   }
 
   static List<portData> allData;
@@ -74,6 +95,7 @@ class DatabaseHelper {
     }
     return 0; // doesnt exist
   }
+
   // Helper methods
 
   // Inserts a row in the database where each key in the Map is a column name
@@ -84,11 +106,21 @@ class DatabaseHelper {
     return await db.insert(table, row);
   }
 
+  Future<int> insertStock(Map<String, dynamic> row) async {
+    Database db = await instance.database;
+    return await db.insert(tableStock, row);
+  }
+
   //The data present in the table is returned as a List of Map, where each
   // row is of type map
   Future<List<Map<String, dynamic>>> queryAllRows() async {
     Database db = await instance.database;
     return await db.query(table);
+  }
+
+  Future<List<Map<String, dynamic>>> queryAllRowsStock() async {
+    Database db = await instance.database;
+    return await db.query(tableStock);
   }
 
   // All of the methods (insert, query, update, delete) can also be done using
@@ -97,6 +129,12 @@ class DatabaseHelper {
     Database db = await instance.database;
     return Sqflite.firstIntValue(
         await db.rawQuery('SELECT COUNT(*) FROM $table'));
+  }
+
+  Future<int> queryRowCountStock() async {
+    Database db = await instance.database;
+    return Sqflite.firstIntValue(
+        await db.rawQuery('SELECT COUNT(*) FROM $tableStock'));
   }
 
   // We are assuming here that the id column in the map is set. The other
@@ -112,5 +150,11 @@ class DatabaseHelper {
   Future<int> delete(String name) async {
     Database db = await instance.database;
     return await db.delete(table, where: '$columnName = ?', whereArgs: [name]);
+  }
+
+  Future<int> deleteStock(String name) async {
+    Database db = await instance.database;
+    return await db
+        .delete(tableStock, where: '$stockName = ?', whereArgs: [name]);
   }
 }

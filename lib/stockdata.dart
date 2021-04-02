@@ -208,22 +208,27 @@ class _StockdataState extends State<Stockdata> {
             ),
             iconTheme: IconThemeData(color: Colors.grey[800]),
             bottom: TabBar(
+              indicatorColor: Colors.grey[800],
+              labelColor: Colors.grey[800],
               tabs: [
                 Tab(
+                    text: 'Stats',
                     icon: Icon(
-                  Icons.bar_chart,
-                  color: Colors.grey[800],
-                )),
+                      Icons.bar_chart,
+                      color: Colors.grey[800],
+                    )),
                 Tab(
+                    text: 'News',
                     icon: Icon(
-                  Icons.article,
-                  color: Colors.grey[800],
-                )),
+                      Icons.article,
+                      color: Colors.grey[800],
+                    )),
                 Tab(
+                    text: 'Add',
                     icon: Icon(
-                  Icons.add_box_rounded,
-                  color: Colors.grey[800],
-                )),
+                      Icons.add_box_rounded,
+                      color: Colors.grey[800],
+                    )),
               ],
             ),
             backgroundColor: Colors.limeAccent[700],

@@ -49,6 +49,7 @@ class _WatchScreenState extends State<WatchScreen> {
   void initState() {
     _watchquerymaker();
     super.initState();
+    // stock.sortName(isAscending);
   }
 
   @override

@@ -11,7 +11,7 @@ class AddScreen extends StatefulWidget {
   _AddScreenState createState() => _AddScreenState();
 }
 
-bool checkExist;
+bool checkExist, showchkbox;
 
 final dbHelper = DatabaseHelper.instance;
 String txt = '';
@@ -26,66 +26,110 @@ Future<void> findConfig() async {
 class _AddScreenState extends State<AddScreen> {
   @override
   void initState() {
+    showchkbox = true;
     super.initState();
     findConfig();
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      showchkbox = false;
+      setState(() {
+        showchkbox = false;
+        // Here you can write your code for open new view
+      });
+    });
   }
 
+  String temp = "";
+  int count, cost;
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[700],
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: ListTile(
-                    // leading: Icon(Icons.add),
-                    title: Text(
-                      'Keep an eye',
-                      textScaleFactor: 1.5,
-                      style: GoogleFonts.lato(
-                        color: Colors.white,
+      body: SingleChildScrollView(
+        child: Container(
+          child: showchkbox
+              ? new Container(child: const CircularProgressIndicator())
+              : Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(18),
+                          child: ListTile(
+                            // leading: Icon(Icons.add),
+                            title: Text(
+                              'Keep an eye',
+                              textScaleFactor: 1.5,
+                              style: GoogleFonts.lato(
+                                color: Colors.white,
+                              ),
+                            ),
+                            trailing: Checkbox(
+                                checkColor: Colors.grey[700],
+                                activeColor: Colors.limeAccent[700],
+                                value: checkExist,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    checkExist = newValue;
+                                    print('Set state called');
+                                  });
+                                  if (checkExist) {
+                                    _insert(stockquote[0]['symbol']);
+                                  } else {
+                                    _delete(stockquote[0]['symbol']);
+                                  }
+                                }),
+                            subtitle: Text(
+                              'This stock will be added to watchscreen to keep a track on multiple stocks simultaneously',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            selected: true,
+                            onTap: () {
+                              // setState(() {
+                              //   txt = 'List Tile pressed';
+                              // });
+                            },
+                          ),
+                        ),
                       ),
                     ),
-                    trailing: Checkbox(
-                        checkColor: Colors.grey[700],
-                        activeColor: Colors.limeAccent[700],
-                        value: checkExist,
-                        onChanged: (newValue) {
-                          setState(() {
-                            checkExist = newValue;
-                            print('Set state called');
-                          });
-                          if (checkExist) {
-                            _insert(stockquote[0]['symbol']);
-                          } else {
-                            _delete(stockquote[0]['symbol']);
-                          }
-                        }),
-                    subtitle: Text(
-                      'This stock will be added to watchscreen to keep a track on multiple stocks simultaneously',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+                    Text(
+                      txt,
+                      textScaleFactor: 2,
                     ),
-                    selected: true,
-                    onTap: () {
-                      // setState(() {
-                      //   txt = 'List Tile pressed';
-                      // });
-                    },
-                  ),
+                    // TextField(
+                    //     decoration: const InputDecoration(
+                    //       icon: const Icon(Icons.person),
+                    //       hintText: 'Enter no. of stocks bought',
+                    //       labelText: 'Count',
+                    //     ),
+                    //     onChanged: (value) {
+                    //       temp = value;
+                    //       count = int.parse(temp);
+                    //     }),
+                    // TextField(
+                    //     decoration: const InputDecoration(
+                    //       icon: const Icon(Icons.person),
+                    //       hintText: 'Enter cost. of stocks bought',
+                    //       labelText: 'Cost',
+                    //     ),
+                    //     onChanged: (value) {
+                    //       temp = value;
+                    //       cost = int.parse(temp);
+                    //     }),
+                    ElevatedButton(
+                      // color:Colors.grey,
+                      child: Text(
+                        'insert',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () {
+                        _insertStock(count, cost);
+                      },
+                    ),
+                  ],
                 ),
-              ),
-            ),
-            Text(
-              txt,
-              textScaleFactor: 2,
-            )
-          ],
         ),
       ),
     );
@@ -95,11 +139,21 @@ class _AddScreenState extends State<AddScreen> {
     // row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.columnName: name,
-      DatabaseHelper.columnAge: 0,
       DatabaseHelper.columnAge: 1
     };
     final id = await dbHelper.insert(row);
     print('inserted row id: $id, $name');
+  }
+
+  void _insertStock(int count, int cost) async {
+    // row to insert
+    Map<String, dynamic> row = {
+      DatabaseHelper.stockName: stockquote[0]['symbol'],
+      DatabaseHelper.stockCount: count,
+      DatabaseHelper.stockCost: cost
+    };
+    final id = await dbHelper.insertStock(row);
+    print('inserted row in table 2 id: $id');
   }
 
   void _delete(String name) async {
@@ -117,4 +171,5 @@ class _AddScreenState extends State<AddScreen> {
   //     _delete(stockquote[0]['symbol']);
   //   }
   // }
+
 }
