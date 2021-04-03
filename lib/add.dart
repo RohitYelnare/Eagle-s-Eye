@@ -98,26 +98,28 @@ class _AddScreenState extends State<AddScreen> {
                       txt,
                       textScaleFactor: 2,
                     ),
-                    // TextField(
-                    //     decoration: const InputDecoration(
-                    //       icon: const Icon(Icons.person),
-                    //       hintText: 'Enter no. of stocks bought',
-                    //       labelText: 'Count',
-                    //     ),
-                    //     onChanged: (value) {
-                    //       temp = value;
-                    //       count = int.parse(temp);
-                    //     }),
-                    // TextField(
-                    //     decoration: const InputDecoration(
-                    //       icon: const Icon(Icons.person),
-                    //       hintText: 'Enter cost. of stocks bought',
-                    //       labelText: 'Cost',
-                    //     ),
-                    //     onChanged: (value) {
-                    //       temp = value;
-                    //       cost = int.parse(temp);
-                    //     }),
+                    TextField(
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          hintText: 'Enter no. of stocks bought',
+                          labelText: 'Count',
+                        ),
+                        onChanged: (value) {
+                          temp = value;
+                          count = int.parse(temp);
+                        }),
+                    TextField(
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          hintText: 'Enter cost. of stocks bought',
+                          labelText: 'Cost',
+                        ),
+                        onChanged: (value) {
+                          temp = value;
+                          cost = int.parse(temp);
+                        }),
                     ElevatedButton(
                       // color:Colors.grey,
                       child: Text(
