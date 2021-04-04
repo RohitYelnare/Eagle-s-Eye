@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:share/share.dart';
 import 'package:launch_review/launch_review.dart';
 import 'database_helper.dart';
+import 'portfolio.dart';
 
 var months = [
   "Jan",
@@ -175,12 +176,63 @@ class _StockdataState extends State<Stockdata> {
                           );
                         },
                       );
-                      new Future.delayed(new Duration(seconds: 6), () {
+                      new Future.delayed(new Duration(seconds: 4), () {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     WatchScreen()));
+                      });
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.bar_chart,
+                      color: Colors.white,
+                    ),
+                    title: Text(
+                      "Portfolio",
+                      style: GoogleFonts.lato(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20.0),
+                    ),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            backgroundColor: Colors.grey[700],
+                            child: Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.limeAccent[400]),
+                                  ),
+                                  Text(
+                                    "\t\t\t\t\tLoading",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.limeAccent[400]),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                      new Future.delayed(new Duration(seconds: 4), () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    PortfolioScreen()));
                       });
                     },
                   ),

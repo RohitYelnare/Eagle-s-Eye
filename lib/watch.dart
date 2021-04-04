@@ -1,3 +1,5 @@
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 import 'add.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
@@ -17,6 +19,7 @@ import 'database_helper.dart';
 
 List<String> watchlist = [];
 String watchquery = "";
+bool loadingdatatable;
 void _watchquerymaker() async {
   watchlist.clear();
   watchquery = "";
@@ -47,6 +50,13 @@ class _WatchScreenState extends State<WatchScreen> {
 
   @override
   void initState() {
+    loadingdatatable = true;
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      loadingdatatable = false;
+      setState(() {
+        loadingdatatable = false;
+      });
+    });
     _watchquerymaker();
     super.initState();
     // stock.sortName(isAscending);
@@ -55,6 +65,7 @@ class _WatchScreenState extends State<WatchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[700],
       appBar: AppBar(
         title: Text(
           "Investigeek",
@@ -66,7 +77,35 @@ class _WatchScreenState extends State<WatchScreen> {
         iconTheme: IconThemeData(color: Colors.grey[800]),
         backgroundColor: Colors.limeAccent[700],
       ),
-      body: _getBodyWidget(),
+      body: loadingdatatable
+          ? new Container(child: const CircularProgressIndicator())
+          : (watchquery == "")
+              ? Center(
+                  child: Container(
+                  child: Column(children: [
+                    Text('\n\n'),
+                    Container(
+                        child: Icon(
+                      Icons.block,
+                      color: Colors.white,
+                    )),
+                    Padding(
+                        padding: const EdgeInsets.fromLTRB(60, 10.0, 60, 10.0),
+                        child: Text(
+                          'No stocks added to keep an eye on',
+                          style: GoogleFonts.lato(
+                              color: Colors.white, fontSize: 18.0),
+                        ))
+                  ]),
+                ))
+              : _getBodyWidget(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Add your onPressed code here!
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.limeAccent[700],
+      ),
     );
   }
 
@@ -74,7 +113,7 @@ class _WatchScreenState extends State<WatchScreen> {
     return Container(
       child: HorizontalDataTable(
         leftHandSideColumnWidth: (MediaQuery.of(context).size.width) * 0.3,
-        rightHandSideColumnWidth: (MediaQuery.of(context).size.width) * 0.8744,
+        rightHandSideColumnWidth: (MediaQuery.of(context).size.width) * 1.28,
         isFixedHeader: true,
         headerWidgets: _getTitleWidget(),
         leftSideItemBuilder: _generateFirstColumnRow,
@@ -91,7 +130,7 @@ class _WatchScreenState extends State<WatchScreen> {
         refreshIndicator: const WaterDropHeader(),
         refreshIndicatorHeight: 69,
         onRefresh: () {
-          loadquote();
+          _watchquerymaker();
           _hdtRefreshController.refreshCompleted();
         },
         htdRefreshController: _hdtRefreshController,
@@ -141,7 +180,7 @@ class _WatchScreenState extends State<WatchScreen> {
       // ),
       _getTitleItemWidget('Price', (MediaQuery.of(context).size.width) * 0.20),
       _getTitleItemWidget(
-          'Mkt Cap', (MediaQuery.of(context).size.width) * 0.25),
+          'Mkt Cap', (MediaQuery.of(context).size.width) * 0.20),
       _getTitleItemWidget('P/E', (MediaQuery.of(context).size.width) * 0.15),
     ];
   }
@@ -229,7 +268,7 @@ class _WatchScreenState extends State<WatchScreen> {
                 : Colors.red[400],
             child: Container(
               child: Text(
-                stock.stockinfo[index].terminationDate,
+                stock.stockinfo[index].pe,
                 style: TextStyle(color: Colors.white),
               ),
               width: (MediaQuery.of(context).size.width) * 0.15,
@@ -237,9 +276,61 @@ class _WatchScreenState extends State<WatchScreen> {
               padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
               alignment: Alignment.centerLeft,
             )),
+        FlatButton(
+          onPressed: () {
+            Clipboard.setData(
+                new ClipboardData(text: stock.stockinfo[index].sym));
+            final snackBar = SnackBar(
+              content:
+                  Text(stock.stockinfo[index].sym + ' real-time quote copied'),
+              duration: Duration(seconds: 3),
+              action: SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () {
+                    print("undo pressed");
+                  }),
+            );
+            Scaffold.of(context).showSnackBar(snackBar);
+          },
+          padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
+          child: Icon(
+            Icons.content_copy,
+            color: Colors.blue,
+          ),
+        ),
+        FlatButton(
+          onPressed: () {
+            print(stock.stockinfo[index].sym);
+            _delete(stock.stockinfo[index].sym);
+            setState(() {
+              _watchquerymaker();
+            });
+            final snackBar = SnackBar(
+              content: Text('Deleted stock'),
+              duration: Duration(seconds: 3),
+              action: SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () {
+                    print("undo pressed");
+                  }),
+            );
+            Scaffold.of(context).showSnackBar(snackBar);
+          },
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          child: Icon(
+            Icons.delete,
+            color: Colors.red,
+          ),
+        )
       ],
     );
   }
+}
+
+void _delete(String sym) async {
+  // Assuming that the number of rows is the id for the last row.
+  final rowsDeleted = await dbHelper.delete(sym);
+  print('deleted $rowsDeleted row(s): row $sym');
 }
 
 Stock stock = Stock();
@@ -252,6 +343,7 @@ class Stock {
     // print(','.allMatches(watchquery).length);
     for (int i = 0; i < size; i++) {
       stockinfo.add(Stockinfo(
+          stockquotes[i]['symbol'],
           stockquotes[i]['name'],
           stockquotes[i]['change'],
           stockquotes[i]['price'],
@@ -294,25 +386,26 @@ class Stock {
   }
 }
 
-var tmp = new Stockinfo("", 0, 0, "", "");
-
 class Stockinfo {
+  String sym;
   String name;
   double change;
   double price;
   String registerDate;
-  String terminationDate;
+  String pe;
 
-  Stockinfo(this.name, this.change, this.price, this.registerDate,
-      this.terminationDate);
+  Stockinfo(
+      this.sym, this.name, this.change, this.price, this.registerDate, this.pe);
 }
 
 dynamic stockquotes;
 void loadquote() {
-  http
-      .get("https://fmpcloud.io/api/v3/quote/" + watchquery + '?' + apikey)
-      .then((result) {
-    stockquotes = json.decode(result.body);
-    stock.initData(','.allMatches(watchquery).length + 1);
-  });
+  if (watchquery != "") {
+    http
+        .get("https://fmpcloud.io/api/v3/quote/" + watchquery + '?' + apikey)
+        .then((result) {
+      stockquotes = json.decode(result.body);
+      stock.initData(','.allMatches(watchquery).length + 1);
+    });
+  }
 }
