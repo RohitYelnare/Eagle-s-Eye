@@ -101,7 +101,7 @@ class _AutoCompleteState extends State<AutoComplete> {
               children: <Widget>[
                 DrawerHeader(
                   child: Text(
-                    "Investigeek",
+                    "Financigram",
                     style: GoogleFonts.lato(
                         color: Colors.grey[800],
                         fontStyle: FontStyle.italic,
@@ -111,72 +111,6 @@ class _AutoCompleteState extends State<AutoComplete> {
                   decoration: BoxDecoration(
                     color: Colors.limeAccent[700],
                   ),
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.star_border_outlined,
-                    color: Colors.white,
-                  ),
-                  title: Text(
-                    "Rate",
-                    style: GoogleFonts.lato(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20.0),
-                  ),
-                  onTap: () {
-                    LaunchReview.launch(
-                        androidAppId: "com.rohityelnare.investigeek");
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.share,
-                    color: Colors.white,
-                  ),
-                  title: Text(
-                    "Share",
-                    style: GoogleFonts.lato(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20.0),
-                  ),
-                  onTap: () {
-                    Share.share(
-                        'Know latest quotes and news of stocks listed on NYSE & NASDAQ!\nhttps://play.google.com/store/apps/details?id=com.rohityelnare.investigeek');
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.link,
-                    color: Colors.white,
-                  ),
-                  title: Text(
-                    "Visit My Website",
-                    style: GoogleFonts.lato(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20.0),
-                  ),
-                  onTap: () {
-                    launchURL("http://rohit.yelnare.com/");
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.code_sharp,
-                    color: Colors.white,
-                  ),
-                  title: Text(
-                    "View Source Code",
-                    style: GoogleFonts.lato(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20.0),
-                  ),
-                  onTap: () {
-                    launchURL("https://github.com/RohitYelnare/Investigeek");
-                  },
                 ),
                 ListTile(
                     leading: Icon(
@@ -191,42 +125,11 @@ class _AutoCompleteState extends State<AutoComplete> {
                           fontSize: 20.0),
                     ),
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            backgroundColor: Colors.grey[700],
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.limeAccent[400]),
-                                  ),
-                                  Text(
-                                    "\t\t\t\t\tLoading",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.limeAccent[400]),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                      new Future.delayed(new Duration(seconds: 4), () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    WatchScreen()));
-                      });
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  WatchScreen()));
                     }),
                 ListTile(
                     leading: Icon(
@@ -278,16 +181,6 @@ class _AutoCompleteState extends State<AutoComplete> {
                                     PortfolioScreen()));
                       });
                     }),
-                ListTile(
-                  title: Text(
-                    "Made by Rohit Yelnare",
-                    style: GoogleFonts.lato(
-                        color: Colors.white,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20.0),
-                  ),
-                )
               ],
             ),
           ),
@@ -295,7 +188,7 @@ class _AutoCompleteState extends State<AutoComplete> {
         backgroundColor: Colors.grey[700],
         appBar: AppBar(
           // automaticallyImplyLeading: false,
-          title: Text("Investigeek",
+          title: Text("Financigram",
               style: GoogleFonts.lato(
                   color: Colors.grey[800],
                   fontStyle: FontStyle.italic,

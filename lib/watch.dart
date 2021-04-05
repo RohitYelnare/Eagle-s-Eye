@@ -1,3 +1,4 @@
+import 'package:financigram/search.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import 'add.dart';
@@ -68,7 +69,7 @@ class _WatchScreenState extends State<WatchScreen> {
       backgroundColor: Colors.grey[700],
       appBar: AppBar(
         title: Text(
-          "Investigeek",
+          "Financigram",
           style: TextStyle(
               color: Colors.grey[800],
               fontStyle: FontStyle.italic,
@@ -101,6 +102,10 @@ class _WatchScreenState extends State<WatchScreen> {
               : _getBodyWidget(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => AutoComplete()));
           // Add your onPressed code here!
         },
         child: const Icon(Icons.add),
@@ -300,21 +305,16 @@ class _WatchScreenState extends State<WatchScreen> {
         ),
         FlatButton(
           onPressed: () {
-            print(stock.stockinfo[index].sym);
-            _delete(stock.stockinfo[index].sym);
-            setState(() {
-              _watchquerymaker();
-            });
-            final snackBar = SnackBar(
-              content: Text('Deleted stock'),
-              duration: Duration(seconds: 3),
-              action: SnackBarAction(
-                  label: 'Undo',
-                  onPressed: () {
-                    print("undo pressed");
-                  }),
-            );
-            Scaffold.of(context).showSnackBar(snackBar);
+            String tmp = stock.stockinfo[index].sym;
+            // setState(() {
+            //   _watchquerymaker();
+            // });
+            // stock.stockinfo.remove(stock.stockinfo[index].sym);
+            _delete(tmp);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => WatchScreen()));
           },
           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
           child: Icon(
@@ -331,6 +331,16 @@ void _delete(String sym) async {
   // Assuming that the number of rows is the id for the last row.
   final rowsDeleted = await dbHelper.delete(sym);
   print('deleted $rowsDeleted row(s): row $sym');
+}
+
+void _insert(String name) async {
+  // row to insert
+  Map<String, dynamic> row = {
+    DatabaseHelper.columnName: name,
+    DatabaseHelper.columnAge: 1
+  };
+  final id = await dbHelper.insert(row);
+  print('inserted row id: $id, $name');
 }
 
 Stock stock = Stock();

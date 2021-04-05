@@ -116,7 +116,7 @@ class _HomepageState extends State<Homepage> {
                     alignment: Alignment.bottomCenter,
                     children: <Widget>[
                       Image.asset(
-                        'assets/images/investigeekhome.jpg',
+                        'assets/images/financigramhome.jpg',
                         height: MediaQuery.of(context).size.height / 1.4,
                         width: double.infinity,
                         fit: BoxFit.fill,
@@ -124,7 +124,7 @@ class _HomepageState extends State<Homepage> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: Text(
-                          'Investigeek',
+                          'Financigram',
                           textAlign: TextAlign.center,
                           style: GoogleFonts.lato(
                               fontSize: 45,
