@@ -83,7 +83,7 @@ class _WatchScreenState extends State<WatchScreen> {
           ? Center(
               child: Container(
               padding: EdgeInsets.fromLTRB(0, 40.0, 0, 0),
-              child: SpinKitWave(color: Colors.white, size: 25.0),
+              child: SpinKitWave(color: Colors.limeAccent[700], size: 25.0),
             ))
           : (watchquery == "")
               ? Center(

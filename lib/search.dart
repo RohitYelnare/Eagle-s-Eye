@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'stockdata.dart';
 import 'dart:convert';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class AutoComplete extends StatefulWidget {
   AutoComplete() : super();
@@ -148,29 +149,8 @@ class _AutoCompleteState extends State<AutoComplete> {
                         context: context,
                         barrierDismissible: false,
                         builder: (BuildContext context) {
-                          return Dialog(
-                            backgroundColor: Colors.grey[700],
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.limeAccent[400]),
-                                  ),
-                                  Text(
-                                    "\t\t\t\t\tLoading",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.limeAccent[400]),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
+                          return SpinKitWave(
+                              color: Colors.limeAccent[700], size: 25.0);
                         },
                       );
                       new Future.delayed(new Duration(seconds: 4), () {
@@ -323,31 +303,8 @@ class _AutoCompleteState extends State<AutoComplete> {
                               context: context,
                               barrierDismissible: false,
                               builder: (BuildContext context) {
-                                return Dialog(
-                                  backgroundColor: Colors.grey[700],
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        CircularProgressIndicator(
-                                          strokeWidth: 2.5,
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                                  Colors.limeAccent[400]),
-                                        ),
-                                        Text(
-                                          "\t\t\t\t\tLoading",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.limeAccent[400]),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
+                                return SpinKitWave(
+                                    color: Colors.limeAccent[700], size: 25.0);
                               },
                             );
                             new Future.delayed(new Duration(seconds: 5), () {

@@ -11,6 +11,7 @@ import 'package:share/share.dart';
 import 'package:launch_review/launch_review.dart';
 import 'database_helper.dart';
 import 'portfolio.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 var months = [
   "Jan",
@@ -105,29 +106,8 @@ class _StockdataState extends State<Stockdata> {
                         context: context,
                         barrierDismissible: false,
                         builder: (BuildContext context) {
-                          return Dialog(
-                            backgroundColor: Colors.grey[700],
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.limeAccent[400]),
-                                  ),
-                                  Text(
-                                    "\t\t\t\t\tLoading",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.limeAccent[400]),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
+                          return SpinKitWave(
+                              color: Colors.limeAccent[700], size: 25.0);
                         },
                       );
                       new Future.delayed(new Duration(seconds: 4), () {
