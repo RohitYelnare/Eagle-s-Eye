@@ -152,9 +152,16 @@ class DatabaseHelper {
     return await db.delete(table, where: '$columnName = ?', whereArgs: [name]);
   }
 
-  Future<int> deleteStock(String name) async {
+  // deletes all row with input symbol
+  Future<int> deleteStockSym(String name) async {
     Database db = await instance.database;
     return await db
         .delete(tableStock, where: '$stockName = ?', whereArgs: [name]);
+  }
+
+  // delete all row with input id
+  Future<int> deleteStockId(int id) async {
+    Database db = await instance.database;
+    return await db.delete(tableStock, where: '$stockId = ?', whereArgs: [id]);
   }
 }
