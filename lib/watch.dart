@@ -17,6 +17,7 @@ import 'package:http/http.dart' as http;
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'option.dart';
 import 'database_helper.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 List<String> watchlist = [];
 String watchquery = "";
@@ -79,7 +80,11 @@ class _WatchScreenState extends State<WatchScreen> {
         backgroundColor: Colors.limeAccent[700],
       ),
       body: loadingdatatable
-          ? new Container(child: const CircularProgressIndicator())
+          ? Center(
+              child: Container(
+              padding: EdgeInsets.fromLTRB(0, 40.0, 0, 0),
+              child: SpinKitWave(color: Colors.white, size: 25.0),
+            ))
           : (watchquery == "")
               ? Center(
                   child: Container(

@@ -81,42 +81,11 @@ class _StockdataState extends State<Stockdata> {
                           fontSize: 20.0),
                     ),
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            backgroundColor: Colors.grey[700],
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.limeAccent[400]),
-                                  ),
-                                  Text(
-                                    "\t\t\t\t\tLoading",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.limeAccent[400]),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                      new Future.delayed(new Duration(seconds: 0), () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    WatchScreen()));
-                      });
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  WatchScreen()));
                     },
                   ),
                   ListTile(

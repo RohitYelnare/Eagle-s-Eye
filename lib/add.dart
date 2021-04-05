@@ -5,6 +5,7 @@ import 'main.dart';
 import 'quote.dart';
 import 'stockdata.dart';
 import 'database_helper.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class AddScreen extends StatefulWidget {
   @override
@@ -47,7 +48,11 @@ class _AddScreenState extends State<AddScreen> {
       body: SingleChildScrollView(
         child: Container(
           child: showchkbox
-              ? new Container(child: const CircularProgressIndicator())
+              ? Center(
+                  child: Container(
+                  padding: EdgeInsets.fromLTRB(0, 40.0, 0, 0),
+                  child: SpinKitWave(color: Colors.white, size: 25.0),
+                ))
               : Column(
                   children: <Widget>[
                     Padding(

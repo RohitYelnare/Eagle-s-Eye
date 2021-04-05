@@ -16,15 +16,19 @@ import 'dart:async';
 List<stockData> portfoliolist = [];
 stockData tmpstock;
 String portfolioquery = "";
+double totalfinal, totalinitial;
 void _portfolioquerymaker() async {
   portfoliolist.clear();
   portfolioquery = "";
-  final allRows = await dbHelper.queryAllRows();
+  final allRows = await dbHelper.queryAllRowsStock();
   allRows.forEach((row) {
-    tmpstock = stockData(row['name'], row['count'], row['cost']);
+    print(row);
+    tmpstock =
+        stockData.storeAll(row['_id'], row['name'], row['count'], row['cost']);
     portfoliolist.add(tmpstock);
-    portfolioquery = row['name'].toSet().toList().join(',');
+    portfolioquery += (row['name'] + ",");
   });
+  portfolioquery = portfolioquery.substring(0, portfolioquery.length - 1);
   _loadquote(portfolioquery);
 }
 
@@ -40,7 +44,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
   @override
   void initState() {
-    _queryStock();
+    _portfolioquerymaker();
+    // _queryStock();
     super.initState();
   }
 
@@ -52,84 +57,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Theme(
-          data: Theme.of(context).copyWith(
-            canvasColor: Colors
-                .grey[800], //This will change the drawer background to blue.
-            //other styles
-          ),
-          child: Drawer(
-            child: ListView(
-              // Important: Remove any padding from the ListView.
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                DrawerHeader(
-                  child: Text(
-                    "Financigram",
-                    style: GoogleFonts.lato(
-                        color: Colors.grey[800],
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 25.0),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.limeAccent[700],
-                  ),
-                ),
-                ListTile(
-                    leading: Icon(
-                      Icons.remove_red_eye,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      "Watch Screen",
-                      style: GoogleFonts.lato(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20.0),
-                    ),
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            backgroundColor: Colors.grey[700],
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.limeAccent[400]),
-                                  ),
-                                  Text(
-                                    "\t\t\t\t\tLoading",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.limeAccent[400]),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                      new Future.delayed(new Duration(seconds: 6), () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    WatchScreen()));
-                      });
-                    }),
-              ],
-            ),
-          ),
-        ),
         backgroundColor: Colors.grey[700],
         appBar: AppBar(
           // automaticallyImplyLeading: false,
@@ -141,7 +68,54 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           iconTheme: IconThemeData(color: Colors.grey[800]),
           backgroundColor: Colors.limeAccent[700],
         ),
-        body: SingleChildScrollView());
+        body: SingleChildScrollView(
+            child: Card(
+          margin: EdgeInsets.all(10.0),
+          elevation: 1.0,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(50.0))),
+          child: Container(
+              decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                      colors: [Colors.grey[700], Colors.grey[700]])),
+              padding: EdgeInsets.all(5.0),
+              // color: Color(0xFF015FFF),
+              child: Column(
+                children: <Widget>[
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: <Widget>[
+                  //     IconButton(
+                  //       icon: Icon(
+                  //         Icons.arrow_back,
+                  //         color: Colors.white,
+                  //       ),
+                  //       onPressed: () {},
+                  //     ),
+                  //     Text("Savings",
+                  //         style:
+                  //             TextStyle(color: Colors.white, fontSize: 20.0)),
+                  //     IconButton(
+                  //       icon: Icon(
+                  //         Icons.arrow_forward,
+                  //         color: Colors.white,
+                  //       ),
+                  //       onPressed: () {},
+                  //     )
+                  //   ],
+                  // ),
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Text(r"$ " "95,940.00",
+                          style: TextStyle(
+                              color: Colors.limeAccent[400], fontSize: 24.0)),
+                    ),
+                  ),
+                  SizedBox(height: 35.0),
+                ],
+              )),
+        )));
   }
 
   void _delete(String name) async {
@@ -160,10 +134,31 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 void _loadquote(stockname) {
   if (portfolioquery != null) {
     http
-        .get("https://fmpcloud.io/api/v3/quote/" + stockname + '?' + apikey)
+        .get(
+            "https://fmpcloud.io/api/v3/quote/" + portfolioquery + '?' + apikey)
         .then((result) {
       stockquote = json.decode(result.body);
     });
-    print(stockquote);
+    print(stockquote[0]);
   }
+  // print("portfolioquery");
+  // print(portfolioquery);
+  // print(portfoliolist[0].stockCost);
+  totalcalc();
+}
+
+void totalcalc() {
+  totalfinal = 0;
+  totalinitial = 0;
+  portfoliolist.forEach((portfoliodata) {
+    for (var i = 0; i < stockquote.length; i++) {
+      if (stockquote[i]['symbol'] == portfoliodata.stockName) {
+        totalfinal += (stockquote[i]['price'] * portfoliodata.stockCount);
+        totalinitial += (portfoliodata.stockCost * portfoliodata.stockCount);
+      }
+    }
+  });
+  print("totalfinal");
+  print(totalfinal);
+  print(totalinitial);
 }
