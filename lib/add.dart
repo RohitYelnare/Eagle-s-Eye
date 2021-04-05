@@ -39,7 +39,8 @@ class _AddScreenState extends State<AddScreen> {
   }
 
   String temp = "";
-  int count, cost;
+  int count;
+  num cost;
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[700],
@@ -74,8 +75,30 @@ class _AddScreenState extends State<AddScreen> {
                                   });
                                   if (checkExist) {
                                     _insert(stockquote[0]['symbol']);
+                                    final snackBar = SnackBar(
+                                      content: Text('Inserted value!'),
+                                      duration: Duration(seconds: 2),
+                                      action: SnackBarAction(
+                                          label: 'Dismiss',
+                                          onPressed: () {
+                                            Scaffold.of(context)
+                                                .hideCurrentSnackBar();
+                                          }),
+                                    );
+                                    Scaffold.of(context).showSnackBar(snackBar);
                                   } else {
                                     _delete(stockquote[0]['symbol']);
+                                    final snackBar = SnackBar(
+                                      content: Text('Deleted value!'),
+                                      duration: Duration(seconds: 2),
+                                      action: SnackBarAction(
+                                          label: 'Dismiss',
+                                          onPressed: () {
+                                            Scaffold.of(context)
+                                                .hideCurrentSnackBar();
+                                          }),
+                                    );
+                                    Scaffold.of(context).showSnackBar(snackBar);
                                   }
                                 }),
                             subtitle: Text(
@@ -118,7 +141,7 @@ class _AddScreenState extends State<AddScreen> {
                         ),
                         onChanged: (value) {
                           temp = value;
-                          cost = int.parse(temp);
+                          cost = num.parse(temp);
                         }),
                     ElevatedButton(
                       // color:Colors.grey,
@@ -128,6 +151,16 @@ class _AddScreenState extends State<AddScreen> {
                       ),
                       onPressed: () {
                         _insertStock(count, cost);
+                        final snackBar = SnackBar(
+                          content: Text('Inserted value!'),
+                          duration: Duration(seconds: 4),
+                          action: SnackBarAction(
+                              label: 'Undo',
+                              onPressed: () {
+                                _deleteStock();
+                              }),
+                        );
+                        Scaffold.of(context).showSnackBar(snackBar);
                       },
                     ),
                   ],
@@ -147,7 +180,7 @@ class _AddScreenState extends State<AddScreen> {
     print('inserted row id: $id, $name');
   }
 
-  void _insertStock(int count, int cost) async {
+  void _insertStock(int count, num cost) async {
     // row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.stockName: stockquote[0]['symbol'],
@@ -159,19 +192,13 @@ class _AddScreenState extends State<AddScreen> {
   }
 
   void _delete(String name) async {
-    // Assuming that the number of rows is the id for the last row.
-    final id = await dbHelper.queryRowCount();
     final rowsDeleted = await dbHelper.delete(name);
     print('deleted $rowsDeleted row(s): row $name');
   }
 
-  // void _checkboxValue() async {
-  //   // checkExist = newValue;
-  //   if (checkExist) {
-  //     _insert(stockquote[0]['symbol']);
-  //   } else {
-  //     _delete(stockquote[0]['symbol']);
-  //   }
-  // }
-
+  void _deleteStock() async {
+    final id = await dbHelper.queryRowCountStock();
+    final rowsDeleted = await dbHelper.deleteStockId(id);
+    print('deleted $rowsDeleted row(s): row $id');
+  }
 }
