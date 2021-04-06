@@ -5,8 +5,11 @@ import 'package:url_launcher/url_launcher.dart';
 import 'news.dart';
 import 'drawer.dart';
 import 'quote.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'add.dart';
+import 'database_helper.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 
 var months = [
   "Jan",
@@ -32,6 +35,7 @@ class Stockdata extends StatefulWidget {
 }
 
 class _StockdataState extends State<Stockdata> {
+  String temp1 = "", temp2 = "";
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -39,48 +43,222 @@ class _StockdataState extends State<Stockdata> {
       home: DefaultTabController(
         length: 3,
         child: Scaffold(
-          backgroundColor: Colors.grey[700],
+          endDrawer: Container(
+            width: (MediaQuery.of(context).size.width / 100) * 80,
+            child: Stack(
+              children: <Widget>[
+                // background of the drawer
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    width: (MediaQuery.of(context).size.width / 100) * 75,
+                    // color: Colors.limeAccent[700],
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.center,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.white, Colors.white],
+                      ),
+                    ),
+                  ),
+                ),
+
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  top: (MediaQuery.of(context).size.height / 100) * 10,
+                  bottom: 0,
+                  child: Container(
+                    // color: Colors.red,
+                    child: showchkbox
+                        ? Center(
+                            child: Container(
+                            padding: EdgeInsets.fromLTRB(0, 60.0, 0, 0),
+                            child: SpinKitWave(
+                                color: Colors.limeAccent[700], size: 25.0),
+                          ))
+                        : Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(18),
+                                    child: ListTile(
+                                      title: Text(
+                                        'Add to WatchList',
+                                        textScaleFactor: 1.3,
+                                        style: GoogleFonts.lato(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      trailing: Checkbox(
+                                          checkColor: Colors.white,
+                                          activeColor: Colors.black,
+                                          value: checkExist,
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              checkExist = newValue;
+                                              print('Set state called');
+                                            });
+                                            if (checkExist) {
+                                              _insert(stockquote[0]['symbol']);
+                                              final snackBar = SnackBar(
+                                                content:
+                                                    Text('Inserted value!'),
+                                                duration: Duration(seconds: 2),
+                                                action: SnackBarAction(
+                                                    label: 'Dismiss',
+                                                    onPressed: () {
+                                                      Scaffold.of(context)
+                                                          .hideCurrentSnackBar();
+                                                    }),
+                                              );
+                                              Scaffold.of(context)
+                                                  .showSnackBar(snackBar);
+                                            } else {
+                                              _delete(stockquote[0]['symbol']);
+                                              final snackBar = SnackBar(
+                                                content: Text('Deleted value!'),
+                                                duration: Duration(seconds: 2),
+                                                action: SnackBarAction(
+                                                    label: 'Dismiss',
+                                                    onPressed: () {
+                                                      Scaffold.of(context)
+                                                          .hideCurrentSnackBar();
+                                                    }),
+                                              );
+                                              Scaffold.of(context)
+                                                  .showSnackBar(snackBar);
+                                            }
+                                          }),
+                                      selected: true,
+                                      onTap: () {
+                                        // setState(() {
+                                        //   txt = 'List Tile pressed';
+                                        // });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                child: Text("Add to portfolio",
+                                    style: GoogleFonts.lato(
+                                        color: Colors.white, fontSize: 17)),
+                                style: ButtonStyle(
+                                    padding: MaterialStateProperty.all<EdgeInsets>(
+                                        EdgeInsets.fromLTRB(25, 15, 25, 15)),
+                                    foregroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.black),
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.black),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(25.0),
+                                            side: BorderSide(color: Colors.black)))),
+                                onPressed: () async {
+                                  // final String currentTeam =
+                                  await _asyncInputDialog(context);
+                                  // print("Current team name is $currentTeam");
+                                },
+                              ),
+                              // new RaisedButton(
+                              //   onPressed: () async {
+                              //     // final String currentTeam =
+                              //     await _asyncInputDialog(context);
+                              //     // print("Current team name is $currentTeam");
+                              //   },
+                              //   child: Text(
+                              //     "Add to portfolio",
+                              //     style: GoogleFonts.lato(color: Colors.black),
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                  ),
+                ),
+                // Align(
+                //   alignment: Alignment.topRight,
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.end,
+                //     children: <Widget>[
+                //       Container(
+                //         width: (MediaQuery.of(context).size.width / 100) * 75,
+                //         height: (MediaQuery.of(context).size.height / 100) * 10,
+                //         color: Colors.transparent,
+                //         alignment: Alignment.center,
+                //         child: Padding(
+                //           padding: EdgeInsets.only(
+                //               top: (MediaQuery.of(context).size.height / 100) *
+                //                   3),
+                //           child: Text(
+                //             'TITLE',
+                //             style: TextStyle(color: Colors.white),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+              ],
+            ),
+          ),
+          backgroundColor: Colors.black,
           drawer: Theme(
               data: Theme.of(context).copyWith(
-                canvasColor: Colors.grey[
-                    800], //This will change the drawer background to blue.
+                canvasColor: Colors
+                    .black, //This will change the drawer background to blue.
                 //other styles
               ),
               child: CallDrawer()),
           appBar: AppBar(
+            actions: [
+              Builder(
+                builder: (context) => IconButton(
+                  icon: Icon(Icons.add_box),
+                  onPressed: () => Scaffold.of(context).openEndDrawer(),
+                  tooltip:
+                      MaterialLocalizations.of(context).openAppDrawerTooltip,
+                ),
+              ),
+            ],
             title: Text(
               "Financigram",
               style: GoogleFonts.lato(
-                  color: Colors.grey[800],
+                  color: Colors.white,
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w600),
             ),
-            iconTheme: IconThemeData(color: Colors.grey[800]),
+            iconTheme: IconThemeData(color: Colors.white),
             bottom: TabBar(
-              indicatorColor: Colors.grey[800],
-              labelColor: Colors.grey[800],
+              indicatorColor: Colors.white,
+              labelColor: Colors.white,
               tabs: [
                 Tab(
                     text: 'Stats',
                     icon: Icon(
                       Icons.bar_chart,
-                      color: Colors.grey[800],
+                      color: Colors.white,
                     )),
                 Tab(
                     text: 'News',
                     icon: Icon(
                       Icons.article,
-                      color: Colors.grey[800],
+                      color: Colors.white,
                     )),
                 Tab(
                     text: 'Add',
                     icon: Icon(
                       Icons.add_box_rounded,
-                      color: Colors.grey[800],
+                      color: Colors.white,
                     )),
               ],
             ),
-            backgroundColor: Colors.limeAccent[700],
+            backgroundColor: Colors.black,
           ),
           body: TabBarView(
             children: [
@@ -96,7 +274,16 @@ class _StockdataState extends State<Stockdata> {
 
   @override
   void initState() {
+    showchkbox = true;
     super.initState();
+    findConfig();
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      showchkbox = false;
+      setState(() {
+        showchkbox = false;
+        // Here you can write your code for open new view
+      });
+    });
     setState(() {
       if (stockquote != null) {
         if (stockquote[0]['change'] >= 0.0) {
@@ -106,6 +293,88 @@ class _StockdataState extends State<Stockdata> {
         }
       }
     });
+  }
+
+  void _insert(String name) async {
+    // row to insert
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnName: name,
+      DatabaseHelper.columnAge: 1
+    };
+    final id = await dbHelper.insert(row);
+    print('inserted row id: $id, $name');
+  }
+
+  void _insertStock(int count, num cost) async {
+    // row to insert
+    Map<String, dynamic> row = {
+      DatabaseHelper.stockName: stockquote[0]['symbol'],
+      DatabaseHelper.stockCount: count,
+      DatabaseHelper.stockCost: cost
+    };
+    final id = await dbHelper.insertStock(row);
+    print('inserted row in table 2 id: $id');
+  }
+
+  void _delete(String name) async {
+    final rowsDeleted = await dbHelper.delete(name);
+    print('deleted $rowsDeleted row(s): row $name');
+  }
+
+  void _deleteStock() async {
+    final id = await dbHelper.queryRowCountStock();
+    final rowsDeleted = await dbHelper.deleteStockId(id);
+    print('deleted $rowsDeleted row(s): row $id');
+  }
+
+  Future _asyncInputDialog(BuildContext context) async {
+    String teamName = '';
+    return showDialog(
+      context: context,
+      barrierDismissible:
+          false, // dialog is dismissible with a tap on the barrier
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter info'),
+          content: new Row(
+            children: [
+              new Expanded(
+                  child: new TextField(
+                keyboardType: TextInputType.number,
+                decoration: new InputDecoration(labelText: 'No. of shares'),
+                onChanged: (value) {
+                  temp1 = value;
+                },
+              )),
+              Container(
+                child: Text('\t\t'),
+                // padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+              ),
+              new Expanded(
+                  child: new TextField(
+                keyboardType: TextInputType.number,
+                decoration:
+                    new InputDecoration(labelText: 'Price(' + r'$' + ')'),
+                onChanged: (value) {
+                  temp2 = value;
+                },
+              ))
+            ],
+          ),
+          actions: [
+            FlatButton(
+              child: Text('Add'),
+              onPressed: () {
+                cost = num.parse(temp1);
+                count = int.parse(temp2);
+                _insertStock(count, cost);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

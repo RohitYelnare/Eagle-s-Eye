@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'portfolioData.dart';
 import 'main.dart';
+import 'drawer.dart';
 import 'quote.dart';
 import 'stockdata.dart';
 import 'database_helper.dart';
@@ -51,7 +52,7 @@ class _AddScreenState extends State<AddScreen> {
               ? Center(
                   child: Container(
                   padding: EdgeInsets.fromLTRB(0, 60.0, 0, 0),
-                  child: SpinKitWave(color: Colors.limeAccent[700], size: 25.0),
+                  child: SpinKitWave(color: Colors.white, size: 25.0),
                 ))
               : Column(
                   children: <Widget>[

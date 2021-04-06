@@ -55,7 +55,7 @@ Widget isNews(BuildContext context) {
   if ((stocknews != null)) {
     child = SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.grey[700],
+        backgroundColor: Colors.black,
         body: ListView.builder(
           padding: const EdgeInsets.all(0.0),
           itemCount: stocknews.length,

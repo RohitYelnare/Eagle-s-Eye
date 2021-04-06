@@ -305,7 +305,7 @@ class _WatchScreenState extends State<WatchScreen> {
           padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
           child: Icon(
             Icons.content_copy,
-            color: Colors.blue,
+            color: Colors.blue[100],
           ),
         ),
         FlatButton(
@@ -324,7 +324,7 @@ class _WatchScreenState extends State<WatchScreen> {
           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
           child: Icon(
             Icons.delete,
-            color: Colors.red,
+            color: Colors.red[200],
           ),
         )
       ],

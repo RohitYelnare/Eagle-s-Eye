@@ -72,14 +72,24 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         ),
         body: SingleChildScrollView(
             child: Card(
-          margin: EdgeInsets.all(10.0),
+          color: Colors.white,
+          margin: EdgeInsets.all(15.0),
           elevation: 1.0,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(50.0))),
+              borderRadius: BorderRadius.all(Radius.circular(30.0))),
           child: Container(
               decoration: BoxDecoration(
-                  gradient: RadialGradient(
-                      colors: [Colors.grey[700], Colors.grey[700]])),
+                borderRadius: BorderRadius.circular(30),
+                // color: Colors.grey[700],
+                // boxShadow: [
+                //   BoxShadow(color: Colors.green, spreadRadius: 0),
+                // ],
+                gradient:
+                    LinearGradient(colors: [Colors.green, Colors.limeAccent]),
+              ),
+              // decoration: BoxDecoration(
+              //     gradient: LinearGradient(
+              //         colors: [Colors.black, Colors.limeAccent[00]])),
               padding: EdgeInsets.all(5.0),
               // color: Color(0xFF015FFF),
               child: Column(
@@ -109,14 +119,30 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                   Center(
                     child: Padding(
                       padding: EdgeInsets.all(5.0),
-                      child: Text(
-                          // (portfolioquery.length != 0)
-                          // ?
-                          r"$ " + totalfinal.toStringAsFixed(2)
-                          // : "no stocks added",
-                          ,
-                          style: TextStyle(
-                              color: Colors.limeAccent[400], fontSize: 24.0)),
+                      child: RichText(
+                        text: TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "\nTotal portfolio value:\n\n",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[700],
+                                    fontSize: 20.0)),
+                            TextSpan(
+                                text: r"$ " + totalfinal.toStringAsFixed(2),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[700],
+                                    fontSize: 36.0)),
+                            // TextSpan(text: ' world!'),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
+                        // (portfolioquery.length != 0)
+                        // ?
+
+                        // : "no stocks added",
+                      ),
                     ),
                   ),
                   SizedBox(height: 35.0),
