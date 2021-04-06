@@ -1,12 +1,8 @@
-import 'package:financigram/portfolio.dart';
-import 'package:financigram/watch.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'option.dart';
-import 'portfolio.dart';
+import 'drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:share/share.dart';
-import 'package:launch_review/launch_review.dart';
 import 'database_helper.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -90,81 +86,12 @@ class _AutoCompleteState extends State<AutoComplete> {
   Widget build(BuildContext context) {
     return Scaffold(
         drawer: Theme(
-          data: Theme.of(context).copyWith(
-            canvasColor: Colors
-                .grey[800], //This will change the drawer background to blue.
-            //other styles
-          ),
-          child: Drawer(
-            child: ListView(
-              // Important: Remove any padding from the ListView.
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                DrawerHeader(
-                  child: Text(
-                    "Financigram",
-                    style: GoogleFonts.lato(
-                        color: Colors.grey[800],
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 25.0),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.limeAccent[700],
-                  ),
-                ),
-                ListTile(
-                    leading: Icon(
-                      Icons.remove_red_eye,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      "Watch Screen",
-                      style: GoogleFonts.lato(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20.0),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  WatchScreen()));
-                    }),
-                ListTile(
-                    leading: Icon(
-                      Icons.bar_chart,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      "Portfolio",
-                      style: GoogleFonts.lato(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20.0),
-                    ),
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return SpinKitWave(
-                              color: Colors.limeAccent[700], size: 25.0);
-                        },
-                      );
-                      new Future.delayed(new Duration(seconds: 4), () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    PortfolioScreen()));
-                      });
-                    }),
-              ],
+            data: Theme.of(context).copyWith(
+              canvasColor: Colors
+                  .grey[800], //This will change the drawer background to blue.
+              //other styles
             ),
-          ),
-        ),
+            child: CallDrawer()),
         backgroundColor: Colors.grey[700],
         appBar: AppBar(
           // automaticallyImplyLeading: false,
