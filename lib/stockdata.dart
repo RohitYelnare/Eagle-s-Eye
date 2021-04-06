@@ -110,7 +110,7 @@ class _StockdataState extends State<Stockdata> {
                               color: Colors.limeAccent[700], size: 25.0);
                         },
                       );
-                      new Future.delayed(new Duration(seconds: 4), () {
+                      new Future.delayed(new Duration(seconds: 6), () {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

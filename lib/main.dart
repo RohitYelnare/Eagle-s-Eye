@@ -16,7 +16,6 @@ import 'search.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 List<Option> options = [];
-
 void main() {
   var rng = new Random();
   var randomkey = rng.nextInt(9);

@@ -16,20 +16,22 @@ import 'dart:async';
 List<stockData> portfoliolist = [];
 stockData tmpstock;
 String portfolioquery = "";
-double totalfinal, totalinitial;
+double totalfinal, totalinitial, totaldiff;
 void _portfolioquerymaker() async {
   portfoliolist.clear();
   portfolioquery = "";
   final allRows = await dbHelper.queryAllRowsStock();
-  allRows.forEach((row) {
-    print(row);
-    tmpstock =
-        stockData.storeAll(row['_id'], row['name'], row['count'], row['cost']);
-    portfoliolist.add(tmpstock);
-    portfolioquery += (row['name'] + ",");
-  });
-  portfolioquery = portfolioquery.substring(0, portfolioquery.length - 1);
-  _loadquote(portfolioquery);
+  if (allRows.length != 0) {
+    allRows.forEach((row) {
+      print(row);
+      tmpstock = stockData.storeAll(
+          row['_id'], row['name'], row['count'], row['cost']);
+      portfoliolist.add(tmpstock);
+      portfolioquery += (row['name'] + ",");
+    });
+    portfolioquery = portfolioquery.substring(0, portfolioquery.length - 1);
+    _loadquote(portfolioquery);
+  }
 }
 
 class PortfolioScreen extends StatefulWidget {
@@ -107,7 +109,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                   Center(
                     child: Padding(
                       padding: EdgeInsets.all(5.0),
-                      child: Text(r"$ " "95,940.00",
+                      child: Text(
+                          // (portfolioquery.length != 0)
+                          // ?
+                          r"$ " + totalfinal.toStringAsFixed(2)
+                          // : "no stocks added",
+                          ,
                           style: TextStyle(
                               color: Colors.limeAccent[400], fontSize: 24.0)),
                     ),
@@ -158,7 +165,5 @@ void totalcalc() {
       }
     }
   });
-  print("totalfinal");
-  print(totalfinal);
-  print(totalinitial);
+  totaldiff = totalfinal - totalinitial;
 }
