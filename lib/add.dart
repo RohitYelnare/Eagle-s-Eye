@@ -45,7 +45,7 @@ class _AddScreenState extends State<AddScreen> {
   num cost;
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[700],
+      backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
       body: SingleChildScrollView(
         child: Container(
           child: showchkbox
@@ -71,8 +71,8 @@ class _AddScreenState extends State<AddScreen> {
                               ),
                             ),
                             trailing: Checkbox(
-                                checkColor: Colors.grey[700],
-                                activeColor: Colors.limeAccent[700],
+                                checkColor: Color.fromRGBO(54, 54, 64, 1.0),
+                                activeColor: Colors.white,
                                 value: checkExist,
                                 onChanged: (newValue) {
                                   setState(() {

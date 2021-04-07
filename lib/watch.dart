@@ -67,23 +67,23 @@ class _WatchScreenState extends State<WatchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[700],
+      backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
       appBar: AppBar(
         title: Text(
           "Financigram",
           style: TextStyle(
-              color: Colors.grey[800],
+              color: Color.fromRGBO(54, 54, 64, 1.0),
               fontStyle: FontStyle.italic,
               fontWeight: FontWeight.w600),
         ),
-        iconTheme: IconThemeData(color: Colors.grey[800]),
-        backgroundColor: Colors.limeAccent[700],
+        iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
+        backgroundColor: Colors.white,
       ),
       body: loadingdatatable
           ? Center(
               child: Container(
               padding: EdgeInsets.fromLTRB(0, 40.0, 0, 0),
-              child: SpinKitWave(color: Colors.limeAccent[700], size: 25.0),
+              child: SpinKitWave(color: Colors.white, size: 25.0),
             ))
           : (watchquery == "")
               ? Center(
@@ -113,8 +113,11 @@ class _WatchScreenState extends State<WatchScreen> {
                   builder: (BuildContext context) => AutoComplete()));
           // Add your onPressed code here!
         },
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.limeAccent[700],
+        child: const Icon(
+          Icons.add,
+          color: Color.fromRGBO(54, 54, 64, 1.0),
+        ),
+        backgroundColor: Colors.white,
       ),
     );
   }
@@ -134,8 +137,8 @@ class _WatchScreenState extends State<WatchScreen> {
           height: 1.0,
           thickness: 0.0,
         ),
-        leftHandSideColBackgroundColor: Colors.grey[700],
-        rightHandSideColBackgroundColor: Colors.grey[700],
+        leftHandSideColBackgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
+        rightHandSideColBackgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
         enablePullToRefresh: true,
         refreshIndicator: const WaterDropHeader(),
         refreshIndicatorHeight: 69,
@@ -305,7 +308,7 @@ class _WatchScreenState extends State<WatchScreen> {
           padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
           child: Icon(
             Icons.content_copy,
-            color: Colors.blue[100],
+            color: Colors.blue[400],
           ),
         ),
         FlatButton(
@@ -324,7 +327,7 @@ class _WatchScreenState extends State<WatchScreen> {
           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
           child: Icon(
             Icons.delete,
-            color: Colors.red[200],
+            color: Colors.red,
           ),
         )
       ],

@@ -108,7 +108,7 @@ class _HomepageState extends State<Homepage> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-            backgroundColor: Colors.grey[700],
+            backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
             body: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
@@ -152,8 +152,7 @@ class _HomepageState extends State<Homepage> {
                                 barrierDismissible: false,
                                 builder: (BuildContext context) {
                                   return SpinKitWave(
-                                      color: Colors.limeAccent[700],
-                                      size: 25.0);
+                                      color: Colors.white, size: 25.0);
                                 },
                               );
                               new Future.delayed(new Duration(seconds: 4), () {
@@ -165,11 +164,12 @@ class _HomepageState extends State<Homepage> {
                               });
                             },
                             elevation: 3.0,
-                            fillColor: Colors.limeAccent[400],
+                            fillColor: Colors.white,
                             child: Text(
                               '\t\t Get\nStarted',
                               style: GoogleFonts.lato(
-                                  fontSize: 17, color: Colors.grey[700]),
+                                  fontSize: 17,
+                                  color: Color.fromRGBO(54, 54, 64, 1.0)),
                             ),
                             padding: EdgeInsets.all(28.0),
                             shape: CircleBorder(),

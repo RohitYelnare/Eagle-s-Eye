@@ -19,13 +19,13 @@ class CallDrawer extends StatelessWidget {
             child: Text(
               "Financigram",
               style: GoogleFonts.lato(
-                  color: Colors.grey[800],
+                  color: Color.fromRGBO(54, 54, 64, 1.0),
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w600,
                   fontSize: 25.0),
             ),
             decoration: BoxDecoration(
-              color: Colors.limeAccent[700],
+              color: Colors.white,
             ),
           ),
           ListTile(
@@ -64,7 +64,7 @@ class CallDrawer extends StatelessWidget {
                 context: context,
                 barrierDismissible: false,
                 builder: (BuildContext context) {
-                  return SpinKitWave(color: Colors.limeAccent[700], size: 25.0);
+                  return SpinKitWave(color: Colors.white, size: 25.0);
                 },
               );
               new Future.delayed(new Duration(seconds: 6), () {
@@ -101,7 +101,7 @@ num cost;
 //                 gradient: LinearGradient(
 //                   begin: Alignment.topCenter,
 //                   end: Alignment.bottomCenter,
-//                   colors: [Colors.black87, Colors.grey[800]],
+//                   colors: [Colors.black87, Colors.black],
 //                 ),
 //               ),
 //             ),

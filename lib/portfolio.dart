@@ -59,16 +59,16 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[700],
+        backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
         appBar: AppBar(
           // automaticallyImplyLeading: false,
           title: Text("Financigram",
               style: GoogleFonts.lato(
-                  color: Colors.grey[800],
+                  color: Color.fromRGBO(54, 54, 64, 1.0),
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w600)),
-          iconTheme: IconThemeData(color: Colors.grey[800]),
-          backgroundColor: Colors.limeAccent[700],
+          iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
+          backgroundColor: Colors.white,
         ),
         body: SingleChildScrollView(
             child: Card(

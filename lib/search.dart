@@ -87,28 +87,28 @@ class _AutoCompleteState extends State<AutoComplete> {
     return Scaffold(
         drawer: Theme(
             data: Theme.of(context).copyWith(
-              canvasColor: Colors
-                  .grey[800], //This will change the drawer background to blue.
+              canvasColor: Color.fromRGBO(54, 54, 64,
+                  1.0), //This will change the drawer background to blue.
               //other styles
             ),
             child: CallDrawer()),
-        backgroundColor: Colors.grey[700],
+        backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
         appBar: AppBar(
           // automaticallyImplyLeading: false,
           title: Text("Financigram",
               style: GoogleFonts.lato(
-                  color: Colors.grey[800],
+                  color: Color.fromRGBO(54, 54, 64, 1.0),
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w600)),
-          iconTheme: IconThemeData(color: Colors.grey[800]),
-          backgroundColor: Colors.limeAccent[700],
+          iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
+          backgroundColor: Colors.white,
         ),
         body: SingleChildScrollView(
             child: Column(
           children: <Widget>[
             (false)
                 ? Dialog(
-                    backgroundColor: Colors.grey[600],
+                    backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
                     child: Padding(
                       padding: const EdgeInsets.all(20),
                       child: Row(
@@ -117,13 +117,12 @@ class _AutoCompleteState extends State<AutoComplete> {
                         children: [
                           CircularProgressIndicator(
                             strokeWidth: 2.5,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.limeAccent[400]),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                           Text(
                             "\t\t\t\t\tLoading",
-                            style: TextStyle(
-                                fontSize: 18, color: Colors.limeAccent[400]),
+                            style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                         ],
                       ),
@@ -138,20 +137,20 @@ class _AutoCompleteState extends State<AutoComplete> {
                           noItemsFoundBuilder: (value) {
                             return Container(
                                 decoration: new BoxDecoration(
-                                  color: Colors.grey[800],
+                                  color: Color.fromRGBO(54, 54, 64, 1.0),
                                 ),
                                 child: ListTile(
                                   title: Text(
                                     'No Matches Found',
                                     style: GoogleFonts.lato(
-                                        color: Colors.limeAccent[400],
+                                        color: Colors.white,
                                         fontSize: 18.5,
                                         fontWeight: FontWeight.w600),
                                   ),
                                   subtitle: Text(
                                     'Make sure you have entered a valid company name or check your connection and reload the app',
                                     style: GoogleFonts.lato(
-                                        color: Colors.limeAccent[400],
+                                        color: Colors.white,
                                         fontSize: 15.0,
                                         fontWeight: FontWeight.w400),
                                   ),
@@ -167,7 +166,7 @@ class _AutoCompleteState extends State<AutoComplete> {
                                   .style
                                   .copyWith(
                                       fontStyle: FontStyle.normal,
-                                      color: Colors.limeAccent[400],
+                                      color: Colors.white,
                                       fontSize: 18.5,
                                       fontWeight: FontWeight.w200,
                                       decoration: TextDecoration.none,
@@ -180,7 +179,7 @@ class _AutoCompleteState extends State<AutoComplete> {
                                     ? IconButton(
                                         icon: Icon(
                                           Icons.clear,
-                                          color: Colors.limeAccent[400],
+                                          color: Colors.white,
                                         ),
                                         onPressed: () {
                                           setState(() {
@@ -190,8 +189,7 @@ class _AutoCompleteState extends State<AutoComplete> {
                                       )
                                     : null,
                                 hintStyle: GoogleFonts.lato(
-                                    fontSize: 18.5,
-                                    color: Colors.limeAccent[400]),
+                                    fontSize: 18.5, color: Colors.white),
                               )),
                           suggestionsCallback: (pattern) async {
                             return _getSuggestions(pattern);
@@ -199,20 +197,20 @@ class _AutoCompleteState extends State<AutoComplete> {
                           itemBuilder: (context, suggestion) {
                             return Container(
                                 decoration: new BoxDecoration(
-                                  color: Colors.grey[800],
+                                  color: Color.fromRGBO(54, 54, 64, 1.0),
                                 ),
                                 child: ListTile(
                                   title: Text(
                                     '${suggestion.name}',
                                     style: GoogleFonts.lato(
-                                        color: Colors.limeAccent[400],
+                                        color: Colors.white,
                                         fontSize: 18.5,
                                         fontWeight: FontWeight.w600),
                                   ),
                                   subtitle: Text(
                                     '${suggestion.exchangeShortName}: ${suggestion.symbol}',
                                     style: GoogleFonts.lato(
-                                        color: Colors.limeAccent[400],
+                                        color: Colors.white,
                                         fontSize: 15.0,
                                         fontWeight: FontWeight.w400),
                                   ),
@@ -231,7 +229,7 @@ class _AutoCompleteState extends State<AutoComplete> {
                               barrierDismissible: false,
                               builder: (BuildContext context) {
                                 return SpinKitWave(
-                                    color: Colors.limeAccent[700], size: 25.0);
+                                    color: Colors.white, size: 25.0);
                               },
                             );
                             new Future.delayed(new Duration(seconds: 5), () {
@@ -254,7 +252,7 @@ class _AutoCompleteState extends State<AutoComplete> {
                   "Search for latest quotes and news of stocks listed on NYSE and NASDAQ",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.lato(
-                      color: Colors.limeAccent[400],
+                      color: Colors.white,
                       fontWeight: FontWeight.w700,
                       fontSize: 21.0),
                 ),

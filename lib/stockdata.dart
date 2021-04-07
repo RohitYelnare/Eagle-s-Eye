@@ -41,7 +41,7 @@ class _StockdataState extends State<Stockdata> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
-        length: 3,
+        length: 2,
         child: Scaffold(
           endDrawer: Container(
             width: (MediaQuery.of(context).size.width / 100) * 80,
@@ -75,7 +75,7 @@ class _StockdataState extends State<Stockdata> {
                             child: Container(
                             padding: EdgeInsets.fromLTRB(0, 60.0, 0, 0),
                             child: SpinKitWave(
-                                color: Colors.limeAccent[700], size: 25.0),
+                                color: Colors.white, size: 25.0),
                           ))
                         : Column(
                             children: <Widget>[
@@ -89,12 +89,14 @@ class _StockdataState extends State<Stockdata> {
                                         'Add to WatchList',
                                         textScaleFactor: 1.3,
                                         style: GoogleFonts.lato(
-                                          color: Colors.black,
+                                          color:
+                                              Color.fromRGBO(54, 54, 64, 1.0),
                                         ),
                                       ),
                                       trailing: Checkbox(
                                           checkColor: Colors.white,
-                                          activeColor: Colors.black,
+                                          activeColor:
+                                              Color.fromRGBO(54, 54, 64, 1.0),
                                           value: checkExist,
                                           onChanged: (newValue) {
                                             setState(() {
@@ -151,15 +153,15 @@ class _StockdataState extends State<Stockdata> {
                                         EdgeInsets.fromLTRB(25, 15, 25, 15)),
                                     foregroundColor:
                                         MaterialStateProperty.all<Color>(
-                                            Colors.black),
+                                            Color.fromRGBO(54, 54, 64, 1.0)),
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
-                                            Colors.black),
-                                    shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
+                                            Color.fromRGBO(54, 54, 64, 1.0)),
+                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(25.0),
-                                            side: BorderSide(color: Colors.black)))),
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                            side: BorderSide(color: Color.fromRGBO(54, 54, 64, 1.0))))),
                                 onPressed: () async {
                                   // final String currentTeam =
                                   await _asyncInputDialog(context);
@@ -174,7 +176,7 @@ class _StockdataState extends State<Stockdata> {
                               //   },
                               //   child: Text(
                               //     "Add to portfolio",
-                              //     style: GoogleFonts.lato(color: Colors.black),
+                              //     style: GoogleFonts.lato(color: Color.fromRGBO(54, 54, 64, 1.0)),
                               //   ),
                               // ),
                             ],
@@ -207,11 +209,11 @@ class _StockdataState extends State<Stockdata> {
               ],
             ),
           ),
-          backgroundColor: Colors.black,
+          backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
           drawer: Theme(
               data: Theme.of(context).copyWith(
-                canvasColor: Colors
-                    .black, //This will change the drawer background to blue.
+                canvasColor: Color.fromRGBO(54, 54, 64,
+                    1.0), //This will change the drawer background to blue.
                 //other styles
               ),
               child: CallDrawer()),
@@ -229,42 +231,49 @@ class _StockdataState extends State<Stockdata> {
             title: Text(
               "Financigram",
               style: GoogleFonts.lato(
-                  color: Colors.white,
+                  color: Color.fromRGBO(54, 54, 64, 1.0),
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w600),
             ),
-            iconTheme: IconThemeData(color: Colors.white),
+            iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
             bottom: TabBar(
-              indicatorColor: Colors.white,
+              // indicatorColor: Color.fromRGBO(54, 54, 64, 1.0),
               labelColor: Colors.white,
+              unselectedLabelColor: Color.fromRGBO(54, 54, 64, 1.0),
+              indicatorSize: TabBarIndicatorSize.label,
+              indicator: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10)),
+                  color: Color.fromRGBO(54, 54, 64, 1.0)),
               tabs: [
                 Tab(
-                    text: 'Stats',
-                    icon: Icon(
-                      Icons.bar_chart,
-                      color: Colors.white,
-                    )),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text("Stats"),
+                  ),
+                ),
                 Tab(
-                    text: 'News',
-                    icon: Icon(
-                      Icons.article,
-                      color: Colors.white,
-                    )),
-                Tab(
-                    text: 'Add',
-                    icon: Icon(
-                      Icons.add_box_rounded,
-                      color: Colors.white,
-                    )),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text("News"),
+                  ),
+                ),
+                // Tab(
+                //   child: Align(
+                //     alignment: Alignment.center,
+                //     child: Text("Add"),
+                //   ),
+                // ),
               ],
             ),
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.white,
           ),
           body: TabBarView(
             children: [
               QuoteScreen(),
               NewsScreen(),
-              AddScreen(),
+              // AddScreen(),
             ],
           ),
         ),
