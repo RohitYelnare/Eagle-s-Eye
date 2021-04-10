@@ -45,8 +45,9 @@ class _WatchScreenState extends State<WatchScreen> {
   HDTRefreshController _hdtRefreshController = HDTRefreshController();
 
   static const int sortName = 0;
-  static const int sortChange = 1;
-  static const int sortPrice = 1;
+  static const int sortChange = 0;
+  static const int sortPrice = 0;
+  static const int sortPE = 0;
   bool isAscending = true;
   int sortType = sortName;
 
@@ -179,22 +180,47 @@ class _WatchScreenState extends State<WatchScreen> {
           setState(() {});
         },
       ),
-      // FlatButton(
-      //   padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      //   child: _getTitleItemWidget(
-      //       'Price' + (sortType == sortChange ? (isAscending ? '↓' : '↑') : ''),
-      //       (MediaQuery.of(context).size.width) * 0.20),
-      //   onPressed: () {
-      //     sortType = sortPrice;
-      //     isAscending = !isAscending;
-      //     stock.sortPrice(isAscending);
-      //     setState(() {});
-      //   },
-      // ),
-      _getTitleItemWidget('Price', (MediaQuery.of(context).size.width) * 0.20),
-      _getTitleItemWidget(
-          'Mkt Cap', (MediaQuery.of(context).size.width) * 0.20),
-      _getTitleItemWidget('P/E', (MediaQuery.of(context).size.width) * 0.15),
+      FlatButton(
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        child: _getTitleItemWidget(
+            'Price' + (sortType == sortChange ? (isAscending ? '↓' : '↑') : ''),
+            (MediaQuery.of(context).size.width) * 0.20),
+        onPressed: () {
+          sortType = sortPrice;
+          isAscending = !isAscending;
+          stock.sortPrice(isAscending);
+          setState(() {});
+        },
+      ),
+      // _getTitleItemWidget('Price', (MediaQuery.of(context).size.width) * 0.20),
+      // _getTitleItemWidget(
+      //     'Mkt Cap', (MediaQuery.of(context).size.width) * 0.20),
+      FlatButton(
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        child: _getTitleItemWidget(
+            'Mkt Cap' +
+                (sortType == sortChange ? (isAscending ? '↓' : '↑') : ''),
+            (MediaQuery.of(context).size.width) * 0.20),
+        onPressed: () {
+          sortType = sortPE;
+          isAscending = !isAscending;
+          stock.sortPE(isAscending);
+          setState(() {});
+        },
+      ),
+      FlatButton(
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        child: _getTitleItemWidget(
+            'P/E' + (sortType == sortChange ? (isAscending ? '↓' : '↑') : ''),
+            (MediaQuery.of(context).size.width) * 0.20),
+        onPressed: () {
+          sortType = sortPE;
+          isAscending = !isAscending;
+          stock.sortPE(isAscending);
+          setState(() {});
+        },
+      ),
+      // _getTitleItemWidget('P/E', (MediaQuery.of(context).size.width) * 0.15),
     ];
   }
 
@@ -267,7 +293,7 @@ class _WatchScreenState extends State<WatchScreen> {
                 : Colors.red[400],
             child: Container(
               child: Text(
-                stock.stockinfo[index].registerDate,
+                stock.stockinfo[index].mktcap,
                 style: TextStyle(color: Colors.white),
               ),
               width: (MediaQuery.of(context).size.width) * 0.25,
@@ -291,17 +317,16 @@ class _WatchScreenState extends State<WatchScreen> {
             )),
         FlatButton(
           onPressed: () {
-            Clipboard.setData(
-                new ClipboardData(text: stock.stockinfo[index].sym));
+            clipboardfunc(stock.stockinfo[index]);
             final snackBar = SnackBar(
-              content:
-                  Text(stock.stockinfo[index].sym + ' real-time quote copied'),
+              content: Text(stock.stockinfo[index].sym +
+                  ' real-time quote copied to be clipboard ✔'),
               duration: Duration(seconds: 3),
-              action: SnackBarAction(
-                  label: 'Undo',
-                  onPressed: () {
-                    print("undo pressed");
-                  }),
+              // action: SnackBarAction(
+              //     label: 'Undo',
+              //     onPressed: () {
+              //       print("undo pressed");
+              //     }),
             );
             Scaffold.of(context).showSnackBar(snackBar);
           },
@@ -332,6 +357,25 @@ class _WatchScreenState extends State<WatchScreen> {
         )
       ],
     );
+  }
+
+  void clipboardfunc(Stockinfo stock) {
+    String stockclipboard = stock.name +
+        "[" +
+        stock.sym +
+        "]\nPrice: " +
+        r'$' +
+        stock.price.toStringAsFixed(2) +
+        "\nChange: " +
+        r'$' +
+        stock.change.toStringAsFixed(1) +
+        "\nMkt Cap: " +
+        stock.mktcap +
+        "\nP/E: " +
+        stock.pe +
+        "\n";
+    Clipboard.setData(new ClipboardData(text: stockclipboard));
+    print(stock.name);
   }
 }
 
@@ -394,8 +438,24 @@ class Stock {
 
   void sortPrice(bool isAscending) {
     (isAscending == false)
-        ? stockinfo.sort((a, b) => a.change.compareTo(b.change))
-        : stockinfo.sort((a, b) => b.change.compareTo(a.change));
+        ? stockinfo.sort((a, b) => a.price.compareTo(b.price))
+        : stockinfo.sort((a, b) => b.price.compareTo(a.price));
+  }
+
+  void sortPE(bool isAscending) {
+    (isAscending == false)
+        ? stockinfo.sort((a, b) => ((a.pe != '-') ? double.parse(a.pe) : 0)
+            .compareTo((b.pe != '-') ? double.parse(b.pe) : 0))
+        : stockinfo.sort((a, b) => ((b.pe != '-') ? double.parse(b.pe) : 0)
+            .compareTo((a.pe != '-') ? double.parse(a.pe) : 0));
+  }
+
+  void sortMktCap(bool isAscending) {
+    (isAscending == false)
+        ? stockinfo
+            .sort((a, b) => double.parse(a.pe).compareTo(double.parse(b.pe)))
+        : stockinfo
+            .sort((a, b) => double.parse(b.pe).compareTo(double.parse(a.pe)));
   }
 
   List<Option> loadOptions(String jsonString) {
@@ -409,11 +469,10 @@ class Stockinfo {
   String name;
   double change;
   double price;
-  String registerDate;
+  String mktcap;
   String pe;
 
-  Stockinfo(
-      this.sym, this.name, this.change, this.price, this.registerDate, this.pe);
+  Stockinfo(this.sym, this.name, this.change, this.price, this.mktcap, this.pe);
 }
 
 dynamic stockquotes;
