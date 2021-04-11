@@ -107,167 +107,146 @@ class _AutoCompleteState extends State<AutoComplete> {
         body: SingleChildScrollView(
             child: Column(
           children: <Widget>[
-            (false)
-                ? Dialog(
-                    backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(
-                            strokeWidth: 2.5,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+            Form(
+                child: Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Column(
+                children: <Widget>[
+                  TypeAheadField(
+                    noItemsFoundBuilder: (value) {
+                      return Container(
+                          decoration: new BoxDecoration(
+                            color: Color.fromRGBO(54, 54, 64, 1.0),
                           ),
-                          Text(
-                            "\t\t\t\t\tLoading",
-                            style: TextStyle(fontSize: 18, color: Colors.white),
+                          child: ListTile(
+                            title: Text(
+                              'No Matches Found',
+                              style: GoogleFonts.lato(
+                                  color: Colors.white,
+                                  fontSize: 18.5,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Text(
+                              'Make sure you have entered a valid company name or check your connection and reload the app',
+                              style: GoogleFonts.lato(
+                                  color: Colors.white,
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ));
+                    },
+                    textFieldConfiguration: TextFieldConfiguration(
+                        controller: myController,
+                        autocorrect: true,
+                        maxLines: 3,
+                        minLines: 1,
+                        autofocus: false,
+                        style: DefaultTextStyle.of(context).style.copyWith(
+                            fontStyle: FontStyle.normal,
+                            color: Colors.white,
+                            fontSize: 18.5,
+                            fontWeight: FontWeight.w200,
+                            decoration: TextDecoration.none,
+                            decorationStyle: TextDecorationStyle.dotted),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          prefixIcon: _searchText.isEmpty
+                              ? Icon(
+                                  Icons.search,
+                                  color: Colors.white,
+                                )
+                              : null,
+                          hintText: 'Enter company or cryptocurrency',
+                          suffixIcon: _searchText.isNotEmpty
+                              ? IconButton(
+                                  icon: Icon(
+                                    Icons.clear,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      myController.clear();
+                                    });
+                                  },
+                                )
+                              : null,
+                          hintStyle: GoogleFonts.lato(
+                              fontSize: 18.5, color: Colors.white),
+                        )),
+                    suggestionsCallback: (pattern) async {
+                      return _getSuggestions(pattern);
+                    },
+                    itemBuilder: (context, suggestion) {
+                      return Container(
+                          decoration: new BoxDecoration(
+                            color: Color.fromRGBO(54, 54, 64, 1.0),
                           ),
-                        ],
-                      ),
-                    ),
+                          child: ListTile(
+                            title: Text(
+                              '${suggestion.name}',
+                              style: GoogleFonts.lato(
+                                  color: Colors.white,
+                                  fontSize: 18.5,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Text(
+                              '${suggestion.exchangeShortName}: ${suggestion.symbol}',
+                              style: GoogleFonts.lato(
+                                  color: Colors.white,
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ));
+                    },
+                    onSuggestionSelected: (suggestion) {
+                      if (suggestion.exchangeShortName == 'CRYPTO') {
+                        stockquote = null;
+                        myController.text = suggestion.name;
+                        _loadquote(suggestion.symbol);
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return SpinKitWave(color: Colors.white, size: 25.0);
+                          },
+                        );
+                        new Future.delayed(new Duration(seconds: 5), () {
+                          myController.text = "";
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      Cryptodata()));
+                        });
+                      } else {
+                        stockquote = null;
+                        stockinfo = null;
+                        stocknews = null;
+                        myController.text = suggestion.name;
+                        _loadquote(suggestion.symbol);
+                        _loadnews(suggestion.symbol);
+                        _loadinfo(suggestion.symbol);
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return SpinKitWave(color: Colors.white, size: 25.0);
+                          },
+                        );
+                        new Future.delayed(new Duration(seconds: 5), () {
+                          myController.text = "";
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      Stockdata()));
+                        });
+                      }
+                    },
                   )
-                : Form(
-                    child: Padding(
-                    padding: EdgeInsets.all(32.0),
-                    child: Column(
-                      children: <Widget>[
-                        TypeAheadField(
-                          noItemsFoundBuilder: (value) {
-                            return Container(
-                                decoration: new BoxDecoration(
-                                  color: Color.fromRGBO(54, 54, 64, 1.0),
-                                ),
-                                child: ListTile(
-                                  title: Text(
-                                    'No Matches Found',
-                                    style: GoogleFonts.lato(
-                                        color: Colors.white,
-                                        fontSize: 18.5,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  subtitle: Text(
-                                    'Make sure you have entered a valid company name or check your connection and reload the app',
-                                    style: GoogleFonts.lato(
-                                        color: Colors.white,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ));
-                          },
-                          textFieldConfiguration: TextFieldConfiguration(
-                              controller: myController,
-                              autocorrect: true,
-                              maxLines: 3,
-                              minLines: 1,
-                              autofocus: false,
-                              style: DefaultTextStyle.of(context)
-                                  .style
-                                  .copyWith(
-                                      fontStyle: FontStyle.normal,
-                                      color: Colors.white,
-                                      fontSize: 18.5,
-                                      fontWeight: FontWeight.w200,
-                                      decoration: TextDecoration.none,
-                                      decorationStyle:
-                                          TextDecorationStyle.dotted),
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                hintText: 'Enter company/cryptocurrency here',
-                                suffixIcon: _searchText.isNotEmpty
-                                    ? IconButton(
-                                        icon: Icon(
-                                          Icons.clear,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            myController.clear();
-                                          });
-                                        },
-                                      )
-                                    : null,
-                                hintStyle: GoogleFonts.lato(
-                                    fontSize: 18.5, color: Colors.white),
-                              )),
-                          suggestionsCallback: (pattern) async {
-                            return _getSuggestions(pattern);
-                          },
-                          itemBuilder: (context, suggestion) {
-                            return Container(
-                                decoration: new BoxDecoration(
-                                  color: Color.fromRGBO(54, 54, 64, 1.0),
-                                ),
-                                child: ListTile(
-                                  title: Text(
-                                    '${suggestion.name}',
-                                    style: GoogleFonts.lato(
-                                        color: Colors.white,
-                                        fontSize: 18.5,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  subtitle: Text(
-                                    '${suggestion.exchangeShortName}: ${suggestion.symbol}',
-                                    style: GoogleFonts.lato(
-                                        color: Colors.white,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ));
-                          },
-                          onSuggestionSelected: (suggestion) {
-                            if (suggestion.exchangeShortName == 'CRYPTO') {
-                              stockquote = null;
-                              myController.text = suggestion.name;
-                              _loadquote(suggestion.symbol);
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (BuildContext context) {
-                                  return SpinKitWave(
-                                      color: Colors.white, size: 25.0);
-                                },
-                              );
-                              new Future.delayed(new Duration(seconds: 5), () {
-                                myController.text = "";
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            Cryptodata()));
-                              });
-                            } else {
-                              stockquote = null;
-                              stockinfo = null;
-                              stocknews = null;
-                              myController.text = suggestion.name;
-                              _loadquote(suggestion.symbol);
-                              _loadnews(suggestion.symbol);
-                              _loadinfo(suggestion.symbol);
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (BuildContext context) {
-                                  return SpinKitWave(
-                                      color: Colors.white, size: 25.0);
-                                },
-                              );
-                              new Future.delayed(new Duration(seconds: 5), () {
-                                myController.text = "";
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            Stockdata()));
-                              });
-                            }
-                          },
-                        )
-                      ],
-                    ),
-                  )),
+                ],
+              ),
+            )),
             Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
               child: Container(
@@ -301,23 +280,8 @@ class _AutoCompleteState extends State<AutoComplete> {
                 _queryStock();
               },
             ),
-            ElevatedButton(
-              child: Text(
-                'delete',
-                style: TextStyle(fontSize: 20),
-              ),
-              onPressed: () {
-                _delete('AAN');
-              },
-            ),
           ],
         )));
-  }
-
-  void _delete(String name) async {
-    // Assuming that the number of rows is the id for the last row.
-    final rowsDeleted = await dbHelper.delete(name);
-    print('deleted $rowsDeleted row(s): row $name');
   }
 
   void _query() async {

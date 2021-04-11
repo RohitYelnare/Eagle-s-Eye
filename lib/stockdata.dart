@@ -294,11 +294,9 @@ class _StockdataState extends State<Stockdata> {
     });
     setState(() {
       if (stockquote != null) {
-        if (stockquote[0]['change'] >= 0.0) {
-          global.arrow = "assets/green_up.png";
-        } else {
-          global.arrow = "assets/red_down.png";
-        }
+        global.arrow = (stockquote[0]['change'] >= 0.0)
+            ? "assets/green_up.png"
+            : "assets/red_down.png";
       }
     });
   }

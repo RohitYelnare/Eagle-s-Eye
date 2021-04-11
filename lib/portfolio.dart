@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'add.dart';
 import 'main.dart';
 import 'stockdata.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'portfolioData.dart';
 import 'package:share/share.dart';
 import 'package:launch_review/launch_review.dart';
@@ -10,6 +11,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'database_helper.dart';
 import 'watch.dart';
+import 'global.dart' as global;
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 
@@ -46,6 +48,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
   @override
   void initState() {
+    loadingdatatable = true;
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      setState(() {
+        loadingdatatable = false;
+      });
+    });
     _portfolioquerymaker();
     // _queryStock();
     super.initState();
@@ -70,85 +78,127 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
           backgroundColor: Colors.white,
         ),
-        body: SingleChildScrollView(
-            child: Card(
-          color: Colors.white,
-          margin: EdgeInsets.all(15.0),
-          elevation: 1.0,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30.0))),
-          child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                // color: Colors.grey[700],
-                // boxShadow: [
-                //   BoxShadow(color: Colors.green, spreadRadius: 0),
-                // ],
-                gradient:
-                    LinearGradient(colors: [Colors.green, Colors.limeAccent]),
-              ),
-              // decoration: BoxDecoration(
-              //     gradient: LinearGradient(
-              //         colors: [Colors.black, Colors.limeAccent[00]])),
-              padding: EdgeInsets.all(5.0),
-              // color: Color(0xFF015FFF),
-              child: Column(
-                children: <Widget>[
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: <Widget>[
-                  //     IconButton(
-                  //       icon: Icon(
-                  //         Icons.arrow_back,
-                  //         color: Colors.white,
-                  //       ),
-                  //       onPressed: () {},
-                  //     ),
-                  //     Text("Savings",
-                  //         style:
-                  //             TextStyle(color: Colors.white, fontSize: 20.0)),
-                  //     IconButton(
-                  //       icon: Icon(
-                  //         Icons.arrow_forward,
-                  //         color: Colors.white,
-                  //       ),
-                  //       onPressed: () {},
-                  //     )
-                  //   ],
-                  // ),
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: RichText(
-                        text: TextSpan(
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: "\nTotal portfolio value:\n\n",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey[700],
-                                    fontSize: 20.0)),
-                            TextSpan(
-                                text: r"$ " + totalfinal.toStringAsFixed(2),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey[700],
-                                    fontSize: 36.0)),
-                            // TextSpan(text: ' world!'),
-                          ],
+        body: loadingdatatable
+            ? Center(
+                child: Container(
+                padding: EdgeInsets.fromLTRB(0, 40.0, 0, 0),
+                child: SpinKitWave(color: Colors.white, size: 25.0),
+              ))
+            : (portfolioquery == "")
+                ? Center(
+                    child: Container(
+                    child: Column(children: [
+                      Text('\n\n'),
+                      Container(
+                          child: Icon(
+                        Icons.block,
+                        color: Colors.white,
+                      )),
+                      Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(60, 10.0, 60, 10.0),
+                          child: Text(
+                            'No stocks/crytocurrencies added to your portfolio',
+                            style: GoogleFonts.lato(
+                                color: Colors.white, fontSize: 18.0),
+                          ))
+                    ]),
+                  ))
+                : SingleChildScrollView(
+                    child: Column(children: <Widget>[
+                    Card(
+                      color: Colors.white,
+                      margin: EdgeInsets.all(15.0),
+                      elevation: 1.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(30.0))),
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              // color: Colors.grey[700],
+                              // boxShadow: [
+                              //   BoxShadow(color: Colors.green, spreadRadius: 0),
+                              // ],
+                              gradient: (totaldiff > 0)
+                                  ? LinearGradient(
+                                      colors: [Colors.green, Colors.limeAccent])
+                                  : LinearGradient(
+                                      colors: [Colors.red, Colors.red[200]])),
+                          // decoration: BoxDecoration(
+                          //     gradient: LinearGradient(
+                          //         colors: [Colors.black, Colors.limeAccent[00]])),
+                          padding: EdgeInsets.all(5.0),
+                          // color: Color(0xFF015FFF),
+                          child: Column(
+                            children: <Widget>[
+                              Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(5.0),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text:
+                                                "\nTotal portfolio value:\n\n",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Color.fromRGBO(
+                                                    54, 54, 64, 1.0),
+                                                fontSize: 20.0)),
+                                        TextSpan(
+                                            text: r"$ " +
+                                                totalfinal.toStringAsFixed(2),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Color.fromRGBO(
+                                                    54, 54, 64, 1.0),
+                                                fontSize: 36.0)),
+                                      ],
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 35.0),
+                            ],
+                          )),
+                    ),
+                    Container(
+                      child: ListTile(
+                        leading: Image.asset(
+                          (totaldiff >= 0.0)
+                              ? "assets/green_up.png"
+                              : "assets/red_down.png",
+                          fit: BoxFit.cover,
+                          width: 25,
+                          height: 25,
                         ),
-                        textAlign: TextAlign.center,
-                        // (portfolioquery.length != 0)
-                        // ?
-
-                        // : "no stocks added",
+                        contentPadding:
+                            EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 0.0),
+                        title: Text(
+                          (totaldiff >= 0.0)
+                              ? "Total gains: "
+                              : "Total losses: ",
+                          style: GoogleFonts.lato(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 21,
+                              color: (totaldiff >= 0)
+                                  ? Colors.limeAccent[400]
+                                  : Colors.deepOrangeAccent[400]),
+                        ),
+                        trailing: Text(
+                          r'$' + totaldiff.toStringAsFixed(2),
+                          style: GoogleFonts.lato(
+                              fontSize: 21,
+                              fontWeight: FontWeight.w600,
+                              color: (totaldiff >= 0.0)
+                                  ? Colors.limeAccent[400]
+                                  : Colors.deepOrangeAccent[400]),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 35.0),
-                ],
-              )),
-        )));
+                  ])));
   }
 
   void _delete(String name) async {
@@ -172,10 +222,10 @@ void _loadquote(stockname) {
         .then((result) {
       stockquote = json.decode(result.body);
     });
-    print(stockquote[0]);
+    // print(stockquote[0]);
   }
-  // print("portfolioquery");
-  // print(portfolioquery);
+  print("portfoliolist");
+  print(portfoliolist);
   // print(portfoliolist[0].stockCost);
   totalcalc();
 }
@@ -192,4 +242,6 @@ void totalcalc() {
     }
   });
   totaldiff = totalfinal - totalinitial;
+  global.arrow =
+      (totaldiff >= 0.0) ? "assets/green_up.png" : "assets/red_down.png";
 }
