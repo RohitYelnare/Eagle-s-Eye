@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'portfolioData.dart';
 import 'main.dart';
-import 'drawer.dart';
-import 'quote.dart';
-import 'stockdata.dart';
 import 'database_helper.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 

@@ -14,7 +14,7 @@ class CryptoScreen extends StatelessWidget {
 
 Widget isCrypto(BuildContext context) {
   Widget child;
-  if (cryptoquote == null) {
+  if (stockquote == null) {
     child = Center(
         child: Container(
             child: Column(children: [
@@ -39,14 +39,14 @@ Widget isCrypto(BuildContext context) {
           child: ListTile(
             contentPadding: EdgeInsets.fromLTRB(65.0, 10.0, 15.0, 0.0),
             title: Text(
-              "${cryptoquote[0]['name']}",
+              "${stockquote[0]['name']}",
               style: GoogleFonts.lato(
                   fontWeight: FontWeight.w600,
                   fontSize: 20.0,
                   color: Colors.white),
             ),
             subtitle: Text(
-              "${cryptoquote[0]['symbol']}",
+              "${stockquote[0]['symbol']}",
               style: GoogleFonts.lato(
                 color: Colors.white,
               ),
@@ -63,20 +63,20 @@ Widget isCrypto(BuildContext context) {
             ),
             contentPadding: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 20.0),
             title: Text(
-              "Price: \$${cryptoquote[0]['price']}",
+              "Price: \$${stockquote[0]['price']}",
               style: GoogleFonts.lato(
                   fontWeight: FontWeight.w700,
                   fontSize: 20.0,
-                  color: (cryptoquote[0]['change'] >= 0)
+                  color: (stockquote[0]['change'] >= 0)
                       ? Colors.limeAccent[400]
                       : Colors.deepOrangeAccent[400]),
             ),
             trailing: Text(
-              '${(cryptoquote[0]['change'] >= 0.0) ? '+' : '-'}\$${cryptoquote[0]['change'].abs().toStringAsFixed(2)}\n\t${cryptoquote[0]['changesPercentage'].toStringAsFixed(2)}%',
+              '${(stockquote[0]['change'] >= 0.0) ? '+' : '-'}\$${stockquote[0]['change'].abs().toStringAsFixed(2)}\n\t${stockquote[0]['changesPercentage'].toStringAsFixed(2)}%',
               style: GoogleFonts.lato(
                   fontSize: 17.0,
                   fontWeight: FontWeight.w600,
-                  color: (cryptoquote[0]['change'] >= 0.0)
+                  color: (stockquote[0]['change'] >= 0.0)
                       ? Colors.limeAccent[400]
                       : Colors.deepOrangeAccent[400]),
             ),
@@ -131,27 +131,27 @@ Widget isCrypto(BuildContext context) {
                 cells: [
                   DataCell(Container(
                     alignment: Alignment.center,
-                    child: Text(cryptoquote[0]['open'].toStringAsFixed(2),
+                    child: Text(stockquote[0]['open'].toStringAsFixed(2),
                         style: GoogleFonts.lato(
                             fontSize: 15, color: Colors.white)),
                   )),
                   DataCell(Container(
                     alignment: Alignment.center,
                     child: Text(
-                        cryptoquote[0]['previousClose'].toStringAsFixed(2),
+                        stockquote[0]['previousClose'].toStringAsFixed(2),
                         style:
                             GoogleFonts.lato(fontSize: 15, color: Colors.white),
                         textAlign: TextAlign.center),
                   )),
                   DataCell(Container(
                     alignment: Alignment.center,
-                    child: Text(cryptoquote[0]['dayHigh'].toStringAsFixed(2),
+                    child: Text(stockquote[0]['dayHigh'].toStringAsFixed(2),
                         style: GoogleFonts.lato(
                             fontSize: 15, color: Colors.white)),
                   )),
                   DataCell(Container(
                     alignment: Alignment.center,
-                    child: Text(cryptoquote[0]['dayLow'].toStringAsFixed(2),
+                    child: Text(stockquote[0]['dayLow'].toStringAsFixed(2),
                         style: GoogleFonts.lato(
                             fontSize: 15, color: Colors.white)),
                   )),
@@ -200,25 +200,25 @@ Widget isCrypto(BuildContext context) {
                 cells: [
                   DataCell(Container(
                     alignment: Alignment.center,
-                    child: Text(cryptoquote[0]['yearHigh'].toStringAsFixed(2),
+                    child: Text(stockquote[0]['yearHigh'].toStringAsFixed(2),
                         style: GoogleFonts.lato(
                             fontSize: 15, color: Colors.white)),
                   )),
                   DataCell(Container(
                     alignment: Alignment.center,
-                    child: Text(cryptoquote[0]['yearLow'].toStringAsFixed(2),
+                    child: Text(stockquote[0]['yearLow'].toStringAsFixed(2),
                         style: GoogleFonts.lato(
                             fontSize: 15, color: Colors.white)),
                   )),
                   DataCell(Container(
                     alignment: Alignment.center,
                     child: Text(
-                        (cryptoquote[0]['marketCap'] != null)
-                            ? (cryptoquote[0]['marketCap'] > 1000000000)
-                                ? (cryptoquote[0]['marketCap'] > 1000000000000)
-                                    ? "\$${(cryptoquote[0]['marketCap'] / 1000000000000).toStringAsFixed(3)}T"
-                                    : "\$${(cryptoquote[0]['marketCap'] / 1000000000).toStringAsFixed(2)}B"
-                                : "\$${(cryptoquote[0]['marketCap'] / 1000000).toStringAsFixed(2)}M"
+                        (stockquote[0]['marketCap'] != null)
+                            ? (stockquote[0]['marketCap'] > 1000000000)
+                                ? (stockquote[0]['marketCap'] > 1000000000000)
+                                    ? "\$${(stockquote[0]['marketCap'] / 1000000000000).toStringAsFixed(3)}T"
+                                    : "\$${(stockquote[0]['marketCap'] / 1000000000).toStringAsFixed(2)}B"
+                                : "\$${(stockquote[0]['marketCap'] / 1000000).toStringAsFixed(2)}M"
                             : "-",
                         style: GoogleFonts.lato(
                             fontSize: 15, color: Colors.white)),

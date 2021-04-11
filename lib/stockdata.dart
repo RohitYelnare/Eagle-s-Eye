@@ -74,8 +74,7 @@ class _StockdataState extends State<Stockdata> {
                         ? Center(
                             child: Container(
                             padding: EdgeInsets.fromLTRB(0, 60.0, 0, 0),
-                            child: SpinKitWave(
-                                color: Colors.white, size: 25.0),
+                            child: SpinKitWave(color: Colors.white, size: 25.0),
                           ))
                         : Column(
                             children: <Widget>[
@@ -337,7 +336,6 @@ class _StockdataState extends State<Stockdata> {
   }
 
   Future _asyncInputDialog(BuildContext context) async {
-    String teamName = '';
     return showDialog(
       context: context,
       barrierDismissible:
@@ -374,8 +372,8 @@ class _StockdataState extends State<Stockdata> {
             FlatButton(
               child: Text('Add'),
               onPressed: () {
-                cost = num.parse(temp1);
-                count = int.parse(temp2);
+                count = int.parse(temp1);
+                cost = num.parse(temp2);
                 _insertStock(count, cost);
                 Navigator.of(context).pop();
               },

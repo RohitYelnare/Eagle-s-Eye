@@ -219,9 +219,9 @@ class _AutoCompleteState extends State<AutoComplete> {
                           },
                           onSuggestionSelected: (suggestion) {
                             if (suggestion.exchangeShortName == 'CRYPTO') {
-                              cryptoquote = null;
+                              stockquote = null;
                               myController.text = suggestion.name;
-                              _loadcrypto(suggestion.symbol);
+                              _loadquote(suggestion.symbol);
                               showDialog(
                                 context: context,
                                 barrierDismissible: false,
@@ -337,22 +337,6 @@ class _AutoCompleteState extends State<AutoComplete> {
         .get("https://fmpcloud.io/api/v3/quote/" + stockname + '?' + apikey)
         .then((result) {
       stockquote = json.decode(result.body);
-      // setState(() {
-      //   loadingQuote = false;
-      // });
-      // print(stockquote);
-    });
-  }
-
-  void _loadcrypto(cryptoname) {
-    http
-        .get("https://fmpcloud.io/api/v3/quote/" + cryptoname + '?' + apikey)
-        .then((result) {
-      cryptoquote = json.decode(result.body);
-      // setState(() {
-      //   loadingQuote = false;
-      // });
-      // print(cryptoquote);
     });
   }
 

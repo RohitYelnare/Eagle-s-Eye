@@ -81,7 +81,7 @@ final String apikey8 =
     'apikey=d78f189cdcc5b45e34db4f415b7121ab'; //fmpcloud-financigram
 
 String optionquery;
-dynamic stockquote, stocknews, stockinfo, cryptoquote;
+dynamic stockquote, stocknews, stockinfo;
 bool loadingNasdaq = false;
 bool loadingNyse = false;
 bool loadingFinal = true;
@@ -142,11 +142,6 @@ class _HomepageState extends State<Homepage> {
                           padding: const EdgeInsets.only(top: 10),
                           child: RawMaterialButton(
                             onPressed: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => AutoComplete()),
-                              // );
                               showDialog(
                                 context: context,
                                 barrierDismissible: false,
