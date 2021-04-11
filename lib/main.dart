@@ -81,7 +81,7 @@ final String apikey8 =
     'apikey=d78f189cdcc5b45e34db4f415b7121ab'; //fmpcloud-financigram
 
 String optionquery;
-dynamic stockquote, stocknews, stockinfo;
+dynamic stockquote, stocknews, stockinfo, cryptoquote;
 bool loadingNasdaq = false;
 bool loadingNyse = false;
 bool loadingFinal = true;
@@ -202,34 +202,17 @@ class _HomepageState extends State<Homepage> {
   String urlNyse =
       'https://fmpcloud.io/api/v3/search?query=&limit=10000&exchange=NYSE&' +
           apikey;
+  String urlCrypto =
+      'https://fmpcloud.io/api/v3/symbol/available-cryptocurrencies?' + apikey;
   void getNasdaqOptions() async {
     http.get(urlNasdaq).then((result) {
       options += loadOptions(result.body);
-      // print('NASDAQ Options: ${options.length}');
-      // setState(() {
-      //   loadingNasdaq = true;
-      //   loadingFinal = !(loadingNasdaq && loadingNyse);
-      //   print('loadingFinal');
-      //   print('loadingNasdaq');
-      //   print('loadingNyse');
-      //   print(loadingFinal);
-      //   print(loadingNasdaq);
-      //   print(loadingNyse);
-      // });
     });
     http.get(urlNyse).then((result) {
       options += loadOptions(result.body);
-      // print('NYSE Options: ${options.length}');
-      // setState(() {
-      //   loadingNyse = true;
-      //   loadingFinal = !(loadingNasdaq && loadingNyse);
-      // });
-      // print('loadingFinal');
-      // print('loadingNasdaq');
-      // print('loadingNyse');
-      // print(loadingFinal);
-      // print(loadingNasdaq);
-      // print(loadingNyse);
+    });
+    http.get(urlCrypto).then((result) {
+      options += loadOptions(result.body);
     });
 
     // print('Options: ${options.length}');

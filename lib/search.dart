@@ -7,6 +7,7 @@ import 'database_helper.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'stockdata.dart';
+import 'cryptodata.dart';
 import 'dart:convert';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -174,7 +175,7 @@ class _AutoCompleteState extends State<AutoComplete> {
                                           TextDecorationStyle.dotted),
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                hintText: 'Enter company here',
+                                hintText: 'Enter company/cryptocurrency here',
                                 suffixIcon: _searchText.isNotEmpty
                                     ? IconButton(
                                         icon: Icon(
@@ -217,29 +218,51 @@ class _AutoCompleteState extends State<AutoComplete> {
                                 ));
                           },
                           onSuggestionSelected: (suggestion) {
-                            stockquote = null;
-                            stockinfo = null;
-                            stocknews = null;
-                            myController.text = suggestion.name;
-                            _loadquote(suggestion.symbol);
-                            _loadnews(suggestion.symbol);
-                            _loadinfo(suggestion.symbol);
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return SpinKitWave(
-                                    color: Colors.white, size: 25.0);
-                              },
-                            );
-                            new Future.delayed(new Duration(seconds: 5), () {
-                              myController.text = "";
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          Stockdata()));
-                            });
+                            if (suggestion.exchangeShortName == 'CRYPTO') {
+                              cryptoquote = null;
+                              myController.text = suggestion.name;
+                              _loadcrypto(suggestion.symbol);
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return SpinKitWave(
+                                      color: Colors.white, size: 25.0);
+                                },
+                              );
+                              new Future.delayed(new Duration(seconds: 5), () {
+                                myController.text = "";
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            Cryptodata()));
+                              });
+                            } else {
+                              stockquote = null;
+                              stockinfo = null;
+                              stocknews = null;
+                              myController.text = suggestion.name;
+                              _loadquote(suggestion.symbol);
+                              _loadnews(suggestion.symbol);
+                              _loadinfo(suggestion.symbol);
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return SpinKitWave(
+                                      color: Colors.white, size: 25.0);
+                                },
+                              );
+                              new Future.delayed(new Duration(seconds: 5), () {
+                                myController.text = "";
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            Stockdata()));
+                              });
+                            }
                           },
                         )
                       ],
@@ -318,6 +341,18 @@ class _AutoCompleteState extends State<AutoComplete> {
       //   loadingQuote = false;
       // });
       // print(stockquote);
+    });
+  }
+
+  void _loadcrypto(cryptoname) {
+    http
+        .get("https://fmpcloud.io/api/v3/quote/" + cryptoname + '?' + apikey)
+        .then((result) {
+      cryptoquote = json.decode(result.body);
+      // setState(() {
+      //   loadingQuote = false;
+      // });
+      // print(cryptoquote);
     });
   }
 
