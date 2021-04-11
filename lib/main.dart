@@ -81,7 +81,7 @@ final String apikey8 =
     'apikey=d78f189cdcc5b45e34db4f415b7121ab'; //fmpcloud-financigram
 
 String optionquery;
-dynamic stockquote, stocknews, stockinfo;
+dynamic stockquote, stocknews, stockinfo, cryptoquote;
 bool loadingNasdaq = false;
 bool loadingNyse = false;
 bool loadingFinal = true;
