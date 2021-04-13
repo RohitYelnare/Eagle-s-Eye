@@ -35,7 +35,8 @@ class Stockdata extends StatefulWidget {
 }
 
 class _StockdataState extends State<Stockdata> {
-  String temp1 = "", temp2 = "";
+  final _costtextfield = TextEditingController();
+  String tmpcount = "", tmpcost = "";
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -69,7 +70,6 @@ class _StockdataState extends State<Stockdata> {
                   top: (MediaQuery.of(context).size.height / 100) * 10,
                   bottom: 0,
                   child: Container(
-                    // color: Colors.red,
                     child: showchkbox
                         ? Center(
                             child: Container(
@@ -104,33 +104,33 @@ class _StockdataState extends State<Stockdata> {
                                             });
                                             if (checkExist) {
                                               _insert(stockquote[0]['symbol']);
-                                              final snackBar = SnackBar(
-                                                content:
-                                                    Text('Inserted value!'),
-                                                duration: Duration(seconds: 2),
-                                                action: SnackBarAction(
-                                                    label: 'Dismiss',
-                                                    onPressed: () {
-                                                      Scaffold.of(context)
-                                                          .hideCurrentSnackBar();
-                                                    }),
-                                              );
-                                              Scaffold.of(context)
-                                                  .showSnackBar(snackBar);
+                                              // final snackBar = SnackBar(
+                                              //   content:
+                                              //       Text('Inserted value!'),
+                                              //   duration: Duration(seconds: 2),
+                                              //   action: SnackBarAction(
+                                              //       label: 'Dismiss',
+                                              //       onPressed: () {
+                                              //         Scaffold.of(context)
+                                              //             .hideCurrentSnackBar();
+                                              //       }),
+                                              // );
+                                              // Scaffold.of(context)
+                                              //     .showSnackBar(snackBar);
                                             } else {
                                               _delete(stockquote[0]['symbol']);
-                                              final snackBar = SnackBar(
-                                                content: Text('Deleted value!'),
-                                                duration: Duration(seconds: 2),
-                                                action: SnackBarAction(
-                                                    label: 'Dismiss',
-                                                    onPressed: () {
-                                                      Scaffold.of(context)
-                                                          .hideCurrentSnackBar();
-                                                    }),
-                                              );
-                                              Scaffold.of(context)
-                                                  .showSnackBar(snackBar);
+                                              // final snackBar = SnackBar(
+                                              //   content: Text('Deleted value!'),
+                                              //   duration: Duration(seconds: 2),
+                                              //   action: SnackBarAction(
+                                              //       label: 'Dismiss',
+                                              //       onPressed: () {
+                                              //         Scaffold.of(context)
+                                              //             .hideCurrentSnackBar();
+                                              //       }),
+                                              // );
+                                              // Scaffold.of(context)
+                                              //     .showSnackBar(snackBar);
                                             }
                                           }),
                                       selected: true,
@@ -162,49 +162,13 @@ class _StockdataState extends State<Stockdata> {
                                                 BorderRadius.circular(25.0),
                                             side: BorderSide(color: Color.fromRGBO(54, 54, 64, 1.0))))),
                                 onPressed: () async {
-                                  // final String currentTeam =
                                   await _asyncInputDialog(context);
-                                  // print("Current team name is $currentTeam");
                                 },
                               ),
-                              // new RaisedButton(
-                              //   onPressed: () async {
-                              //     // final String currentTeam =
-                              //     await _asyncInputDialog(context);
-                              //     // print("Current team name is $currentTeam");
-                              //   },
-                              //   child: Text(
-                              //     "Add to portfolio",
-                              //     style: GoogleFonts.lato(color: Color.fromRGBO(54, 54, 64, 1.0)),
-                              //   ),
-                              // ),
                             ],
                           ),
                   ),
                 ),
-                // Align(
-                //   alignment: Alignment.topRight,
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.end,
-                //     children: <Widget>[
-                //       Container(
-                //         width: (MediaQuery.of(context).size.width / 100) * 75,
-                //         height: (MediaQuery.of(context).size.height / 100) * 10,
-                //         color: Colors.transparent,
-                //         alignment: Alignment.center,
-                //         child: Padding(
-                //           padding: EdgeInsets.only(
-                //               top: (MediaQuery.of(context).size.height / 100) *
-                //                   3),
-                //           child: Text(
-                //             'TITLE',
-                //             style: TextStyle(color: Colors.white),
-                //           ),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -286,10 +250,8 @@ class _StockdataState extends State<Stockdata> {
     super.initState();
     findConfig();
     Future.delayed(const Duration(milliseconds: 2000), () {
-      showchkbox = false;
       setState(() {
         showchkbox = false;
-        // Here you can write your code for open new view
       });
     });
     setState(() {
@@ -298,7 +260,15 @@ class _StockdataState extends State<Stockdata> {
             ? "assets/green_up.png"
             : "assets/red_down.png";
       }
+      _costtextfield.text = stockquote[0]['price'].toString();
     });
+  }
+
+  @override
+  void dispose() {
+    // other dispose methods
+    _costtextfield.dispose();
+    super.dispose();
   }
 
   void _insert(String name) async {
@@ -348,7 +318,7 @@ class _StockdataState extends State<Stockdata> {
                 keyboardType: TextInputType.number,
                 decoration: new InputDecoration(labelText: 'No. of shares'),
                 onChanged: (value) {
-                  temp1 = value;
+                  tmpcount = value;
                 },
               )),
               Container(
@@ -357,11 +327,12 @@ class _StockdataState extends State<Stockdata> {
               ),
               new Expanded(
                   child: new TextField(
+                controller: _costtextfield,
                 keyboardType: TextInputType.number,
                 decoration:
                     new InputDecoration(labelText: 'Price(' + r'$' + ')'),
                 onChanged: (value) {
-                  temp2 = value;
+                  tmpcost = value;
                 },
               ))
             ],
@@ -370,8 +341,8 @@ class _StockdataState extends State<Stockdata> {
             FlatButton(
               child: Text('Add'),
               onPressed: () {
-                count = int.parse(temp1);
-                cost = num.parse(temp2);
+                count = int.parse(tmpcount);
+                cost = num.parse(tmpcost);
                 _insertStock(count, cost);
                 Navigator.of(context).pop();
               },
