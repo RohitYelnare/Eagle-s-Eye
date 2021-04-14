@@ -14,6 +14,7 @@ import 'watch.dart';
 import 'global.dart' as global;
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
+import 'dart:math' as math;
 
 List<stockData> portfoliolist = [];
 stockData tmpstock;
@@ -147,8 +148,14 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                                     54, 54, 64, 1.0),
                                                 fontSize: 20.0)),
                                         TextSpan(
-                                            text: r"$ " +
-                                                totalfinal.toStringAsFixed(2),
+                                            text: (totalfinal > 0)
+                                                ? r"$ " +
+                                                    commaadder(totalfinal
+                                                        .toStringAsFixed(0))
+                                                : r"$- " +
+                                                    commaadder(totalfinal
+                                                        .toStringAsFixed(0)
+                                                        .substring(1)),
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: Color.fromRGBO(
@@ -188,7 +195,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                   : Colors.deepOrangeAccent[400]),
                         ),
                         trailing: Text(
-                          r'$' + totaldiff.toStringAsFixed(2),
+                          (totaldiff > 0)
+                              ? r"$ " + commaadder(totaldiff.toStringAsFixed(0))
+                              : r"$-" +
+                                  commaadder(totaldiff
+                                      .toStringAsFixed(0)
+                                      .substring(1)),
                           style: GoogleFonts.lato(
                               fontSize: 21,
                               fontWeight: FontWeight.w600,
@@ -198,6 +210,16 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         ),
                       ),
                     ),
+                    Container(
+                        child: Text(
+                      'Initial value: ' +
+                          r'$' +
+                          commaadder(totalinitial.toStringAsFixed(0)),
+                      style: GoogleFonts.lato(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 21,
+                          color: Colors.white),
+                    ))
                   ])));
   }
 
@@ -211,6 +233,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     final allRows = await dbHelper.queryAllRowsStock();
     print('query all rows stock:');
     allRows.forEach((row) => print(row['name']));
+  }
+
+  String commaadder(String str) {
+    String tempString = "", separator = ",";
+    for (int i = 0; i < str.length; i++) {
+      if (i % 3 == 0 && i > 0) {
+        tempString = tempString + separator;
+      }
+      tempString = tempString + str[i];
+    }
+    return tempString;
   }
 }
 
