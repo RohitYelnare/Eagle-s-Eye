@@ -133,7 +133,7 @@ Widget websiteTile(BuildContext context) {
 
 Widget isQuote(BuildContext context) {
   Widget child;
-  if (stockinfo == null || stockquote == null) {
+  if (stockinfo == null || stockquote == null || stocknews == null) {
     child = Center(
         child: Container(
             child: Column(children: [

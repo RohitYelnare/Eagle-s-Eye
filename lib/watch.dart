@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'add.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
+import 'drawer.dart';
 import 'global.dart' as global;
 import 'package:url_launcher/url_launcher.dart';
 import 'stockdata.dart';
@@ -27,7 +28,7 @@ void _watchquerymaker() async {
     watchlist.add(row['name']);
   });
   watchquery = watchlist.toSet().toList().join(',');
-  loadquote();
+  loadlistquote();
 }
 
 class WatchScreen extends StatefulWidget {
@@ -66,7 +67,23 @@ class _WatchScreenState extends State<WatchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
+      drawer: Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: Color.fromRGBO(54, 54, 64,
+                1.0), //This will change the drawer background to blue.
+            //other styles
+          ),
+          child: CallDrawer()),
       appBar: AppBar(
+        actions: [
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.add_box),
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            ),
+          ),
+        ],
         title: Text(
           "Financigram",
           style: TextStyle(
@@ -234,11 +251,34 @@ class _WatchScreenState extends State<WatchScreen> {
 
   Widget _generateFirstColumnRow(BuildContext context, int index) {
     return Container(
-      child: Text(stock.stockinfo[index].name,
-          style: TextStyle(color: Colors.white)),
+      child: FlatButton(
+        child: Text(stock.stockinfo[index].name,
+            style: TextStyle(color: Colors.white)),
+        onPressed: () {
+          stockquote = null;
+          stockinfo = null;
+          stocknews = null;
+          _loadquote(stock.stockinfo[index].sym);
+          _loadnews(stock.stockinfo[index].sym);
+          _loadinfo(stock.stockinfo[index].sym);
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return SpinKitWave(color: Colors.white, size: 25.0);
+            },
+          );
+          new Future.delayed(new Duration(seconds: 5), () {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => Stockdata()));
+          });
+        },
+      ),
       width: (MediaQuery.of(context).size.width) * 0.13,
       height: 52,
-      padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
+      padding: EdgeInsets.fromLTRB(11, 0, 0, 0),
       alignment: Alignment.centerLeft,
     );
   }
@@ -253,14 +293,6 @@ class _WatchScreenState extends State<WatchScreen> {
             child: Container(
               child: Row(
                 children: <Widget>[
-                  // Icon(
-                  //     stock.stockinfo[index].change
-                  //         ? Icons.notifications_off
-                  //         : Icons.notifications_active,
-                  //     color: stock.stockinfo[index].change
-                  //         ? Colors.red[400]
-                  //         : Colors.greenAccent[400]),
-                  // Text(stock.stockinfo[index].change ? 'Disabled' : 'Active')
                   Text(stock.stockinfo[index].change.toStringAsFixed(2),
                       style: TextStyle(color: Colors.white))
                 ],
@@ -374,6 +406,33 @@ class _WatchScreenState extends State<WatchScreen> {
     Clipboard.setData(new ClipboardData(text: stockclipboard));
     print(stock.name);
   }
+
+  void _loadquote(stockname) {
+    http
+        .get("https://fmpcloud.io/api/v3/quote/" + stockname + '?' + apikey)
+        .then((result) {
+      stockquote = json.decode(result.body);
+    });
+  }
+
+  void _loadnews(stockname) {
+    http
+        .get("https://fmpcloud.io/api/v3/stock_news?tickers=" +
+            stockname +
+            "&limit=5&" +
+            apikey)
+        .then((result) {
+      stocknews = json.decode(result.body);
+    });
+  }
+
+  void _loadinfo(stockname) {
+    http
+        .get("https://fmpcloud.io/api/v3/profile/" + stockname + "?" + apikey)
+        .then((result) {
+      stockinfo = json.decode(result.body);
+    });
+  }
 }
 
 void _delete(String sym) async {
@@ -473,7 +532,7 @@ class Stockinfo {
 }
 
 dynamic stockquotes;
-void loadquote() {
+void loadlistquote() {
   if (watchquery != "") {
     http
         .get("https://fmpcloud.io/api/v3/quote/" + watchquery + '?' + apikey)

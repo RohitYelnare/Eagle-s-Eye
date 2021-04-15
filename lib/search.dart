@@ -311,11 +311,7 @@ class _AutoCompleteState extends State<AutoComplete> {
             "&limit=5&" +
             apikey)
         .then((result) {
-      // setState(() {
-      //   loadingNews = false;
-      // });
       stocknews = json.decode(result.body);
-      // print(stocknews);
     });
   }
 
@@ -324,10 +320,6 @@ class _AutoCompleteState extends State<AutoComplete> {
         .get("https://fmpcloud.io/api/v3/profile/" + stockname + "?" + apikey)
         .then((result) {
       stockinfo = json.decode(result.body);
-      // (stockinfo[0]['website'] == "") ? print('yes') : print('no');
-      // setState(() {
-      //   loadingNews = false;
-      // });
     });
   }
 }
