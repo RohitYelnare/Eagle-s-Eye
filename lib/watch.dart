@@ -85,10 +85,9 @@ class _WatchScreenState extends State<WatchScreen> {
           ),
         ],
         title: Text(
-          "Financigram",
+          "Watch List",
           style: TextStyle(
               color: Color.fromRGBO(54, 54, 64, 1.0),
-              fontStyle: FontStyle.italic,
               fontWeight: FontWeight.w600),
         ),
         iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),

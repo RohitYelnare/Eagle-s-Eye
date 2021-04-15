@@ -141,7 +141,7 @@ class _HomepageState extends State<Homepage> {
                       Padding(
                           padding: const EdgeInsets.only(top: 10),
                           child: RawMaterialButton(
-                            onPressed: () {
+                            onPressed: () async {
                               showDialog(
                                 context: context,
                                 barrierDismissible: false,
@@ -150,13 +150,14 @@ class _HomepageState extends State<Homepage> {
                                       color: Colors.white, size: 25.0);
                                 },
                               );
-                              new Future.delayed(new Duration(seconds: 4), () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            AutoComplete()));
-                              });
+                              int a = await getNasdaqOptions();
+                              // new Future.delayed(new Duration(seconds: 4), () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          AutoComplete()));
+                              // });
                             },
                             elevation: 3.0,
                             fillColor: Colors.white,
@@ -188,7 +189,6 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
-    getNasdaqOptions();
   }
 
   String urlNasdaq =
@@ -199,18 +199,21 @@ class _HomepageState extends State<Homepage> {
           apikey;
   String urlCrypto =
       'https://fmpcloud.io/api/v3/symbol/available-cryptocurrencies?' + apikey;
-  void getNasdaqOptions() async {
-    http.get(urlNasdaq).then((result) {
-      options += loadOptions(result.body);
-    });
-    http.get(urlNyse).then((result) {
-      options += loadOptions(result.body);
-    });
-    http.get(urlCrypto).then((result) {
-      options += loadOptions(result.body);
-    });
+  Future<int> getNasdaqOptions() async {
+    await getopts();
+    return 1;
+  }
 
-    // print('Options: ${options.length}');
+  Future<void> getopts() async {
+    http.get(urlNasdaq).then((resultnasdaq) {
+      options += loadOptions(resultnasdaq.body);
+      http.get(urlNyse).then((resultnyse) {
+        options += loadOptions(resultnyse.body);
+        http.get(urlCrypto).then((resultcrypto) {
+          options += loadOptions(resultcrypto.body);
+        });
+      });
+    });
   }
 
   List<Option> loadOptions(String jsonString) {
