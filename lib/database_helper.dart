@@ -146,6 +146,14 @@ class DatabaseHelper {
     return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
   }
 
+  // update in table 2 count of stock with input symbol
+  Future<int> updateStockSymbol(String name, int count) async {
+    Database db = await instance.database;
+    return await db.rawUpdate(
+        'UPDATE $tableStock SET $stockCount = ? WHERE $stockName = ?',
+        [count, name]);
+  }
+
   Future<List<Map<String, dynamic>>> queryFindStock(String name) async {
     Database db = await instance.database;
     return await db
@@ -175,14 +183,14 @@ class DatabaseHelper {
     return await db.delete(table, where: '$columnName = ?', whereArgs: [name]);
   }
 
-  // deletes all row with input symbol
+  // deletes all row with input symbol in second table
   Future<int> deleteStockSym(String name) async {
     Database db = await instance.database;
     return await db
         .delete(tableStock, where: '$stockName = ?', whereArgs: [name]);
   }
 
-  // delete all row with input id
+  // delete all row with input id in second table
   Future<int> deleteStockId(int id) async {
     Database db = await instance.database;
     return await db.delete(tableStock, where: '$stockId = ?', whereArgs: [id]);
