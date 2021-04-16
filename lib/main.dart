@@ -205,14 +205,15 @@ class _HomepageState extends State<Homepage> {
   }
 
   Future<void> getopts() async {
-    http.get(urlNasdaq).then((resultnasdaq) {
+    await http.get(urlNasdaq).then((resultnasdaq) {
       options += loadOptions(resultnasdaq.body);
-      http.get(urlNyse).then((resultnyse) {
-        options += loadOptions(resultnyse.body);
-        http.get(urlCrypto).then((resultcrypto) {
-          options += loadOptions(resultcrypto.body);
-        });
-      });
+    });
+    await http.get(urlNyse).then((resultnyse) {
+      options += loadOptions(resultnyse.body);
+    });
+    await http.get(urlCrypto).then((resultcrypto) {
+      // print(resultcrypto.statusCode);
+      options += loadOptions(resultcrypto.body);
     });
   }
 
