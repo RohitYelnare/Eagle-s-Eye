@@ -28,6 +28,17 @@ var months = [
 double icondiff;
 bool icondisplay = true;
 bool loadImage = false;
+bool checkExist, showchkbox;
+
+String txt = '';
+Future<void> findConfig() async {
+  int a = await dbHelper.getOneData(stockquote[0]['symbol']);
+  print('value of a = $a');
+  //initial value of checkExist is set to 0
+  checkExist = (a == 0) ? false : true;
+  print('value of check = $checkExist');
+  showchkbox = false;
+}
 
 class Stockdata extends StatefulWidget {
   @override
@@ -36,6 +47,7 @@ class Stockdata extends StatefulWidget {
 
 class _StockdataState extends State<Stockdata> {
   final _costtextfield = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   String tmpcount = "", tmpcost = "";
   @override
   Widget build(BuildContext context) {
@@ -74,7 +86,9 @@ class _StockdataState extends State<Stockdata> {
                         ? Center(
                             child: Container(
                             padding: EdgeInsets.fromLTRB(0, 60.0, 0, 0),
-                            child: SpinKitWave(color: Colors.white, size: 25.0),
+                            child: SpinKitWave(
+                                color: Color.fromRGBO(54, 54, 64, 1.0),
+                                size: 25.0),
                           ))
                         : Column(
                             children: <Widget>[
@@ -134,11 +148,7 @@ class _StockdataState extends State<Stockdata> {
                                             }
                                           }),
                                       selected: true,
-                                      onTap: () {
-                                        // setState(() {
-                                        //   txt = 'List Tile pressed';
-                                        // });
-                                      },
+                                      onTap: () {},
                                     ),
                                   ),
                                 ),
@@ -199,7 +209,6 @@ class _StockdataState extends State<Stockdata> {
             ),
             iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
             bottom: TabBar(
-              // indicatorColor: Color.fromRGBO(54, 54, 64, 1.0),
               labelColor: Colors.white,
               unselectedLabelColor: Color.fromRGBO(54, 54, 64, 1.0),
               indicatorSize: TabBarIndicatorSize.label,
@@ -260,6 +269,7 @@ class _StockdataState extends State<Stockdata> {
             : "assets/red_down.png";
       }
       _costtextfield.text = stockquote[0]['price'].toString();
+      tmpcost = stockquote[0]['price'].toString();
     });
   }
 
@@ -308,46 +318,62 @@ class _StockdataState extends State<Stockdata> {
       barrierDismissible:
           false, // dialog is dismissible with a tap on the barrier
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Enter info'),
-          content: new Row(
-            children: [
-              new Expanded(
-                  child: new TextField(
-                keyboardType: TextInputType.number,
-                decoration: new InputDecoration(labelText: 'No. of shares'),
-                onChanged: (value) {
-                  tmpcount = value;
-                },
-              )),
-              Container(
-                child: Text('\t\t'),
-                // padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+        return Form(
+            key: _formKey,
+            child: AlertDialog(
+              title: Text('Enter info'),
+              content: new Row(
+                children: [
+                  new Expanded(
+                      child: new TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: new InputDecoration(labelText: 'No. of shares'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter no. of shares';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      tmpcount = value;
+                    },
+                  )),
+                  Container(
+                    child: Text('\t\t'),
+                    // padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                  ),
+                  new Expanded(
+                      child: new TextFormField(
+                    controller: _costtextfield,
+                    keyboardType: TextInputType.number,
+                    decoration:
+                        new InputDecoration(labelText: 'Price(' + r'$' + ')'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter cost';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      tmpcost = value;
+                    },
+                  ))
+                ],
               ),
-              new Expanded(
-                  child: new TextField(
-                controller: _costtextfield,
-                keyboardType: TextInputType.number,
-                decoration:
-                    new InputDecoration(labelText: 'Price(' + r'$' + ')'),
-                onChanged: (value) {
-                  tmpcost = value;
-                },
-              ))
-            ],
-          ),
-          actions: [
-            FlatButton(
-              child: Text('Add'),
-              onPressed: () {
-                count = int.parse(tmpcount);
-                cost = num.parse(tmpcost);
-                _insertStock(count, cost);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
+              actions: [
+                FlatButton(
+                  child: Text('Add'),
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      count = int.parse(tmpcount);
+                      cost = num.parse(tmpcost);
+                      _insertStock(count, cost);
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+              ],
+            ));
       },
     );
   }

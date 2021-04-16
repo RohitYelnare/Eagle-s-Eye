@@ -138,6 +138,7 @@ class _HomepageState extends State<Homepage> {
                           padding: const EdgeInsets.only(top: 10),
                           child: RawMaterialButton(
                             onPressed: () async {
+                              options = [];
                               showDialog(
                                 context: context,
                                 barrierDismissible: false,
@@ -147,6 +148,7 @@ class _HomepageState extends State<Homepage> {
                                 },
                               );
                               await getNasdaqOptions();
+                              Navigator.of(context).maybePop();
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
