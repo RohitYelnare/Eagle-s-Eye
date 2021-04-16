@@ -179,11 +179,20 @@ class _CryptodataState extends State<Cryptodata> {
               ),
               child: CallDrawer()),
           appBar: AppBar(
+            actions: [
+              Builder(
+                builder: (context) => IconButton(
+                  icon: Icon(Icons.add_box),
+                  onPressed: () => Scaffold.of(context).openEndDrawer(),
+                  tooltip:
+                      MaterialLocalizations.of(context).openAppDrawerTooltip,
+                ),
+              ),
+            ],
             title: Text(
-              "Financigram",
+              stockquote[0]['exchange'] + ": " + stockquote[0]['symbol'],
               style: GoogleFonts.lato(
                   color: Color.fromRGBO(54, 54, 64, 1.0),
-                  fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w600),
             ),
             iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),

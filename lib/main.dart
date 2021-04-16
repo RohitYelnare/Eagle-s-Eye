@@ -80,11 +80,7 @@ final String apikey7 =
 final String apikey8 =
     'apikey=d78f189cdcc5b45e34db4f415b7121ab'; //fmpcloud-financigram
 
-String optionquery;
 dynamic stockquote, stocknews, stockinfo;
-bool loadingNasdaq = false;
-bool loadingNyse = false;
-bool loadingFinal = true;
 
 class MyApp extends StatelessWidget {
   @override
@@ -150,14 +146,12 @@ class _HomepageState extends State<Homepage> {
                                       color: Colors.white, size: 25.0);
                                 },
                               );
-                              int a = await getNasdaqOptions();
-                              // new Future.delayed(new Duration(seconds: 4), () {
+                              await getNasdaqOptions();
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           AutoComplete()));
-                              // });
                             },
                             elevation: 3.0,
                             fillColor: Colors.white,
@@ -199,7 +193,7 @@ class _HomepageState extends State<Homepage> {
           apikey;
   String urlCrypto =
       'https://fmpcloud.io/api/v3/symbol/available-cryptocurrencies?' + apikey;
-  Future<int> getNasdaqOptions() async {
+  Future<void> getNasdaqOptions() async {
     await getopts();
     return 1;
   }

@@ -192,10 +192,9 @@ class _StockdataState extends State<Stockdata> {
               ),
             ],
             title: Text(
-              "Financigram",
+              stockquote[0]['exchange'] + ": " + stockquote[0]['symbol'],
               style: GoogleFonts.lato(
                   color: Color.fromRGBO(54, 54, 64, 1.0),
-                  fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w600),
             ),
             iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),

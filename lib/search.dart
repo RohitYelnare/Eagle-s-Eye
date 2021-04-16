@@ -96,10 +96,9 @@ class _AutoCompleteState extends State<AutoComplete> {
         backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
         appBar: AppBar(
           // automaticallyImplyLeading: false,
-          title: Text("Financigram",
+          title: Text("Search",
               style: GoogleFonts.lato(
                   color: Color.fromRGBO(54, 54, 64, 1.0),
-                  fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w600)),
           iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
           backgroundColor: Colors.white,
@@ -198,11 +197,10 @@ class _AutoCompleteState extends State<AutoComplete> {
                             ),
                           ));
                     },
-                    onSuggestionSelected: (suggestion) {
+                    onSuggestionSelected: (suggestion) async {
                       if (suggestion.exchangeShortName == 'CRYPTO') {
                         stockquote = null;
                         myController.text = suggestion.name;
-                        _loadquote(suggestion.symbol);
                         showDialog(
                           context: context,
                           barrierDismissible: false,
@@ -210,22 +208,18 @@ class _AutoCompleteState extends State<AutoComplete> {
                             return SpinKitWave(color: Colors.white, size: 25.0);
                           },
                         );
-                        new Future.delayed(new Duration(seconds: 5), () {
-                          myController.text = "";
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      Cryptodata()));
-                        });
+                        await _loadquote(suggestion.symbol);
+                        myController.text = "";
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    Cryptodata()));
                       } else {
                         stockquote = null;
                         stockinfo = null;
                         stocknews = null;
                         myController.text = suggestion.name;
-                        _loadquote(suggestion.symbol);
-                        _loadnews(suggestion.symbol);
-                        _loadinfo(suggestion.symbol);
                         showDialog(
                           context: context,
                           barrierDismissible: false,
@@ -233,14 +227,15 @@ class _AutoCompleteState extends State<AutoComplete> {
                             return SpinKitWave(color: Colors.white, size: 25.0);
                           },
                         );
-                        new Future.delayed(new Duration(seconds: 5), () {
-                          myController.text = "";
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      Stockdata()));
-                        });
+                        await _loadquote(suggestion.symbol);
+                        await _loadnews(suggestion.symbol);
+                        await _loadinfo(suggestion.symbol);
+                        myController.text = "";
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    Stockdata()));
                       }
                     },
                   )
@@ -296,16 +291,17 @@ class _AutoCompleteState extends State<AutoComplete> {
     allRows.forEach((row) => print(row));
   }
 
-  void _loadquote(stockname) {
-    http
+  Future<int> _loadquote(stockname) async {
+    await http
         .get("https://fmpcloud.io/api/v3/quote/" + stockname + '?' + apikey)
         .then((result) {
       stockquote = json.decode(result.body);
     });
+    return 1;
   }
 
-  void _loadnews(stockname) {
-    http
+  Future<int> _loadnews(stockname) async {
+    await http
         .get("https://fmpcloud.io/api/v3/stock_news?tickers=" +
             stockname +
             "&limit=5&" +
@@ -313,13 +309,15 @@ class _AutoCompleteState extends State<AutoComplete> {
         .then((result) {
       stocknews = json.decode(result.body);
     });
+    return 1;
   }
 
-  void _loadinfo(stockname) {
-    http
+  Future<int> _loadinfo(stockname) async {
+    await http
         .get("https://fmpcloud.io/api/v3/profile/" + stockname + "?" + apikey)
         .then((result) {
       stockinfo = json.decode(result.body);
     });
+    return 1;
   }
 }

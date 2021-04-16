@@ -18,9 +18,10 @@ import 'database_helper.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 List<String> watchlist = [];
+dynamic watchlistquote;
 String watchquery = "";
-bool loadingdatatable;
-void _watchquerymaker() async {
+bool reloadwatchlist = false;
+Future<void> watchquerymaker() async {
   watchlist.clear();
   watchquery = "";
   final allRows = await dbHelper.queryAllRows();
@@ -28,7 +29,7 @@ void _watchquerymaker() async {
     watchlist.add(row['name']);
   });
   watchquery = watchlist.toSet().toList().join(',');
-  loadlistquote();
+  await loadlistquote();
 }
 
 class WatchScreen extends StatefulWidget {
@@ -51,16 +52,8 @@ class _WatchScreenState extends State<WatchScreen> {
 
   @override
   void initState() {
-    loadingdatatable = true;
-    Future.delayed(const Duration(milliseconds: 2000), () {
-      loadingdatatable = false;
-      setState(() {
-        loadingdatatable = false;
-      });
-    });
-    _watchquerymaker();
+    reloadwatchlist = false;
     super.initState();
-    // stock.sortName(isAscending);
   }
 
   @override
@@ -75,15 +68,6 @@ class _WatchScreenState extends State<WatchScreen> {
           ),
           child: CallDrawer()),
       appBar: AppBar(
-        actions: [
-          Builder(
-            builder: (context) => IconButton(
-              icon: Icon(Icons.add_box),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-            ),
-          ),
-        ],
         title: Text(
           "Watch List",
           style: TextStyle(
@@ -93,39 +77,32 @@ class _WatchScreenState extends State<WatchScreen> {
         iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
         backgroundColor: Colors.white,
       ),
-      body: loadingdatatable
+      body: (watchquery == "")
           ? Center(
               child: Container(
-              padding: EdgeInsets.fromLTRB(0, 40.0, 0, 0),
-              child: SpinKitWave(color: Colors.white, size: 25.0),
+              child: Column(children: [
+                Text('\n\n'),
+                Container(
+                    child: Icon(
+                  Icons.block,
+                  color: Colors.white,
+                )),
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(60, 10.0, 60, 10.0),
+                    child: Text(
+                      'No stocks added to keep an eye on',
+                      style:
+                          GoogleFonts.lato(color: Colors.white, fontSize: 18.0),
+                    ))
+              ]),
             ))
-          : (watchquery == "")
-              ? Center(
-                  child: Container(
-                  child: Column(children: [
-                    Text('\n\n'),
-                    Container(
-                        child: Icon(
-                      Icons.block,
-                      color: Colors.white,
-                    )),
-                    Padding(
-                        padding: const EdgeInsets.fromLTRB(60, 10.0, 60, 10.0),
-                        child: Text(
-                          'No stocks added to keep an eye on',
-                          style: GoogleFonts.lato(
-                              color: Colors.white, fontSize: 18.0),
-                        ))
-                  ]),
-                ))
-              : _getBodyWidget(),
+          : _getBodyWidget(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => AutoComplete()));
-          // Add your onPressed code here!
         },
         child: const Icon(
           Icons.add,
@@ -157,7 +134,7 @@ class _WatchScreenState extends State<WatchScreen> {
         refreshIndicator: const WaterDropHeader(),
         refreshIndicatorHeight: 69,
         onRefresh: () {
-          _watchquerymaker();
+          watchquerymaker();
           _hdtRefreshController.refreshCompleted();
         },
         htdRefreshController: _hdtRefreshController,
@@ -253,13 +230,10 @@ class _WatchScreenState extends State<WatchScreen> {
       child: FlatButton(
         child: Text(stock.stockinfo[index].name,
             style: TextStyle(color: Colors.white)),
-        onPressed: () {
+        onPressed: () async {
           stockquote = null;
           stockinfo = null;
           stocknews = null;
-          _loadquote(stock.stockinfo[index].sym);
-          _loadnews(stock.stockinfo[index].sym);
-          _loadinfo(stock.stockinfo[index].sym);
           showDialog(
             context: context,
             barrierDismissible: false,
@@ -267,12 +241,13 @@ class _WatchScreenState extends State<WatchScreen> {
               return SpinKitWave(color: Colors.white, size: 25.0);
             },
           );
-          new Future.delayed(new Duration(seconds: 5), () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => Stockdata()));
-          });
+          await _loadquote(stock.stockinfo[index].sym);
+          await _loadnews(stock.stockinfo[index].sym);
+          await _loadinfo(stock.stockinfo[index].sym);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => Stockdata()));
         },
       ),
       width: (MediaQuery.of(context).size.width) * 0.13,
@@ -365,13 +340,24 @@ class _WatchScreenState extends State<WatchScreen> {
           ),
         ),
         FlatButton(
-          onPressed: () {
+          onPressed: () async {
             String tmp = stock.stockinfo[index].sym;
             // setState(() {
-            //   _watchquerymaker();
+            //   watchquerymaker();
             // });
             // stock.stockinfo.remove(stock.stockinfo[index].sym);
-            _delete(tmp);
+            if (reloadwatchlist == false) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return SpinKitWave(color: Colors.white, size: 25.0);
+                },
+              );
+            }
+            await _delete(tmp);
+            await watchquerymaker();
+            reloadwatchlist = true;
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -403,19 +389,18 @@ class _WatchScreenState extends State<WatchScreen> {
         stock.pe +
         "\n";
     Clipboard.setData(new ClipboardData(text: stockclipboard));
-    print(stock.name);
   }
 
-  void _loadquote(stockname) {
-    http
+  Future<void> _loadquote(stockname) async {
+    await http
         .get("https://fmpcloud.io/api/v3/quote/" + stockname + '?' + apikey)
         .then((result) {
       stockquote = json.decode(result.body);
     });
   }
 
-  void _loadnews(stockname) {
-    http
+  Future<void> _loadnews(stockname) async {
+    await http
         .get("https://fmpcloud.io/api/v3/stock_news?tickers=" +
             stockname +
             "&limit=5&" +
@@ -425,8 +410,8 @@ class _WatchScreenState extends State<WatchScreen> {
     });
   }
 
-  void _loadinfo(stockname) {
-    http
+  Future<void> _loadinfo(stockname) async {
+    await http
         .get("https://fmpcloud.io/api/v3/profile/" + stockname + "?" + apikey)
         .then((result) {
       stockinfo = json.decode(result.body);
@@ -434,7 +419,7 @@ class _WatchScreenState extends State<WatchScreen> {
   }
 }
 
-void _delete(String sym) async {
+Future<void> _delete(String sym) async {
   // Assuming that the number of rows is the id for the last row.
   final rowsDeleted = await dbHelper.delete(sym);
   print('deleted $rowsDeleted row(s): row $sym');
@@ -460,19 +445,19 @@ class Stock {
     // print(','.allMatches(watchquery).length);
     for (int i = 0; i < size; i++) {
       stockinfo.add(Stockinfo(
-          stockquotes[i]['symbol'],
-          stockquotes[i]['name'],
-          stockquotes[i]['change'],
-          stockquotes[i]['price'],
-          (stockquotes[i]['marketCap'] != null)
-              ? (stockquotes[i]['marketCap'] > 1000000000)
-                  ? (stockquotes[i]['marketCap'] > 1000000000000)
-                      ? "\$${(stockquotes[i]['marketCap'] / 1000000000000).toStringAsFixed(3)}T"
-                      : "\$${(stockquotes[i]['marketCap'] / 1000000000).toStringAsFixed(2)}B"
-                  : "\$${(stockquotes[i]['marketCap'] / 1000000).toStringAsFixed(2)}M"
+          watchlistquote[i]['symbol'],
+          watchlistquote[i]['name'],
+          watchlistquote[i]['change'],
+          watchlistquote[i]['price'],
+          (watchlistquote[i]['marketCap'] != null)
+              ? (watchlistquote[i]['marketCap'] > 1000000000)
+                  ? (watchlistquote[i]['marketCap'] > 1000000000000)
+                      ? "\$${(watchlistquote[i]['marketCap'] / 1000000000000).toStringAsFixed(3)}T"
+                      : "\$${(watchlistquote[i]['marketCap'] / 1000000000).toStringAsFixed(2)}B"
+                  : "\$${(watchlistquote[i]['marketCap'] / 1000000).toStringAsFixed(2)}M"
               : "-",
-          (stockquotes[i]['pe'] != null)
-              ? stockquotes[i]['pe'].toStringAsFixed(1)
+          (watchlistquote[i]['pe'] != null)
+              ? watchlistquote[i]['pe'].toStringAsFixed(1)
               : '-'));
     }
   }
@@ -530,13 +515,12 @@ class Stockinfo {
   Stockinfo(this.sym, this.name, this.change, this.price, this.mktcap, this.pe);
 }
 
-dynamic stockquotes;
-void loadlistquote() {
+Future<void> loadlistquote() async {
   if (watchquery != "") {
-    http
+    await http
         .get("https://fmpcloud.io/api/v3/quote/" + watchquery + '?' + apikey)
         .then((result) {
-      stockquotes = json.decode(result.body);
+      watchlistquote = json.decode(result.body);
       stock.initData(','.allMatches(watchquery).length + 1);
     });
   }

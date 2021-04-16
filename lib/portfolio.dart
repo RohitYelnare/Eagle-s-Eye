@@ -34,11 +34,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
   @override
   void initState() {
-    loadingdatatable = true;
     Future.delayed(const Duration(milliseconds: 2000), () {
-      setState(() {
-        loadingdatatable = false;
-      });
+      setState(() {});
     });
     _portfolioquerymaker();
     // _queryStock();
