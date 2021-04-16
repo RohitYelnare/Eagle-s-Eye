@@ -33,7 +33,9 @@ class Cryptodata extends StatefulWidget {
 }
 
 class _CryptodataState extends State<Cryptodata> {
-  String temp1 = "", temp2 = "";
+  final _costtextfield = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  String tmpcount = "", tmpcost = "";
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,12 +47,10 @@ class _CryptodataState extends State<Cryptodata> {
             width: (MediaQuery.of(context).size.width / 100) * 80,
             child: Stack(
               children: <Widget>[
-                // background of the drawer
                 Align(
                   alignment: Alignment.topRight,
                   child: Container(
                     width: (MediaQuery.of(context).size.width / 100) * 75,
-                    // color: Colors.limeAccent[700],
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.center,
@@ -60,19 +60,19 @@ class _CryptodataState extends State<Cryptodata> {
                     ),
                   ),
                 ),
-
                 Positioned(
                   left: 0,
                   right: 0,
                   top: (MediaQuery.of(context).size.height / 100) * 10,
                   bottom: 0,
                   child: Container(
-                    // color: Colors.red,
                     child: showchkbox
                         ? Center(
                             child: Container(
                             padding: EdgeInsets.fromLTRB(0, 60.0, 0, 0),
-                            child: SpinKitWave(color: Colors.white, size: 25.0),
+                            child: SpinKitWave(
+                                color: Color.fromRGBO(54, 54, 64, 1.0),
+                                size: 25.0),
                           ))
                         : Column(
                             children: <Widget>[
@@ -232,7 +232,6 @@ class _CryptodataState extends State<Cryptodata> {
     super.initState();
     findConfig();
     Future.delayed(const Duration(milliseconds: 2000), () {
-      showchkbox = false;
       setState(() {
         showchkbox = false;
         // Here you can write your code for open new view
@@ -240,12 +239,12 @@ class _CryptodataState extends State<Cryptodata> {
     });
     setState(() {
       if (stockquote != null) {
-        if (stockquote[0]['change'] >= 0.0) {
-          global.arrow = "assets/green_up.png";
-        } else {
-          global.arrow = "assets/red_down.png";
-        }
+        global.arrow = (stockquote[0]['change'] >= 0.0)
+            ? "assets/green_up.png"
+            : "assets/red_down.png";
       }
+      _costtextfield.text = stockquote[0]['price'].toString();
+      tmpcost = stockquote[0]['price'].toString();
     });
   }
 
@@ -255,47 +254,67 @@ class _CryptodataState extends State<Cryptodata> {
       barrierDismissible:
           false, // dialog is dismissible with a tap on the barrier
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Enter info'),
-          content: new Row(
-            children: [
-              new Expanded(
-                  child: new TextField(
-                keyboardType: TextInputType.number,
-                decoration: new InputDecoration(labelText: 'No. of coins'),
-                onChanged: (value) {
-                  temp1 = value;
-                },
-              )),
-              Container(
-                child: Text('\t\t'),
-                // padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+        return Form(
+            key: _formKey,
+            child: AlertDialog(
+              title: Text('Enter info'),
+              content: new Row(
+                children: [
+                  new Expanded(
+                      child: new TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: new InputDecoration(labelText: 'No. of coins'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter no. of coins';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      tmpcount = value;
+                    },
+                  )),
+                  Container(
+                    child: Text('\t\t'),
+                  ),
+                  new Expanded(
+                      child: new TextFormField(
+                    controller: _costtextfield,
+                    keyboardType: TextInputType.number,
+                    decoration:
+                        new InputDecoration(labelText: 'Price(' + r'$' + ')'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter cost';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      tmpcost = value;
+                    },
+                  ))
+                ],
               ),
-              new Expanded(
-                  child: new TextField(
-                keyboardType: TextInputType.number,
-                decoration:
-                    new InputDecoration(labelText: 'Price(' + r'$' + ')'),
-                onChanged: (value) {
-                  temp2 = value;
-                },
-              ))
-            ],
-          ),
-          actions: [
-            FlatButton(
-              child: Text('Add'),
-              onPressed: () {
-                count = int.parse(temp1);
-                cost = num.parse(temp2);
-                _insertStock(count, cost);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
+              actions: [
+                FlatButton(
+                  child: Text('Add'),
+                  onPressed: () {
+                    count = int.parse(tmpcount);
+                    cost = num.parse(tmpcost);
+                    _insertStock(count, cost);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ));
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _costtextfield.dispose();
+    super.dispose();
   }
 
   void _insert(String name) async {
