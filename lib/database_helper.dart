@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:path/path.dart';
@@ -143,6 +144,28 @@ class DatabaseHelper {
     Database db = await instance.database;
     int id = row[columnId];
     return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
+  }
+
+  Future<List<Map<String, dynamic>>> queryFindStock(String name) async {
+    Database db = await instance.database;
+    return await db
+        .rawQuery('SELECT * FROM $tableStock WHERE $stockName = ?', [name]);
+  }
+
+  Future<int> updateStock(Map<String, dynamic> row) async {
+    Database db = await instance.database;
+    String name = row[stockName];
+    final result = await queryFindStock(name);
+    num totalCount = row[stockCount];
+    num totalCost = row[stockCost] * row[stockCount];
+    for (var i = 0; i < result.length; i++) {
+      totalCount += result[i]['count'];
+      totalCost += (result[i]['cost'] * result[i]['count']);
+    }
+    totalCost /= totalCount;
+    return await db.rawUpdate(
+        'UPDATE $tableStock SET $stockCount = ?, $stockCost = ? WHERE $stockName = ?',
+        [totalCount, totalCost, name]);
   }
 
   // Deletes the row specified by the id. The number of affected rows is

@@ -297,8 +297,16 @@ class _StockdataState extends State<Stockdata> {
       DatabaseHelper.stockCount: count,
       DatabaseHelper.stockCost: cost
     };
-    final id = await dbHelper.insertStock(row);
-    print('inserted row in table 2 id: $id');
+    // check if stock/crypto already exists in portfolio
+    final result = await dbHelper.queryFindStock(stockquote[0]['symbol']);
+    print('data in table2 : $result');
+    if (result.length == 0) {
+      final id = await dbHelper.insertStock(row);
+      print('inserted row in table 2 id: $id');
+    } else {
+      final count = await dbHelper.updateStock(row);
+      print('updated $count rows');
+    }
   }
 
   void _delete(String name) async {
