@@ -72,20 +72,19 @@ class CallDrawer extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   fontSize: 20.0),
             ),
-            onTap: () {
-              // showDialog(
-              //   context: context,
-              //   barrierDismissible: false,
-              //   builder: (BuildContext context) {
-              //     return SpinKitWave(color: Colors.white, size: 25.0);
-              //   },
-              // );
-              new Future.delayed(new Duration(seconds: 6), () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => PortfolioScreen()));
-              });
+            onTap: () async {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return SpinKitWave(color: Colors.white, size: 25.0);
+                },
+              );
+              await portfolioquerymaker();
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => PortfolioScreen()));
             },
           ),
         ],
