@@ -60,13 +60,6 @@ class _WatchScreenState extends State<WatchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
-      // drawer: Theme(
-      //     data: Theme.of(context).copyWith(
-      //       canvasColor: Color.fromRGBO(54, 54, 64,
-      //           1.0), //This will change the drawer background to blue.
-      //       //other styles
-      //     ),
-      //     child: CallDrawer()),
       appBar: AppBar(
         title: Text(
           "Watch List",
@@ -422,7 +415,7 @@ class _WatchScreenState extends State<WatchScreen> {
 Future<void> _delete(String sym) async {
   // Assuming that the number of rows is the id for the last row.
   final rowsDeleted = await dbHelper.delete(sym);
-  print('deleted $rowsDeleted row(s): row $sym');
+  // print('deleted $rowsDeleted row(s): row $sym');
 }
 
 void _insert(String name) async {
@@ -432,7 +425,7 @@ void _insert(String name) async {
     DatabaseHelper.columnAge: 1
   };
   final id = await dbHelper.insert(row);
-  print('inserted row id: $id, $name');
+  // print('inserted row id: $id, $name');
 }
 
 Stock stock = Stock();

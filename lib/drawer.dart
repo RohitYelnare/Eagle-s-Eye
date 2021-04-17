@@ -19,7 +19,7 @@ class CallDrawer extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
             child: Text(
-              "Financigram",
+              "Eagle's Eye",
               style: GoogleFonts.lato(
                   color: Color.fromRGBO(54, 54, 64, 1.0),
                   fontStyle: FontStyle.italic,

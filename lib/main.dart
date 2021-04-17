@@ -112,7 +112,7 @@ class _HomepageState extends State<Homepage> {
                     alignment: Alignment.bottomCenter,
                     children: <Widget>[
                       Image.asset(
-                        'assets/images/financigramhome.jpg',
+                        'assets/images/home.jpg',
                         height: MediaQuery.of(context).size.height / 1.4,
                         width: double.infinity,
                         fit: BoxFit.fill,
@@ -120,7 +120,7 @@ class _HomepageState extends State<Homepage> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: Text(
-                          'Financigram',
+                          "Eagle's Eye",
                           textAlign: TextAlign.center,
                           style: GoogleFonts.lato(
                               fontSize: 45,
@@ -170,7 +170,7 @@ class _HomepageState extends State<Homepage> {
                         padding: const EdgeInsets.only(
                             top: 2, left: 25, right: 25, bottom: 7),
                         child: Text(
-                            'Your one-stop app to know latest key stats and news of stocks listed on NYSE and NASDAQ',
+                            '\nKnow latest key info of Cryptocurrencies & stocks listed on NYSE, NASDAQ',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.lato(
                                 fontSize: 16, color: Colors.white)),

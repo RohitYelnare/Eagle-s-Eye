@@ -52,7 +52,7 @@ Widget newsCard(BuildContext context, int index) {
 
 Widget isNews(BuildContext context) {
   Widget child;
-  if ((stocknews != null)) {
+  if ((stocknews != null || stocknews.length != 0)) {
     child = SafeArea(
       child: Scaffold(
         backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
@@ -76,8 +76,9 @@ Widget isNews(BuildContext context) {
       Padding(
           padding: const EdgeInsets.fromLTRB(50.0, 10.0, 50.0, 10.0),
           child: Text(
-            'ERROR: Unable to reach server. Reload the app with an active internet connection.',
+            'ERROR: Unable to fetch data at the moment. Try reloading the app with an active internet connection.',
             style: GoogleFonts.lato(color: Colors.white, fontSize: 18.0),
+            textAlign: TextAlign.center,
           ))
     ])));
   }

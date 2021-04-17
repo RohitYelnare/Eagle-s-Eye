@@ -133,7 +133,12 @@ Widget websiteTile(BuildContext context) {
 
 Widget isQuote(BuildContext context) {
   Widget child;
-  if (stockinfo == null || stockquote == null || stocknews == null) {
+  if (stockinfo == null ||
+      stockquote == null ||
+      stocknews == null ||
+      stockinfo.length == 0 ||
+      stocknews.length == 0 ||
+      stockquote.length == 0) {
     child = Center(
         child: Container(
             child: Column(children: [
@@ -146,8 +151,9 @@ Widget isQuote(BuildContext context) {
       Padding(
           padding: const EdgeInsets.fromLTRB(50.0, 10.0, 50.0, 10.0),
           child: Text(
-            'ERROR: Unable to reach server. Reload the app with an active internet connection.',
+            'ERROR: Unable to fetch data at the moment. Try reloading the app with an active internet connection.',
             style: GoogleFonts.lato(color: Colors.white, fontSize: 18.0),
+            textAlign: TextAlign.center,
           ))
     ])));
   } else {
@@ -163,9 +169,9 @@ Widget isQuote(BuildContext context) {
                   maxWidth: 50,
                   maxHeight: 50,
                 ),
-                child: (stockinfo[0]['image'] != null)
-                    ? Image.network(stockinfo[0]['image'])
-                    : Icon(Icons.image_not_supported)),
+                child: (stockinfo[0]['image'] == null)
+                    ? Icon(Icons.image_not_supported)
+                    : Image.network(stockinfo[0]['image'])),
             contentPadding: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 0.0),
             title: Text(
               "${stockinfo[0]['companyName']}",

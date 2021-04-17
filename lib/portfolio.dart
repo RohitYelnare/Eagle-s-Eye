@@ -1,3 +1,4 @@
+import 'package:financigram/cryptodata.dart';
 import 'package:financigram/portfolioData.dart';
 import 'package:flutter/material.dart';
 import 'add.dart';
@@ -175,155 +176,214 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                   ),
                 ),
                 Container(
+                    padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
                     child: Text(
-                  'You invested: ' +
-                      r'$' +
-                      commaadder(totalinitial.toStringAsFixed(0)),
-                  style: GoogleFonts.lato(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 21,
-                      color: Colors.white),
-                )),
+                      'You invested: ' +
+                          r'$' +
+                          commaadder(totalinitial.toStringAsFixed(0)),
+                      style: GoogleFonts.lato(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 21,
+                          color: Colors.white),
+                    )),
                 Container(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
                       itemCount: portfoliolist.length,
                       itemBuilder: (context, index) {
-                        return ExpansionTileCard(
-                          paddingCurve: Curves.easeIn,
-                          baseColor: Color.fromRGBO(54, 54, 64, 1.0),
-                          expandedColor: Color.fromRGBO(54, 54, 64, 1.0),
-                          leading: (portfoliolist[index].price >=
-                                  portfoliolist[index].stockCost)
-                              ? Image.asset("assets/green_up.png",
-                                  height:
-                                      MediaQuery.of(context).size.height / 23)
-                              : Image.asset("assets/red_down.png",
-                                  height:
-                                      MediaQuery.of(context).size.height / 23),
-                          title: Text(
-                            portfoliolist[index].fullname,
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                          subtitle: Text(
-                            (portfoliolist[index].price >=
-                                    portfoliolist[index].stockCost)
-                                ? r"$+" +
-                                    ((portfoliolist[index].price -
-                                                portfoliolist[index]
-                                                    .stockCost) *
-                                            portfoliolist[index].stockCount)
-                                        .toStringAsFixed(1)
-                                : r"$" +
-                                    ((portfoliolist[index].price -
-                                                portfoliolist[index]
-                                                    .stockCost) *
-                                            portfoliolist[index].stockCount)
-                                        .toStringAsFixed(1),
-                            style: TextStyle(
-                                color: (portfoliolist[index].price >=
-                                        portfoliolist[index].stockCost)
-                                    ? Colors.limeAccent[400]
-                                    : Colors.red,
-                                fontSize: 17),
-                          ),
-                          trailing: Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Colors.white,
-                          ),
-                          children: <Widget>[
-                            Divider(
-                              thickness: 1.0,
-                              height: 1.0,
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0,
-                                  vertical: 8.0,
-                                ),
-                                child: Center(
-                                    child: Text(
-                                  r"Capital: $ " +
-                                      (portfoliolist[index].price *
-                                              portfoliolist[index].stockCount)
-                                          .toStringAsFixed(1) +
-                                      "\n\n" +
-                                      r"Investment: $ " +
-                                      (portfoliolist[index].stockCost *
-                                              portfoliolist[index].stockCount)
-                                          .toStringAsFixed(1),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                )),
+                        return Padding(
+                            padding: EdgeInsets.fromLTRB(0.0, 7.0, 0.0, 7.0),
+                            child: ExpansionTileCard(
+                              paddingCurve: Curves.easeIn,
+                              baseColor: Color.fromRGBO(54, 54, 64, 1.0),
+                              expandedColor: Color.fromRGBO(54, 54, 64, 1.0),
+                              leading: (portfoliolist[index].price >=
+                                      portfoliolist[index].stockCost)
+                                  ? Image.asset("assets/green_up.png",
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              23)
+                                  : Image.asset("assets/red_down.png",
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              23),
+                              title: Text(
+                                portfoliolist[index].fullname,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
                               ),
-                            ),
-                            ButtonBar(
-                              alignment: MainAxisAlignment.spaceAround,
-                              buttonHeight: 52.0,
-                              buttonMinWidth: 90.0,
+                              subtitle: Text(
+                                (portfoliolist[index].price >=
+                                        portfoliolist[index].stockCost)
+                                    ? r"$+" +
+                                        ((portfoliolist[index].price -
+                                                    portfoliolist[index]
+                                                        .stockCost) *
+                                                portfoliolist[index].stockCount)
+                                            .toStringAsFixed(1)
+                                    : r"$" +
+                                        ((portfoliolist[index].price -
+                                                    portfoliolist[index]
+                                                        .stockCost) *
+                                                portfoliolist[index].stockCount)
+                                            .toStringAsFixed(1),
+                                style: TextStyle(
+                                    color: (portfoliolist[index].price >=
+                                            portfoliolist[index].stockCost)
+                                        ? Colors.limeAccent[400]
+                                        : Colors.red,
+                                    fontSize: 17),
+                              ),
+                              trailing: Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Colors.white,
+                              ),
                               children: <Widget>[
-                                // FlatButton(
-                                //   shape: RoundedRectangleBorder(
-                                //       borderRadius: BorderRadius.circular(4.0)),
-                                //   onPressed: () {},
-                                //   child: Column(
-                                //     children: <Widget>[
-                                //       Icon(
-                                //         Icons.arrow_circle_down,
-                                //         color: Colors.white,
-                                //       ),
-                                //       Padding(
-                                //         padding: const EdgeInsets.symmetric(
-                                //             vertical: 2.0),
-                                //       ),
-                                //       Text(
-                                //         'Reduce',
-                                //         style: TextStyle(color: Colors.white),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
-                                FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(4.0)),
-                                  onPressed: () async {
-                                    await dbHelper.deleteStockSym(
-                                        portfoliolist[index].stockName);
-                                    await portfolioquerymaker();
-                                    Future.delayed(
-                                        const Duration(milliseconds: 2000), () {
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  PortfolioScreen()));
-                                    });
-                                  },
-                                  child: Column(
-                                    children: <Widget>[
-                                      Icon(Icons.remove_circle,
-                                          color: Colors.red),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 2.0),
+                                Divider(
+                                  thickness: 1.0,
+                                  height: 1.0,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0,
+                                      vertical: 8.0,
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      r"Capital: $ " +
+                                          (portfoliolist[index].price *
+                                                  portfoliolist[index]
+                                                      .stockCount)
+                                              .toStringAsFixed(1) +
+                                          "\n\n" +
+                                          r"Investment: $ " +
+                                          (portfoliolist[index].stockCost *
+                                                  portfoliolist[index]
+                                                      .stockCount)
+                                              .toStringAsFixed(1),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
                                       ),
-                                      Text(
-                                        'Remove',
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ],
+                                      textAlign: TextAlign.center,
+                                    )),
                                   ),
+                                ),
+                                ButtonBar(
+                                  alignment: MainAxisAlignment.spaceAround,
+                                  buttonHeight: 52.0,
+                                  buttonMinWidth: 90.0,
+                                  children: <Widget>[
+                                    FlatButton(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(4.0)),
+                                      onPressed: () async {
+                                        if (portfoliolist[index].exchange !=
+                                            'CRYPTO') {
+                                          stockquote = null;
+                                          stockinfo = null;
+                                          stocknews = null;
+                                          showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (BuildContext context) {
+                                              return SpinKitWave(
+                                                  color: Colors.white,
+                                                  size: 25.0);
+                                            },
+                                          );
+                                          await _loadquote(
+                                              portfoliolist[index].stockName);
+                                          await _loadnews(
+                                              portfoliolist[index].stockName);
+                                          await _loadinfo(
+                                              portfoliolist[index].stockName);
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          Stockdata()));
+                                        } else {
+                                          stockquote = null;
+                                          showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (BuildContext context) {
+                                              return SpinKitWave(
+                                                  color: Colors.white,
+                                                  size: 25.0);
+                                            },
+                                          );
+                                          await _loadquote(
+                                              portfoliolist[index].stockName);
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          Cryptodata()));
+                                        }
+                                      },
+                                      child: Column(
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.info,
+                                            color: Colors.blue,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 2.0),
+                                          ),
+                                          Text(
+                                            'Info',
+                                            style:
+                                                TextStyle(color: Colors.blue),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    FlatButton(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(4.0)),
+                                      onPressed: () async {
+                                        await dbHelper.deleteStockSym(
+                                            portfoliolist[index].stockName);
+                                        await portfolioquerymaker();
+                                        // Future.delayed(
+                                        //     const Duration(milliseconds: 2000), () {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        PortfolioScreen()));
+                                        // });
+                                      },
+                                      child: Column(
+                                        children: <Widget>[
+                                          Icon(Icons.remove_circle,
+                                              color: Colors.red),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 2.0),
+                                          ),
+                                          Text(
+                                            'Remove',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
-                            ),
-                          ],
-                        );
+                            ));
                       }),
                 )
               ])));
@@ -358,7 +418,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
   }
 }
 
-Future<void> _loadquote(stockname) async {
+Future<void> _loadportfolioquote(stockname) async {
   if (portfolioquery != null) {
     await http
         .get(
@@ -403,10 +463,40 @@ Future<void> portfolioquerymaker() async {
       portfolioquery += (row['name'] + ",");
     });
     portfolioquery = portfolioquery.substring(0, portfolioquery.length - 1);
-    await _loadquote(portfolioquery);
+    await _loadportfolioquote(portfolioquery);
   }
 }
 
 Future<void> deletestockbysym(String name) async {
   await dbHelper.deleteStockSym(name);
+}
+
+Future<int> _loadquote(stockname) async {
+  await http
+      .get("https://fmpcloud.io/api/v3/quote/" + stockname + '?' + apikey)
+      .then((result) {
+    stockquote = json.decode(result.body);
+  });
+  return 1;
+}
+
+Future<int> _loadnews(stockname) async {
+  await http
+      .get("https://fmpcloud.io/api/v3/stock_news?tickers=" +
+          stockname +
+          "&limit=5&" +
+          apikey)
+      .then((result) {
+    stocknews = json.decode(result.body);
+  });
+  return 1;
+}
+
+Future<int> _loadinfo(stockname) async {
+  await http
+      .get("https://fmpcloud.io/api/v3/profile/" + stockname + "?" + apikey)
+      .then((result) {
+    stockinfo = json.decode(result.body);
+  });
+  return 1;
 }

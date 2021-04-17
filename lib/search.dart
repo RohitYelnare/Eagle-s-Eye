@@ -254,7 +254,7 @@ class _AutoCompleteState extends State<AutoComplete> {
               padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
               child: Container(
                 child: Text(
-                  "Search for latest quotes and news of stocks listed on NYSE and NASDAQ",
+                  "Search for real-time quotes and news of Cryptocurrencies and stocks listed on NYSE, NASDAQ ",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.lato(
                       color: Colors.white,
@@ -263,26 +263,25 @@ class _AutoCompleteState extends State<AutoComplete> {
                 ),
               ),
             ),
-            ElevatedButton(
-              // color:Colors.green;
-              child: Text(
-                'query',
-                style: TextStyle(fontSize: 20),
-              ),
-              onPressed: () {
-                _query();
-              },
-            ),
-            ElevatedButton(
-              // color:Colors.green;
-              child: Text(
-                'queryStock',
-                style: TextStyle(fontSize: 20),
-              ),
-              onPressed: () {
-                _queryStock();
-              },
-            ),
+
+            // ElevatedButton(
+            //   child: Text(
+            //     'query',
+            //     style: TextStyle(fontSize: 20),
+            //   ),
+            //   onPressed: () {
+            //     _query();
+            //   },
+            // ),
+            // ElevatedButton(
+            //   child: Text(
+            //     'queryStock',
+            //     style: TextStyle(fontSize: 20),
+            //   ),
+            //   onPressed: () {
+            //     _queryStock();
+            //   },
+            // ),
           ],
         )));
   }
