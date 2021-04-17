@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import 'add.dart';
 import 'package:flutter/material.dart';
+import 'cryptodata.dart';
 import 'main.dart';
 import 'drawer.dart';
 import 'global.dart' as global;
@@ -90,19 +91,6 @@ class _WatchScreenState extends State<WatchScreen> {
               ]),
             ))
           : _getBodyWidget(),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.pushReplacement(
-      //         context,
-      //         MaterialPageRoute(
-      //             builder: (BuildContext context) => AutoComplete()));
-      //   },
-      //   child: const Icon(
-      //     Icons.add,
-      //     color: Color.fromRGBO(54, 54, 64, 1.0),
-      //   ),
-      //   backgroundColor: Colors.white,
-      // ),
     );
   }
 
@@ -203,7 +191,6 @@ class _WatchScreenState extends State<WatchScreen> {
           setState(() {});
         },
       ),
-      // _getTitleItemWidget('P/E', (MediaQuery.of(context).size.width) * 0.15),
     ];
   }
 
@@ -224,23 +211,41 @@ class _WatchScreenState extends State<WatchScreen> {
         child: Text(stock.stockinfo[index].name,
             style: TextStyle(color: Colors.white)),
         onPressed: () async {
-          stockquote = null;
-          stockinfo = null;
-          stocknews = null;
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return SpinKitWave(color: Colors.white, size: 25.0);
-            },
-          );
-          await _loadquote(stock.stockinfo[index].sym);
-          await _loadnews(stock.stockinfo[index].sym);
-          await _loadinfo(stock.stockinfo[index].sym);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => Stockdata()));
+          if (stock.stockinfo[index].exchange != 'CRYPTO') {
+            stockquote = null;
+            stockinfo = null;
+            stocknews = null;
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return SpinKitWave(color: Colors.white, size: 25.0);
+              },
+            );
+            await _loadquote(stock.stockinfo[index].sym);
+            await _loadnews(stock.stockinfo[index].sym);
+            await _loadinfo(stock.stockinfo[index].sym);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => Stockdata()));
+          } else {
+            stockquote = null;
+            stockinfo = null;
+            stocknews = null;
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return SpinKitWave(color: Colors.white, size: 25.0);
+              },
+            );
+            await _loadquote(stock.stockinfo[index].sym);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => Cryptodata()));
+          }
         },
       ),
       width: (MediaQuery.of(context).size.width) * 0.13,
@@ -318,11 +323,6 @@ class _WatchScreenState extends State<WatchScreen> {
               content: Text(stock.stockinfo[index].sym +
                   ' real-time quote copied to be clipboard ✔'),
               duration: Duration(seconds: 3),
-              // action: SnackBarAction(
-              //     label: 'Undo',
-              //     onPressed: () {
-              //       print("undo pressed");
-              //     }),
             );
             Scaffold.of(context).showSnackBar(snackBar);
           },
@@ -351,6 +351,7 @@ class _WatchScreenState extends State<WatchScreen> {
             await _delete(tmp);
             await watchquerymaker();
             reloadwatchlist = true;
+            Navigator.pop(context);
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -451,7 +452,8 @@ class Stock {
               : "-",
           (watchlistquote[i]['pe'] != null)
               ? watchlistquote[i]['pe'].toStringAsFixed(1)
-              : '-'));
+              : '-',
+          watchlistquote[i]['exchange']));
     }
   }
 
@@ -504,8 +506,10 @@ class Stockinfo {
   double price;
   String mktcap;
   String pe;
+  String exchange;
 
-  Stockinfo(this.sym, this.name, this.change, this.price, this.mktcap, this.pe);
+  Stockinfo(this.sym, this.name, this.change, this.price, this.mktcap, this.pe,
+      this.exchange);
 }
 
 Future<void> loadlistquote() async {
