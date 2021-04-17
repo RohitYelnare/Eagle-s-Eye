@@ -190,6 +190,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
+                      physics: const BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
                       itemCount: portfoliolist.length,
                       itemBuilder: (context, index) {
                         return Padding(
