@@ -60,13 +60,13 @@ class _WatchScreenState extends State<WatchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
-      drawer: Theme(
-          data: Theme.of(context).copyWith(
-            canvasColor: Color.fromRGBO(54, 54, 64,
-                1.0), //This will change the drawer background to blue.
-            //other styles
-          ),
-          child: CallDrawer()),
+      // drawer: Theme(
+      //     data: Theme.of(context).copyWith(
+      //       canvasColor: Color.fromRGBO(54, 54, 64,
+      //           1.0), //This will change the drawer background to blue.
+      //       //other styles
+      //     ),
+      //     child: CallDrawer()),
       appBar: AppBar(
         title: Text(
           "Watch List",
@@ -97,19 +97,19 @@ class _WatchScreenState extends State<WatchScreen> {
               ]),
             ))
           : _getBodyWidget(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => AutoComplete()));
-        },
-        child: const Icon(
-          Icons.add,
-          color: Color.fromRGBO(54, 54, 64, 1.0),
-        ),
-        backgroundColor: Colors.white,
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.pushReplacement(
+      //         context,
+      //         MaterialPageRoute(
+      //             builder: (BuildContext context) => AutoComplete()));
+      //   },
+      //   child: const Icon(
+      //     Icons.add,
+      //     color: Color.fromRGBO(54, 54, 64, 1.0),
+      //   ),
+      //   backgroundColor: Colors.white,
+      // ),
     );
   }
 

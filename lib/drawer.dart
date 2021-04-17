@@ -54,7 +54,7 @@ class CallDrawer extends StatelessWidget {
               // }
               await watchquerymaker();
               // loadwatchlist = true;
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) => WatchScreen()));
@@ -73,15 +73,15 @@ class CallDrawer extends StatelessWidget {
                   fontSize: 20.0),
             ),
             onTap: () async {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return SpinKitWave(color: Colors.white, size: 25.0);
-                },
-              );
+              // showDialog(
+              //   context: context,
+              //   barrierDismissible: false,
+              //   builder: (BuildContext context) {
+              //     return SpinKitWave(color: Colors.white, size: 25.0);
+              //   },
+              // );
               await portfolioquerymaker();
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) => PortfolioScreen()));

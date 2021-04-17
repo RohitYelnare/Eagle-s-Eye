@@ -15,8 +15,11 @@ class portData {
 class stockData {
   int stockId;
   String stockName;
+  String exchange;
+  String fullname;
   int stockCount;
   num stockCost;
+  num price;
 
   stockData.storeAll(
       this.stockId, this.stockName, this.stockCount, this.stockCost);
