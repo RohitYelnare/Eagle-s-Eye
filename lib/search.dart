@@ -113,26 +113,32 @@ class _AutoCompleteState extends State<AutoComplete> {
                 children: <Widget>[
                   TypeAheadField(
                     noItemsFoundBuilder: (value) {
-                      return Container(
-                          decoration: new BoxDecoration(
-                            color: Color.fromRGBO(54, 54, 64, 1.0),
-                          ),
-                          child: ListTile(
-                            title: Text(
-                              'No Matches Found',
-                              style: GoogleFonts.lato(
-                                  color: Colors.white,
-                                  fontSize: 18.5,
-                                  fontWeight: FontWeight.w600),
+                      if (myController.text != "") {
+                        return Container(
+                            decoration: new BoxDecoration(
+                              color: Color.fromRGBO(54, 54, 64, 1.0),
                             ),
-                            subtitle: Text(
-                              'Make sure you have entered a valid company name or check your connection and reload the app',
-                              style: GoogleFonts.lato(
-                                  color: Colors.white,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ));
+                            child: ListTile(
+                              title: Text(
+                                'No Matches Found',
+                                style: GoogleFonts.lato(
+                                    color: Colors.white,
+                                    fontSize: 18.5,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              subtitle: Text(
+                                'Make sure you have entered a valid company name or check your connection and reload the app',
+                                style: GoogleFonts.lato(
+                                    color: Colors.white,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ));
+                      } else {
+                        return Container(
+                          height: 0,
+                        );
+                      }
                     },
                     textFieldConfiguration: TextFieldConfiguration(
                         controller: myController,
@@ -200,6 +206,8 @@ class _AutoCompleteState extends State<AutoComplete> {
                     onSuggestionSelected: (suggestion) async {
                       if (suggestion.exchangeShortName == 'CRYPTO') {
                         stockquote = null;
+                        stockinfo = null;
+                        stocknews = null;
                         myController.text = suggestion.name;
                         showDialog(
                           context: context,
