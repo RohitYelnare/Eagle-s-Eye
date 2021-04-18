@@ -339,18 +339,18 @@ class _WatchScreenState extends State<WatchScreen> {
             //   watchquerymaker();
             // });
             // stock.stockinfo.remove(stock.stockinfo[index].sym);
-            if (reloadwatchlist == false) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return SpinKitWave(color: Colors.white, size: 25.0);
-                },
-              );
-            }
+            // if (reloadwatchlist == false) {
+            //   showDialog(
+            //     context: context,
+            //     barrierDismissible: false,
+            //     builder: (BuildContext context) {
+            //       return SpinKitWave(color: Colors.white, size: 25.0);
+            //     },
+            //   );
+            // }
             await _delete(tmp);
             await watchquerymaker();
-            reloadwatchlist = true;
+            // reloadwatchlist = true;
             Navigator.pop(context);
             Navigator.pushReplacement(
                 context,

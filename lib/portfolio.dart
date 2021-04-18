@@ -187,17 +187,18 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                           color: Colors.white),
                     )),
                 Container(
-                  height: MediaQuery.of(context).size.height,
+                  height: (MediaQuery.of(context).size.height) *
+                      (portfoliolist.length / 3.4),
                   width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
-                      physics: const BouncingScrollPhysics(
+                      // shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(
                           parent: AlwaysScrollableScrollPhysics()),
                       itemCount: portfoliolist.length,
                       itemBuilder: (context, index) {
                         return Padding(
                             padding: EdgeInsets.fromLTRB(0.0, 7.0, 0.0, 7.0),
                             child: ExpansionTileCard(
-                              paddingCurve: Curves.easeIn,
                               baseColor: Color.fromRGBO(54, 54, 64, 1.0),
                               expandedColor: Color.fromRGBO(54, 54, 64, 1.0),
                               leading: (portfoliolist[index].price >=
