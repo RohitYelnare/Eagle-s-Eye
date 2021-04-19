@@ -255,13 +255,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.2"
-  launch_review:
-    dependency: "direct main"
-    description:
-      name: launch_review
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   logging:
     dependency: transitive
     description:
@@ -326,7 +319,7 @@ packages:
     source: hosted
     version: "1.8.0-nullsafety.3"
   path_provider:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: path_provider
       url: "https://pub.dartlang.org"
@@ -470,13 +463,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0-nullsafety.6"
-  states_rebuilder:
-    dependency: "direct main"
-    description:
-      name: states_rebuilder
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.2.0"
   stream_channel:
     dependency: transitive
     description:

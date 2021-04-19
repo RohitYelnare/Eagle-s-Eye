@@ -1,4 +1,4 @@
-import 'package:financigram/screens/toppage.dart';
+import '../screens/toppage.dart';
 import 'package:flutter/material.dart';
 import '../screens/watch.dart';
 import '../main.dart';
