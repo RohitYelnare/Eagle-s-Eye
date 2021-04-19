@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
-import 'global.dart' as global;
+import '../main.dart';
+import '../helper/global.dart' as global;
 import 'package:url_launcher/url_launcher.dart';
-import 'news.dart';
-import 'drawer.dart';
-import 'quote.dart';
+import '../widgets/news.dart';
+import '../widgets/drawer.dart';
+import '../widgets/quote.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'add.dart';
-import 'database_helper.dart';
+import '../helper/add.dart';
+import '../database_helper.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 var months = [
@@ -59,12 +59,10 @@ class _StockdataState extends State<Stockdata> {
             width: (MediaQuery.of(context).size.width / 100) * 80,
             child: Stack(
               children: <Widget>[
-                // background of the drawer
                 Align(
                   alignment: Alignment.topRight,
                   child: Container(
                     width: (MediaQuery.of(context).size.width / 100) * 75,
-                    // color: Colors.limeAccent[700],
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.center,
@@ -74,7 +72,6 @@ class _StockdataState extends State<Stockdata> {
                     ),
                   ),
                 ),
-
                 Positioned(
                   left: 0,
                   right: 0,
@@ -113,37 +110,11 @@ class _StockdataState extends State<Stockdata> {
                                           onChanged: (newValue) {
                                             setState(() {
                                               checkExist = newValue;
-                                              // print('Set state called');
                                             });
                                             if (checkExist) {
                                               _insert(stockquote[0]['symbol']);
-                                              // final snackBar = SnackBar(
-                                              //   content:
-                                              //       Text('Inserted value!'),
-                                              //   duration: Duration(seconds: 2),
-                                              //   action: SnackBarAction(
-                                              //       label: 'Dismiss',
-                                              //       onPressed: () {
-                                              //         Scaffold.of(context)
-                                              //             .hideCurrentSnackBar();
-                                              //       }),
-                                              // );
-                                              // Scaffold.of(context)
-                                              //     .showSnackBar(snackBar);
                                             } else {
                                               _delete(stockquote[0]['symbol']);
-                                              // final snackBar = SnackBar(
-                                              //   content: Text('Deleted value!'),
-                                              //   duration: Duration(seconds: 2),
-                                              //   action: SnackBarAction(
-                                              //       label: 'Dismiss',
-                                              //       onPressed: () {
-                                              //         Scaffold.of(context)
-                                              //             .hideCurrentSnackBar();
-                                              //       }),
-                                              // );
-                                              // Scaffold.of(context)
-                                              //     .showSnackBar(snackBar);
                                             }
                                           }),
                                       selected: true,
@@ -182,13 +153,6 @@ class _StockdataState extends State<Stockdata> {
             ),
           ),
           backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
-          // drawer: Theme(
-          //     data: Theme.of(context).copyWith(
-          //       canvasColor: Color.fromRGBO(54, 54, 64,
-          //           1.0), //This will change the drawer background to blue.
-          //       //other styles
-          //     ),
-          //     child: CallDrawer()),
           appBar: AppBar(
             leading: IconButton(
               icon: Icon(Icons.arrow_back,
@@ -224,12 +188,6 @@ class _StockdataState extends State<Stockdata> {
                     child: Text("News"),
                   ),
                 ),
-                // Tab(
-                //   child: Align(
-                //     alignment: Alignment.center,
-                //     child: Text("Add"),
-                //   ),
-                // ),
               ],
             ),
             backgroundColor: Colors.white,
@@ -238,7 +196,6 @@ class _StockdataState extends State<Stockdata> {
             children: [
               QuoteScreen(),
               NewsScreen(),
-              // AddScreen(),
             ],
           ),
         ),
@@ -275,50 +232,40 @@ class _StockdataState extends State<Stockdata> {
   }
 
   void _insert(String name) async {
-    // row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.columnName: name,
       DatabaseHelper.columnAge: 1
     };
     final id = await dbHelper.insert(row);
-    // print('inserted row id: $id, $name');
   }
 
   void _insertStock(int count, num cost) async {
-    // row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.stockName: stockquote[0]['symbol'],
       DatabaseHelper.stockCount: count,
       DatabaseHelper.stockCost: cost
     };
-    // check if stock/crypto already exists in portfolio
     final result = await dbHelper.queryFindStock(stockquote[0]['symbol']);
-    // print('data in table2 : $result');
     if (result.length == 0) {
       final id = await dbHelper.insertStock(row);
-      // print('inserted row in table 2 id: $id');
     } else {
       final count = await dbHelper.updateStock(row);
-      // print('updated $count rows');
     }
   }
 
   void _delete(String name) async {
     final rowsDeleted = await dbHelper.delete(name);
-    // print('deleted $rowsDeleted row(s): row $name');
   }
 
   void _deleteStock() async {
     final id = await dbHelper.queryRowCountStock();
     final rowsDeleted = await dbHelper.deleteStockId(id);
-    // print('deleted $rowsDeleted row(s): row $id');
   }
 
   Future _asyncInputDialog(BuildContext context) async {
     return showDialog(
       context: context,
-      barrierDismissible:
-          false, // dialog is dismissible with a tap on the barrier
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return Form(
             key: _formKey,
@@ -342,7 +289,6 @@ class _StockdataState extends State<Stockdata> {
                   )),
                   Container(
                     child: Text('\t\t'),
-                    // padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
                   ),
                   new Expanded(
                       child: new TextFormField(

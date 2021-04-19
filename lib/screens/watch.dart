@@ -1,22 +1,15 @@
-import 'package:financigram/search.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
-import 'add.dart';
+import '../helper/add.dart';
 import 'package:flutter/material.dart';
 import 'cryptodata.dart';
-import 'main.dart';
-import 'drawer.dart';
-import 'global.dart' as global;
-import 'package:url_launcher/url_launcher.dart';
+import '../main.dart';
 import 'stockdata.dart';
-import 'news.dart';
-import 'quote.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:horizontal_data_table/horizontal_data_table.dart';
-import 'option.dart';
-import 'database_helper.dart';
-import 'package:states_rebuilder/states_rebuilder.dart';
+import '../helper/option.dart';
+import '../database_helper.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 List<String> watchlist = [];
@@ -128,7 +121,10 @@ class _WatchScreenState extends State<WatchScreen> {
                           child: Text(
                             'No stocks added to keep an eye on',
                             style: GoogleFonts.lato(
-                                color: Colors.white, fontSize: 18.0),
+                              color: Colors.white,
+                              fontSize: 18.0,
+                            ),
+                            textAlign: TextAlign.center,
                           ))
                     ]),
                   ))
@@ -140,7 +136,7 @@ class _WatchScreenState extends State<WatchScreen> {
     return Container(
       child: HorizontalDataTable(
         leftHandSideColumnWidth: (MediaQuery.of(context).size.width) * 0.3,
-        rightHandSideColumnWidth: (MediaQuery.of(context).size.width) * 1.28,
+        rightHandSideColumnWidth: (MediaQuery.of(context).size.width) * 1.51,
         isFixedHeader: true,
         headerWidgets: _getTitleWidget(),
         leftSideItemBuilder: _generateFirstColumnRow,
@@ -169,10 +165,10 @@ class _WatchScreenState extends State<WatchScreen> {
   List<Widget> _getTitleWidget() {
     return [
       FlatButton(
-        padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: _getTitleItemWidget(
             'Name' + (sortType == sortName ? (isAscending1 ? '↓' : '↑') : ''),
-            (MediaQuery.of(context).size.width) * 0.3),
+            (MediaQuery.of(context).size.width) * 0.20),
         onPressed: () {
           sortType = sortName;
           isAscending1 = !isAscending1;
@@ -181,7 +177,7 @@ class _WatchScreenState extends State<WatchScreen> {
         },
       ),
       FlatButton(
-        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: _getTitleItemWidget(
             'Change' +
                 (sortType == sortChange ? (isAscending2 ? '↓' : '↑') : ''),
@@ -211,7 +207,7 @@ class _WatchScreenState extends State<WatchScreen> {
         child: _getTitleItemWidget(
             'Mkt Cap' +
                 (sortType == sortChange ? (isAscending4 ? '↓' : '↑') : ''),
-            (MediaQuery.of(context).size.width) * 0.20),
+            (MediaQuery.of(context).size.width) * 0.3),
         onPressed: () {
           sortType = sortPE;
           isAscending4 = !isAscending4;
@@ -239,9 +235,9 @@ class _WatchScreenState extends State<WatchScreen> {
       child: Text(label,
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
       width: width,
-      height: (MediaQuery.of(context).size.height) * 0.09,
-      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-      alignment: Alignment.centerLeft,
+      height: (MediaQuery.of(context).size.height) * 0.13,
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      alignment: Alignment.center,
     );
   }
 
@@ -288,74 +284,82 @@ class _WatchScreenState extends State<WatchScreen> {
           }
         },
       ),
-      width: (MediaQuery.of(context).size.width) * 0.13,
-      height: 52,
-      padding: EdgeInsets.fromLTRB(11, 0, 0, 0),
-      alignment: Alignment.centerLeft,
+      width: (MediaQuery.of(context).size.width) * 0.20,
+      height: (MediaQuery.of(context).size.width) * 0.24,
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      alignment: Alignment.center,
     );
   }
 
   Widget _generateRightHandSideColumnRow(BuildContext context, int index) {
     return Row(
       children: <Widget>[
-        ColoredBox(
-            color: (stock.stockinfo[index].change > 0)
-                ? Colors.greenAccent[400]
-                : Colors.red[400],
-            child: Container(
-              child: Row(
-                children: <Widget>[
-                  Text(stock.stockinfo[index].change.toStringAsFixed(2),
-                      style: TextStyle(color: Colors.white))
-                ],
-              ),
-              width: (MediaQuery.of(context).size.width) * 0.25,
-              height: 52,
-              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-              alignment: Alignment.centerLeft,
-            )),
-        ColoredBox(
-            color: (stock.stockinfo[index].change > 0)
-                ? Colors.greenAccent[400]
-                : Colors.red[400],
-            child: Container(
-              child: Text(
-                stock.stockinfo[index].price.toStringAsFixed(2),
-                style: TextStyle(color: Colors.white),
-              ),
-              width: (MediaQuery.of(context).size.width) * 0.20,
-              height: 52,
-              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-              alignment: Alignment.centerLeft,
-            )),
-        ColoredBox(
-            color: (stock.stockinfo[index].change > 0)
-                ? Colors.greenAccent[400]
-                : Colors.red[400],
-            child: Container(
-              child: Text(
-                stock.stockinfo[index].mktcap,
-                style: TextStyle(color: Colors.white),
-              ),
-              width: (MediaQuery.of(context).size.width) * 0.25,
-              height: 52,
-              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-              alignment: Alignment.centerLeft,
-            )),
-        ColoredBox(
-            color: (stock.stockinfo[index].change > 0)
-                ? Colors.greenAccent[400]
-                : Colors.red[400],
-            child: Container(
-              child: Text(
-                stock.stockinfo[index].pe,
-                style: TextStyle(color: Colors.white),
-              ),
-              width: (MediaQuery.of(context).size.width) * 0.15,
-              height: 52,
-              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-              alignment: Alignment.centerLeft,
-            )),
+        Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: ColoredBox(
+                color: (stock.stockinfo[index].change > 0)
+                    ? Colors.greenAccent[400]
+                    : Colors.red[400],
+                child: Container(
+                  child: Row(
+                    children: <Widget>[
+                      Text(stock.stockinfo[index].change.toStringAsFixed(2),
+                          style: TextStyle(color: Colors.white))
+                    ],
+                  ),
+                  width: (MediaQuery.of(context).size.width) * 0.25,
+                  height: (MediaQuery.of(context).size.width) * 0.24,
+                  padding: EdgeInsets.fromLTRB(17, 0, 0, 0),
+                  alignment: Alignment.center,
+                ))),
+        Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: ColoredBox(
+                color: (stock.stockinfo[index].change > 0)
+                    ? Colors.greenAccent[400]
+                    : Colors.red[400],
+                child: Container(
+                  child: Text(
+                    stock.stockinfo[index].price.toStringAsFixed(2),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  width: (MediaQuery.of(context).size.width) * 0.20,
+                  height: (MediaQuery.of(context).size.width) * 0.24,
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  alignment: Alignment.center,
+                ))),
+        Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: ColoredBox(
+                color: (stock.stockinfo[index].change > 0)
+                    ? Colors.greenAccent[400]
+                    : Colors.red[400],
+                child: Container(
+                  child: Text(
+                    stock.stockinfo[index].mktcap,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  width: (MediaQuery.of(context).size.width) * 0.3,
+                  height: (MediaQuery.of(context).size.width) * 0.24,
+                  padding: EdgeInsets.fromLTRB(15, 0, 5, 0),
+                  alignment: Alignment.center,
+                ))),
+        Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: ColoredBox(
+                color: (stock.stockinfo[index].change > 0)
+                    ? Colors.greenAccent[400]
+                    : Colors.red[400],
+                child: Container(
+                  child: Text(
+                    stock.stockinfo[index].pe,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  width: (MediaQuery.of(context).size.width) * 0.20,
+                  height: (MediaQuery.of(context).size.width) * 0.24,
+                  padding: EdgeInsets.fromLTRB(15, 0, 10, 0),
+                  alignment: Alignment.center,
+                ))),
         FlatButton(
           onPressed: () {
             clipboardfunc(stock.stockinfo[index]);
@@ -366,7 +370,7 @@ class _WatchScreenState extends State<WatchScreen> {
             );
             Scaffold.of(context).showSnackBar(snackBar);
           },
-          padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
+          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
           child: Icon(
             Icons.content_copy,
             color: Colors.blue[400],
@@ -446,19 +450,15 @@ class _WatchScreenState extends State<WatchScreen> {
 }
 
 Future<void> _delete(String sym) async {
-  // Assuming that the number of rows is the id for the last row.
   final rowsDeleted = await dbHelper.delete(sym);
-  // print('deleted $rowsDeleted row(s): row $sym');
 }
 
 void _insert(String name) async {
-  // row to insert
   Map<String, dynamic> row = {
     DatabaseHelper.columnName: name,
     DatabaseHelper.columnAge: 1
   };
   final id = await dbHelper.insert(row);
-  // print('inserted row id: $id, $name');
 }
 
 Stock stock = Stock();
@@ -468,7 +468,6 @@ class Stock {
 
   void initData(int size) {
     stockinfo.clear();
-    // print(','.allMatches(watchquery).length);
     for (int i = 0; i < size; i++) {
       stockinfo.add(Stockinfo(
           watchlistquote[i]['symbol'],

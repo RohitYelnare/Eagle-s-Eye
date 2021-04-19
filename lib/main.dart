@@ -3,16 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:launch_review/launch_review.dart';
-import 'package:share/share.dart';
-import 'option.dart';
-import 'stockdata.dart';
+import 'helper/option.dart';
 import 'dart:convert';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'database_helper.dart';
-import 'watch.dart';
-import 'search.dart';
+import 'screens/search.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 List<Option> options = [];
@@ -170,7 +164,7 @@ class _HomepageState extends State<Homepage> {
                         padding: const EdgeInsets.only(
                             top: 2, left: 25, right: 25, bottom: 7),
                         child: Text(
-                            '\nKnow latest key info of Cryptocurrencies & stocks listed on NYSE, NASDAQ',
+                            'Know latest key info of Cryptocurrencies & stocks listed on NYSE, NASDAQ',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.lato(
                                 fontSize: 16, color: Colors.white)),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'main.dart';
-import 'stockdata.dart';
+import '../main.dart';
+import '../screens/stockdata.dart';
 
 class NewsScreen extends StatelessWidget {
   @override

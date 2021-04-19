@@ -1,5 +1,5 @@
-import 'main.dart';
-import 'database_helper.dart';
+import '../main.dart';
+import '../database_helper.dart';
 
 bool checkExist, showchkbox;
 

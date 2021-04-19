@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
-import 'global.dart' as global;
+import '../main.dart';
+import '../helper/global.dart' as global;
 import 'package:url_launcher/url_launcher.dart';
-import 'drawer.dart';
-import 'crypto.dart';
-import 'add.dart';
-import 'database_helper.dart';
+import '../widgets/drawer.dart';
+import '../widgets/crypto.dart';
+import '../helper/add.dart';
+import '../database_helper.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -98,7 +98,6 @@ class _CryptodataState extends State<Cryptodata> {
                                           onChanged: (newValue) {
                                             setState(() {
                                               checkExist = newValue;
-                                              // print('Set state called');
                                             });
                                             if (checkExist) {
                                               _insert(stockquote[0]['symbol']);
@@ -132,11 +131,7 @@ class _CryptodataState extends State<Cryptodata> {
                                             }
                                           }),
                                       selected: true,
-                                      onTap: () {
-                                        // setState(() {
-                                        //   txt = 'List Tile pressed';
-                                        // });
-                                      },
+                                      onTap: () {},
                                     ),
                                   ),
                                 ),
@@ -185,7 +180,6 @@ class _CryptodataState extends State<Cryptodata> {
             ),
             iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
             bottom: TabBar(
-              // indicatorColor: Color.fromRGBO(54, 54, 64, 1.0),
               labelColor: Colors.white,
               unselectedLabelColor: Color.fromRGBO(54, 54, 64, 1.0),
               indicatorSize: TabBarIndicatorSize.label,
@@ -206,9 +200,6 @@ class _CryptodataState extends State<Cryptodata> {
             backgroundColor: Colors.white,
           ),
           body: CryptoScreen(),
-          // body: TabBarView(
-          //   children: [CryptoScreen()],
-          // ),
         ),
       ),
     );
@@ -239,8 +230,7 @@ class _CryptodataState extends State<Cryptodata> {
   Future _asyncInputDialog(BuildContext context) async {
     return showDialog(
       context: context,
-      barrierDismissible:
-          false, // dialog is dismissible with a tap on the barrier
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return Form(
             key: _formKey,
@@ -306,37 +296,29 @@ class _CryptodataState extends State<Cryptodata> {
   }
 
   void _insert(String name) async {
-    // row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.columnName: name,
       DatabaseHelper.columnAge: 1
     };
     final id = await dbHelper.insert(row);
-    // print('inserted row id: $id, $name');
   }
 
   void _insertStock(int count, num cost) async {
-    // row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.stockName: stockquote[0]['symbol'],
       DatabaseHelper.stockCount: count,
       DatabaseHelper.stockCost: cost
     };
-    // check if stock/crypto already exists in portfolio
     final result = await dbHelper.queryFindStock(stockquote[0]['symbol']);
-    // print('data in table2 : $result');
     if (result.length == 0) {
       final id = await dbHelper.insertStock(row);
-      // print('inserted row in table 2 id: $id');
     } else {
       final count = await dbHelper.updateStock(row);
-      // print('updated $count rows');
     }
   }
 
   void _delete(String name) async {
     final rowsDeleted = await dbHelper.delete(name);
-    // print('deleted $rowsDeleted row(s): row $name');
   }
 }
 

@@ -1,144 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'main.dart';
-import 'stockdata.dart';
-import 'global.dart' as global;
+import '../main.dart';
+import '../screens/cryptodata.dart';
+import '../helper/global.dart' as global;
 import 'package:recase/recase.dart';
 
-class QuoteScreen extends StatelessWidget {
+class CryptoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(child: isQuote(context));
+    return Container(child: isCrypto(context));
   }
 }
 
-Widget industryTile(BuildContext context) {
+Widget isCrypto(BuildContext context) {
   Widget child;
-  if ((stockinfo[0]['sector'] != "")) {
-    child = ListTile(
-      leading: ConstrainedBox(
-        constraints: BoxConstraints(
-          minWidth: 30,
-          minHeight: 30,
-          maxWidth: 50,
-          maxHeight: 50,
-        ),
-        child: Icon(
-          Icons.business_outlined,
-          color: Colors.white,
-        ),
-      ),
-      contentPadding: EdgeInsets.fromLTRB(35.0, 5.0, 15.0, 0.0),
-      title: Text(
-        "${stockinfo[0]['industry']}",
-        style: GoogleFonts.lato(
-            fontWeight: FontWeight.w400, fontSize: 18.0, color: Colors.white),
-      ),
-    );
-  } else {
-    child = Container();
-  }
-  return new Container(child: child);
-}
-
-Widget employeesTile(BuildContext context) {
-  Widget child;
-  if ((stockinfo[0]['fullTimeEmployees'] != null)) {
-    child = ListTile(
-      leading: ConstrainedBox(
-        constraints: BoxConstraints(
-          minWidth: 30,
-          minHeight: 30,
-          maxWidth: 50,
-          maxHeight: 50,
-        ),
-        child: Icon(
-          Icons.people,
-          color: Colors.white,
-        ),
-      ),
-      contentPadding: EdgeInsets.fromLTRB(35.0, 5.0, 15.0, 0.0),
-      title: Text(
-        "${stockinfo[0]['fullTimeEmployees']} Employees",
-        style: GoogleFonts.lato(
-            fontWeight: FontWeight.w400, fontSize: 18.0, color: Colors.white),
-      ),
-    );
-  } else {
-    child = Container();
-  }
-  return new Container(child: child);
-}
-
-Widget placeTile(BuildContext context) {
-  Widget child;
-  if ((stockinfo[0]['city'] != null &&
-      stockinfo[0]['state'] != null &&
-      stockinfo[0]['country'] != null)) {
-    child = ListTile(
-      leading: ConstrainedBox(
-        constraints: BoxConstraints(
-          minWidth: 30,
-          minHeight: 30,
-          maxWidth: 50,
-          maxHeight: 50,
-        ),
-        child: Icon(
-          Icons.location_pin,
-          color: Colors.white,
-        ),
-      ),
-      contentPadding: EdgeInsets.fromLTRB(35.0, 5.0, 15.0, 0.0),
-      title: Text(
-        "${stockinfo[0]['city']}, ${ReCase(stockinfo[0]['state']).sentenceCase}, ${stockinfo[0]['country']}",
-        style: GoogleFonts.lato(
-            fontWeight: FontWeight.w400, fontSize: 18.0, color: Colors.white),
-      ),
-    );
-  } else {
-    child = Container();
-  }
-  return new Container(child: child);
-}
-
-Widget websiteTile(BuildContext context) {
-  Widget child;
-  if ((stockinfo[0]['website'] != "")) {
-    child = ListTile(
-      leading: ConstrainedBox(
-        constraints: BoxConstraints(
-          minWidth: 30,
-          minHeight: 30,
-          maxWidth: 50,
-          maxHeight: 50,
-        ),
-        child: Icon(
-          Icons.insert_link,
-          color: Colors.white,
-        ),
-      ),
-      contentPadding: EdgeInsets.fromLTRB(35.0, 5.0, 15.0, 0.0),
-      title: Text(
-        "Website",
-        style: GoogleFonts.lato(
-            fontWeight: FontWeight.w400, fontSize: 18.0, color: Colors.white),
-      ),
-      onTap: () => launchURL(stockinfo[0]['website']),
-    );
-  } else {
-    child = Container();
-  }
-  return new Container(child: child);
-}
-
-Widget isQuote(BuildContext context) {
-  Widget child;
-  if (stockinfo == null ||
-      stockquote == null ||
-      stocknews == null ||
-      stockinfo.length == 0 ||
-      stocknews.length == 0 ||
-      stockquote.length == 0) {
+  if (stockquote == null) {
     child = Center(
         child: Container(
             child: Column(children: [
@@ -162,26 +38,16 @@ Widget isQuote(BuildContext context) {
       children: [
         Container(
           child: ListTile(
-            leading: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: 30,
-                  minHeight: 30,
-                  maxWidth: 50,
-                  maxHeight: 50,
-                ),
-                child: (stockinfo[0]['image'] == null)
-                    ? Icon(Icons.image_not_supported)
-                    : Image.network(stockinfo[0]['image'])),
-            contentPadding: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 0.0),
+            contentPadding: EdgeInsets.fromLTRB(65.0, 10.0, 15.0, 0.0),
             title: Text(
-              "${stockinfo[0]['companyName']}",
+              "${stockquote[0]['name']}",
               style: GoogleFonts.lato(
                   fontWeight: FontWeight.w600,
                   fontSize: 20.0,
                   color: Colors.white),
             ),
             subtitle: Text(
-              "${stockinfo[0]['exchangeShortName']}: ${stockinfo[0]['symbol']}",
+              "${stockquote[0]['symbol']}",
               style: GoogleFonts.lato(
                 color: Colors.white,
               ),
@@ -196,7 +62,7 @@ Widget isQuote(BuildContext context) {
               width: 25,
               height: 25,
             ),
-            contentPadding: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 0.0),
+            contentPadding: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 20.0),
             title: Text(
               "Price: \$${stockquote[0]['price']}",
               style: GoogleFonts.lato(
@@ -220,7 +86,7 @@ Widget isQuote(BuildContext context) {
         Container(
           child: FittedBox(
               child: DataTable(
-            dataRowHeight: 70,
+            dataRowHeight: 60,
             showBottomBorder: false,
             columnSpacing: 25,
             columns: [
@@ -230,8 +96,8 @@ Widget isQuote(BuildContext context) {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.lato(
                         color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w400)),
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w800)),
               )),
               DataColumn(
                   label: Expanded(
@@ -239,8 +105,8 @@ Widget isQuote(BuildContext context) {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.lato(
                         color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w400)),
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w800)),
               )),
               DataColumn(
                   label: Expanded(
@@ -248,8 +114,8 @@ Widget isQuote(BuildContext context) {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.lato(
                         color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w400)),
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w800)),
               )),
               DataColumn(
                   label: Expanded(
@@ -257,8 +123,8 @@ Widget isQuote(BuildContext context) {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.lato(
                         color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w400)),
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w800)),
               )),
             ],
             rows: [
@@ -308,8 +174,8 @@ Widget isQuote(BuildContext context) {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.lato(
                         color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w400)),
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w800)),
               )),
               DataColumn(
                   label: Expanded(
@@ -317,8 +183,8 @@ Widget isQuote(BuildContext context) {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.lato(
                         color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w400)),
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w800)),
               )),
               DataColumn(
                   label: Expanded(
@@ -326,18 +192,9 @@ Widget isQuote(BuildContext context) {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.lato(
                         color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w400)),
-              )),
-              DataColumn(
-                  label: Expanded(
-                child: Text('P/E',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.lato(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w400)),
-              )),
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w800)),
+              ))
             ],
             rows: [
               DataRow(
@@ -367,56 +224,11 @@ Widget isQuote(BuildContext context) {
                         style: GoogleFonts.lato(
                             fontSize: 15, color: Colors.white)),
                   )),
-                  DataCell(Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                        (stockquote[0]['pe'] != null)
-                            ? stockquote[0]['pe'].toStringAsFixed(2)
-                            : "-",
-                        style: GoogleFonts.lato(
-                            fontSize: 15, color: Colors.white)),
-                  )),
                 ],
               ),
             ],
           )),
         ),
-        Container(child: industryTile(context)),
-        Container(child: employeesTile(context)),
-        Container(child: placeTile(context)),
-        Container(child: websiteTile(context)),
-        Container(
-            child: ExpansionTile(
-          leading: ConstrainedBox(
-            constraints: BoxConstraints(
-              minWidth: 30,
-              minHeight: 30,
-              maxWidth: 50,
-              maxHeight: 50,
-            ),
-            child: Icon(
-              Icons.description,
-              color: Colors.white,
-            ),
-          ),
-          title: Text(
-            "About",
-            style: GoogleFonts.lato(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w400,
-                color: Colors.white),
-          ),
-          children: <Widget>[
-            ListTile(
-              contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-              subtitle: Text(
-                "\t\t\t\t\t\t\t${stockinfo[0]['description']}",
-                textAlign: TextAlign.justify,
-                style: GoogleFonts.lato(color: Colors.white, fontSize: 15.0),
-              ),
-            )
-          ],
-        )),
       ],
     ));
   }

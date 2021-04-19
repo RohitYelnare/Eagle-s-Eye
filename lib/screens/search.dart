@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
-import 'option.dart';
-import 'drawer.dart';
+import '../main.dart';
+import '../helper/option.dart';
+import '../widgets/drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'database_helper.dart';
+import '../database_helper.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'stockdata.dart';
-import 'cryptodata.dart';
+import '../screens/cryptodata.dart';
 import 'dart:convert';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

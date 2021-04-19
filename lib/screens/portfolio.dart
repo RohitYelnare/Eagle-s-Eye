@@ -1,23 +1,21 @@
-import 'package:financigram/cryptodata.dart';
-import 'package:financigram/portfolioData.dart';
+import 'cryptodata.dart';
+import '../helper/portfolioData.dart';
 import 'package:flutter/material.dart';
-import 'add.dart';
-import 'main.dart';
+import '../helper/add.dart';
+import '../main.dart';
 import 'stockdata.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'portfolioData.dart';
-import 'drawer.dart';
 import 'package:share/share.dart';
-import 'package:launch_review/launch_review.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../widgets/drawer.dart';
+import 'package:share/share.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'database_helper.dart';
+import '../database_helper.dart';
 import 'watch.dart';
-import 'global.dart' as global;
+import '../helper/global.dart' as global;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'dart:async';
-import 'dart:math' as math;
 
 dynamic portfolioquote;
 List<stockData> portfoliolist = [];
@@ -40,6 +38,17 @@ class PortfolioScreenloading extends StatelessWidget {
           ),
           iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
           backgroundColor: Colors.white,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.share,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                Share.share(shareString());
+              },
+            )
+          ],
         ),
         body: Container(
             child:
@@ -84,6 +93,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
               ),
               iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
               backgroundColor: Colors.white,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.share,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Share.share(shareString());
+                  },
+                )
+              ],
             ),
             body: Container(
                 child: Center(
@@ -97,6 +117,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                       fontWeight: FontWeight.w600)),
               iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
               backgroundColor: Colors.white,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.share,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Share.share(shareString());
+                  },
+                )
+              ],
             ),
             body: (portfolioquery == "")
                 ? Center(
@@ -228,7 +259,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         )),
                     Container(
                       height: (MediaQuery.of(context).size.height) *
-                          (portfoliolist.length / 3.4),
+                          (portfoliolist.length / 1.95),
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
                           // shrinkWrap: true,
@@ -447,7 +478,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                   ],
                                 ));
                           }),
-                    )
+                    ),
                   ])));
   }
 
@@ -561,4 +592,33 @@ Future<int> _loadinfo(stockname) async {
     stockinfo = json.decode(result.body);
   });
   return 1;
+}
+
+String shareString() {
+  String data = " ";
+  var temp;
+  for (var i = 0; i < portfoliolist.length; i++) {
+    temp = (portfoliolist[i].price - portfoliolist[i].stockCost) *
+        portfoliolist[i].stockCount;
+    data += "\n" +
+        portfoliolist[i].fullname +
+        ": +/-: " +
+        r' $' +
+        temp.toStringAsFixed(2) +
+        "\n" +
+        "Investment: " +
+        (portfoliolist[i].stockCost * portfoliolist[i].stockCount)
+            .toStringAsFixed(1);
+  }
+  String share = 'Total portfolio value: ' +
+      r'$' +
+      totalfinal.toStringAsFixed(0) +
+      "\nTotal initial investment: " +
+      r'$' +
+      totalinitial.toStringAsFixed(0) +
+      "\nTotal gain/loss: " +
+      r'$' +
+      totaldiff.toStringAsFixed(2) +
+      data;
+  return share;
 }

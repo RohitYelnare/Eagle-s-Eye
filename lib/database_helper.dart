@@ -1,11 +1,9 @@
-import 'dart:ffi';
 import 'dart:io';
-
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'portfolioData.dart';
+import 'helper/portfolioData.dart';
 
 class DatabaseHelper {
   static final _databaseName = "MyDatabase.db";
