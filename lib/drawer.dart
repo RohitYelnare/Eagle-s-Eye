@@ -43,17 +43,12 @@ class CallDrawer extends StatelessWidget {
                   fontSize: 20.0),
             ),
             onTap: () async {
-              // if (loadwatchlist = false) {
-              //   showDialog(
-              //     context: context,
-              //     barrierDismissible: false,
-              //     builder: (BuildContext context) {
-              //       return SpinKitWave(color: Colors.white, size: 25.0);
-              //     },
-              //   );
-              // }
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => WatchScreenloading()));
               await watchquerymaker();
-              // loadwatchlist = true;
+              Navigator.pop(context);
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -73,14 +68,13 @@ class CallDrawer extends StatelessWidget {
                   fontSize: 20.0),
             ),
             onTap: () async {
-              // showDialog(
-              //   context: context,
-              //   barrierDismissible: false,
-              //   builder: (BuildContext context) {
-              //     return SpinKitWave(color: Colors.white, size: 25.0);
-              //   },
-              // );
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          PortfolioScreenloading()));
               await portfolioquerymaker();
+              Navigator.pop(context);
               Navigator.push(
                   context,
                   MaterialPageRoute(

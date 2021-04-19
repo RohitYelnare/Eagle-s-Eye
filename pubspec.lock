@@ -106,13 +106,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  custom_switch_button:
-    dependency: "direct main"
-    description:
-      name: custom_switch_button
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.0"
   expansion_tile_card:
     dependency: "direct main"
     description:
@@ -179,13 +172,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.2+1"
-  flutter_switch:
-    dependency: "direct main"
-    description:
-      name: flutter_switch
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -437,13 +423,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.5+4"
-  simple_animations:
-    dependency: transitive
-    description:
-      name: simple_animations
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.3.12"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -491,6 +470,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0-nullsafety.6"
+  states_rebuilder:
+    dependency: "direct main"
+    description:
+      name: states_rebuilder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.0"
   stream_channel:
     dependency: transitive
     description:

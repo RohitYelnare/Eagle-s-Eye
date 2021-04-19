@@ -9,7 +9,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'add.dart';
 import 'database_helper.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 
 var months = [
   "Jan",

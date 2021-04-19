@@ -171,24 +171,12 @@ class _CryptodataState extends State<Cryptodata> {
             ),
           ),
           backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
-          drawer: Theme(
-              data: Theme.of(context).copyWith(
-                canvasColor: Color.fromRGBO(54, 54, 64,
-                    1.0), //This will change the drawer background to blue.
-                //other styles
-              ),
-              child: CallDrawer()),
           appBar: AppBar(
-            actions: [
-              Builder(
-                builder: (context) => IconButton(
-                  icon: Icon(Icons.add_box),
-                  onPressed: () => Scaffold.of(context).openEndDrawer(),
-                  tooltip:
-                      MaterialLocalizations.of(context).openAppDrawerTooltip,
-                ),
-              ),
-            ],
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back,
+                  color: Color.fromRGBO(54, 54, 64, 1.0)),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
             title: Text(
               stockquote[0]['exchange'] + ": " + stockquote[0]['symbol'],
               style: GoogleFonts.lato(

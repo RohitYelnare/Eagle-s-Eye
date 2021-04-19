@@ -16,12 +16,13 @@ import 'package:http/http.dart' as http;
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'option.dart';
 import 'database_helper.dart';
+import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 List<String> watchlist = [];
 dynamic watchlistquote;
 String watchquery = "";
-bool reloadwatchlist = false;
+bool loadlist;
 Future<void> watchquerymaker() async {
   watchlist.clear();
   watchquery = "";
@@ -31,6 +32,27 @@ Future<void> watchquerymaker() async {
   });
   watchquery = watchlist.toSet().toList().join(',');
   await loadlistquote();
+}
+
+class WatchScreenloading extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
+        appBar: AppBar(
+          title: Text(
+            "Watch List",
+            style: TextStyle(
+                color: Color.fromRGBO(54, 54, 64, 1.0),
+                fontWeight: FontWeight.w600),
+          ),
+          iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
+          backgroundColor: Colors.white,
+        ),
+        body: Container(
+            child:
+                Center(child: SpinKitWave(color: Colors.white, size: 25.0))));
+  }
 }
 
 class WatchScreen extends StatefulWidget {
@@ -44,54 +66,74 @@ class WatchScreen extends StatefulWidget {
 class _WatchScreenState extends State<WatchScreen> {
   HDTRefreshController _hdtRefreshController = HDTRefreshController();
 
-  static const int sortName = 0;
-  static const int sortChange = 0;
-  static const int sortPrice = 0;
-  static const int sortPE = 0;
-  bool isAscending = true;
+  static const int sortName = 0, sortChange = 0, sortPrice = 0, sortPE = 0;
+  bool isAscending1 = true,
+      isAscending2 = true,
+      isAscending3 = true,
+      isAscending4 = true,
+      isAscending5 = true;
   int sortType = sortName;
 
   @override
   void initState() {
-    reloadwatchlist = false;
     super.initState();
+    setState(() {
+      loadlist = true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
-      appBar: AppBar(
-        title: Text(
-          "Watch List",
-          style: TextStyle(
-              color: Color.fromRGBO(54, 54, 64, 1.0),
-              fontWeight: FontWeight.w600),
-        ),
-        iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
-        backgroundColor: Colors.white,
-      ),
-      body: (watchquery == "")
-          ? Center(
-              child: Container(
-              child: Column(children: [
-                Text('\n\n'),
-                Container(
-                    child: Icon(
-                  Icons.block,
-                  color: Colors.white,
-                )),
-                Padding(
-                    padding: const EdgeInsets.fromLTRB(60, 10.0, 60, 10.0),
-                    child: Text(
-                      'No stocks added to keep an eye on',
-                      style:
-                          GoogleFonts.lato(color: Colors.white, fontSize: 18.0),
-                    ))
-              ]),
-            ))
-          : _getBodyWidget(),
-    );
+    return (!loadlist)
+        ? Scaffold(
+            backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
+            appBar: AppBar(
+              title: Text(
+                "Watch List",
+                style: TextStyle(
+                    color: Color.fromRGBO(54, 54, 64, 1.0),
+                    fontWeight: FontWeight.w600),
+              ),
+              iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
+              backgroundColor: Colors.white,
+            ),
+            body: Container(
+                child: Center(
+                    child: SpinKitWave(color: Colors.white, size: 25.0))))
+        : Scaffold(
+            backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
+            appBar: AppBar(
+              title: Text(
+                "Watch List",
+                style: TextStyle(
+                    color: Color.fromRGBO(54, 54, 64, 1.0),
+                    fontWeight: FontWeight.w600),
+              ),
+              iconTheme: IconThemeData(color: Color.fromRGBO(54, 54, 64, 1.0)),
+              backgroundColor: Colors.white,
+            ),
+            body: (watchquery == "")
+                ? Center(
+                    child: Container(
+                    child: Column(children: [
+                      Text('\n\n'),
+                      Container(
+                          child: Icon(
+                        Icons.block,
+                        color: Colors.white,
+                      )),
+                      Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(60, 10.0, 60, 10.0),
+                          child: Text(
+                            'No stocks added to keep an eye on',
+                            style: GoogleFonts.lato(
+                                color: Colors.white, fontSize: 18.0),
+                          ))
+                    ]),
+                  ))
+                : _getBodyWidget(),
+          );
   }
 
   Widget _getBodyWidget() {
@@ -114,8 +156,8 @@ class _WatchScreenState extends State<WatchScreen> {
         enablePullToRefresh: true,
         refreshIndicator: const WaterDropHeader(),
         refreshIndicatorHeight: 69,
-        onRefresh: () {
-          watchquerymaker();
+        onRefresh: () async {
+          await watchquerymaker();
           _hdtRefreshController.refreshCompleted();
         },
         htdRefreshController: _hdtRefreshController,
@@ -129,12 +171,12 @@ class _WatchScreenState extends State<WatchScreen> {
       FlatButton(
         padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
         child: _getTitleItemWidget(
-            'Name' + (sortType == sortName ? (isAscending ? '↓' : '↑') : ''),
+            'Name' + (sortType == sortName ? (isAscending1 ? '↓' : '↑') : ''),
             (MediaQuery.of(context).size.width) * 0.3),
         onPressed: () {
           sortType = sortName;
-          isAscending = !isAscending;
-          stock.sortName(isAscending);
+          isAscending1 = !isAscending1;
+          stock.sortName(isAscending1);
           setState(() {});
         },
       ),
@@ -142,52 +184,50 @@ class _WatchScreenState extends State<WatchScreen> {
         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
         child: _getTitleItemWidget(
             'Change' +
-                (sortType == sortChange ? (isAscending ? '↓' : '↑') : ''),
+                (sortType == sortChange ? (isAscending2 ? '↓' : '↑') : ''),
             (MediaQuery.of(context).size.width) * 0.25),
         onPressed: () {
           sortType = sortChange;
-          isAscending = !isAscending;
-          stock.sortChange(isAscending);
+          isAscending2 = !isAscending2;
+          stock.sortChange(isAscending2);
           setState(() {});
         },
       ),
       FlatButton(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: _getTitleItemWidget(
-            'Price' + (sortType == sortChange ? (isAscending ? '↓' : '↑') : ''),
+            'Price' +
+                (sortType == sortChange ? (isAscending3 ? '↓' : '↑') : ''),
             (MediaQuery.of(context).size.width) * 0.20),
         onPressed: () {
           sortType = sortPrice;
-          isAscending = !isAscending;
-          stock.sortPrice(isAscending);
+          isAscending3 = !isAscending3;
+          stock.sortPrice(isAscending3);
           setState(() {});
         },
       ),
-      // _getTitleItemWidget('Price', (MediaQuery.of(context).size.width) * 0.20),
-      // _getTitleItemWidget(
-      //     'Mkt Cap', (MediaQuery.of(context).size.width) * 0.20),
       FlatButton(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: _getTitleItemWidget(
             'Mkt Cap' +
-                (sortType == sortChange ? (isAscending ? '↓' : '↑') : ''),
+                (sortType == sortChange ? (isAscending4 ? '↓' : '↑') : ''),
             (MediaQuery.of(context).size.width) * 0.20),
         onPressed: () {
           sortType = sortPE;
-          isAscending = !isAscending;
-          stock.sortPE(isAscending);
+          isAscending4 = !isAscending4;
+          stock.sortPE(isAscending4);
           setState(() {});
         },
       ),
       FlatButton(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: _getTitleItemWidget(
-            'P/E' + (sortType == sortChange ? (isAscending ? '↓' : '↑') : ''),
+            'P/E' + (sortType == sortChange ? (isAscending5 ? '↓' : '↑') : ''),
             (MediaQuery.of(context).size.width) * 0.20),
         onPressed: () {
           sortType = sortPE;
-          isAscending = !isAscending;
-          stock.sortPE(isAscending);
+          isAscending5 = !isAscending5;
+          stock.sortPE(isAscending5);
           setState(() {});
         },
       ),
@@ -335,23 +375,15 @@ class _WatchScreenState extends State<WatchScreen> {
         FlatButton(
           onPressed: () async {
             String tmp = stock.stockinfo[index].sym;
-            // setState(() {
-            //   watchquerymaker();
-            // });
-            // stock.stockinfo.remove(stock.stockinfo[index].sym);
-            // if (reloadwatchlist == false) {
-            //   showDialog(
-            //     context: context,
-            //     barrierDismissible: false,
-            //     builder: (BuildContext context) {
-            //       return SpinKitWave(color: Colors.white, size: 25.0);
-            //     },
-            //   );
-            // }
+            setState(() {
+              loadlist = !loadlist;
+            });
             await _delete(tmp);
             await watchquerymaker();
-            // reloadwatchlist = true;
-            Navigator.pop(context);
+            setState(() {
+              loadlist = !loadlist;
+            });
+            Navigator.maybePop(context);
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -457,8 +489,6 @@ class Stock {
     }
   }
 
-  ///
-  /// Single sort, sort Name's id
   void sortName(bool isAscending) {
     (isAscending == false)
         ? stockinfo.sort((a, b) => a.name.compareTo(b.name))
