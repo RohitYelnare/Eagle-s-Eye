@@ -1,5 +1,5 @@
 import 'cryptodata.dart';
-import '../helper/portfolioData.dart';
+import '../helper/stockdata.dart';
 import 'package:flutter/material.dart';
 import '../helper/add.dart';
 import '../main.dart';
