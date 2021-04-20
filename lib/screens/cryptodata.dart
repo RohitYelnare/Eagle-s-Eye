@@ -8,6 +8,7 @@ import '../helper/add.dart';
 import '../database_helper.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 var months = [
   "Jan",
@@ -96,6 +97,19 @@ class _CryptodataState extends State<Cryptodata> {
                                               Color.fromRGBO(54, 54, 64, 1.0),
                                           value: checkExist,
                                           onChanged: (newValue) {
+                                            Fluttertoast.showToast(
+                                                msg: (checkExist == false)
+                                                    ? stockquote[0]['symbol'] +
+                                                        " added to watchlist"
+                                                    : stockquote[0]['symbol'] +
+                                                        " removed from watchlist",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor: Color.fromRGBO(
+                                                    54, 54, 64, 1.0),
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
                                             setState(() {
                                               checkExist = newValue;
                                             });
@@ -281,6 +295,14 @@ class _CryptodataState extends State<Cryptodata> {
                     cost = num.parse(tmpcost);
                     _insertStock(count, cost);
                     Navigator.of(context).pop();
+                    Fluttertoast.showToast(
+                        msg: stockquote[0]['symbol'] + " added to portfolio",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
+                        textColor: Colors.white,
+                        fontSize: 16.0);
                   },
                 ),
               ],
