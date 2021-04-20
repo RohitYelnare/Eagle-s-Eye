@@ -1,4 +1,8 @@
-# amoc
+# Eagle's Eye
+
+Mobile Application that will keep real-time track of your investments in the stock market and cryptocurrencies
+
+**##Features**
 
 A new Flutter project.
 
