@@ -9,6 +9,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../helper/add.dart';
 import '../database_helper.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 var months = [
   "Jan",
@@ -108,6 +109,19 @@ class _StockdataState extends State<Stockdata> {
                                               Color.fromRGBO(54, 54, 64, 1.0),
                                           value: checkExist,
                                           onChanged: (newValue) {
+                                            Fluttertoast.showToast(
+                                                msg: (checkExist == false)
+                                                    ? stockinfo[0]['symbol'] +
+                                                        " added to watchlist"
+                                                    : stockinfo[0]['symbol'] +
+                                                        " removed from watchlist",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor: Color.fromRGBO(
+                                                    54, 54, 64, 1.0),
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
                                             setState(() {
                                               checkExist = newValue;
                                             });
@@ -278,8 +292,10 @@ class _StockdataState extends State<Stockdata> {
                     keyboardType: TextInputType.number,
                     decoration: new InputDecoration(labelText: 'No. of shares'),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Enter no. of shares';
+                      if (value == null ||
+                          value.isEmpty ||
+                          double.parse(value) <= 0) {
+                        return 'Enter valid no. of shares';
                       }
                       return null;
                     },
@@ -297,7 +313,9 @@ class _StockdataState extends State<Stockdata> {
                     decoration:
                         new InputDecoration(labelText: 'Price(' + r'$' + ')'),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          double.parse(value) <= 0) {
                         return 'Enter cost';
                       }
                       return null;
@@ -317,6 +335,14 @@ class _StockdataState extends State<Stockdata> {
                       cost = num.parse(tmpcost);
                       _insertStock(count, cost);
                       Navigator.of(context).pop();
+                      Fluttertoast.showToast(
+                          msg: stockinfo[0]['symbol'] + " added to portfolio",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
+                          textColor: Colors.white,
+                          fontSize: 16.0);
                     }
                   },
                 ),

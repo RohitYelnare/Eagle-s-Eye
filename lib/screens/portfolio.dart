@@ -483,18 +483,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                   ])));
   }
 
-  void _delete(String name) async {
-    // Assuming that the number of rows is the id for the last row.
-    final rowsDeleted = await dbHelper.delete(name);
-    print('deleted $rowsDeleted row(s): row $name');
-  }
-
-  void _queryStock() async {
-    final allRows = await dbHelper.queryAllRowsStock();
-    print('query all rows stock:');
-    allRows.forEach((row) => print(row['name']));
-  }
-
   String commaadder(String input) {
     String str = rev(input);
     String tempString = "", separator = ",";
