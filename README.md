@@ -37,7 +37,7 @@ Mobile Application that will keep real-time track of your investments in the sto
 Download or clone this repo:
 
 ```
-$ git clone https://github.com/RohitYelnare/Investigeek.git
+$ git clone https://github.com/RohitYelnare/amoc.git
 ```
 
 **Step 2:**
