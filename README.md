@@ -2,7 +2,9 @@
 
 Mobile Application that will keep real-time track of your investments in the stock market and cryptocurrencies
 
-**##Features**
+## Features
+
+### Select among stocks listed on NYSE, NASDAQ and various cryptocurrencies
 
 A new Flutter project.
 
