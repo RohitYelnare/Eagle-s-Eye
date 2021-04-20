@@ -40,7 +40,6 @@ class _AutoCompleteState extends State<AutoComplete> {
     for (Option opt in options) {
       if (opt.name != null) matches.add(opt);
     }
-    // matches.addAll(options);
     matches
         .retainWhere((s) => s.name.toLowerCase().contains(query.toLowerCase()));
     return matches;
@@ -54,8 +53,6 @@ class _AutoCompleteState extends State<AutoComplete> {
         _searchText = myController.text;
       });
     });
-    // print('loadingFinal from search page');
-    // print(loadingFinal);
   }
 
   @override
@@ -90,12 +87,10 @@ class _AutoCompleteState extends State<AutoComplete> {
             data: Theme.of(context).copyWith(
               canvasColor: Color.fromRGBO(54, 54, 64,
                   1.0), //This will change the drawer background to blue.
-              //other styles
             ),
             child: CallDrawer()),
         backgroundColor: Color.fromRGBO(54, 54, 64, 1.0),
         appBar: AppBar(
-          // automaticallyImplyLeading: false,
           title: Text("Search",
               style: GoogleFonts.lato(
                   color: Color.fromRGBO(54, 54, 64, 1.0),
@@ -216,7 +211,7 @@ class _AutoCompleteState extends State<AutoComplete> {
                             return SpinKitWave(color: Colors.white, size: 25.0);
                           },
                         );
-                        await _loadquote(suggestion.symbol);
+                        await loadquote(suggestion.symbol);
                         myController.text = "";
                         Navigator.pushReplacement(
                             context,
@@ -235,9 +230,9 @@ class _AutoCompleteState extends State<AutoComplete> {
                             return SpinKitWave(color: Colors.white, size: 25.0);
                           },
                         );
-                        await _loadquote(suggestion.symbol);
-                        await _loadnews(suggestion.symbol);
-                        await _loadinfo(suggestion.symbol);
+                        await loadquote(suggestion.symbol);
+                        await loadnews(suggestion.symbol);
+                        await loadinfo(suggestion.symbol);
                         myController.text = "";
                         Navigator.pushReplacement(
                             context,
@@ -263,68 +258,34 @@ class _AutoCompleteState extends State<AutoComplete> {
                 ),
               ),
             ),
-
-            // ElevatedButton(
-            //   child: Text(
-            //     'query',
-            //     style: TextStyle(fontSize: 20),
-            //   ),
-            //   onPressed: () {
-            //     _query();
-            //   },
-            // ),
-            // ElevatedButton(
-            //   child: Text(
-            //     'queryStock',
-            //     style: TextStyle(fontSize: 20),
-            //   ),
-            //   onPressed: () {
-            //     _queryStock();
-            //   },
-            // ),
           ],
         )));
   }
+}
 
-  void _query() async {
-    final allRows = await dbHelper.queryAllRows();
-    print('query all rows:');
-    allRows.forEach((row) => print(row));
-  }
+Future<void> loadquote(stockname) async {
+  await http
+      .get("https://fmpcloud.io/api/v3/quote/" + stockname + '?' + apikey)
+      .then((result) {
+    stockquote = json.decode(result.body);
+  });
+}
 
-  void _queryStock() async {
-    final allRows = await dbHelper.queryAllRowsStock();
-    print('query all rows stock:');
-    allRows.forEach((row) => print(row));
-  }
+Future<void> loadnews(stockname) async {
+  await http
+      .get("https://fmpcloud.io/api/v3/stock_news?tickers=" +
+          stockname +
+          "&limit=5&" +
+          apikey)
+      .then((result) {
+    stocknews = json.decode(result.body);
+  });
+}
 
-  Future<int> _loadquote(stockname) async {
-    await http
-        .get("https://fmpcloud.io/api/v3/quote/" + stockname + '?' + apikey)
-        .then((result) {
-      stockquote = json.decode(result.body);
-    });
-    return 1;
-  }
-
-  Future<int> _loadnews(stockname) async {
-    await http
-        .get("https://fmpcloud.io/api/v3/stock_news?tickers=" +
-            stockname +
-            "&limit=5&" +
-            apikey)
-        .then((result) {
-      stocknews = json.decode(result.body);
-    });
-    return 1;
-  }
-
-  Future<int> _loadinfo(stockname) async {
-    await http
-        .get("https://fmpcloud.io/api/v3/profile/" + stockname + "?" + apikey)
-        .then((result) {
-      stockinfo = json.decode(result.body);
-    });
-    return 1;
-  }
+Future<void> loadinfo(stockname) async {
+  await http
+      .get("https://fmpcloud.io/api/v3/profile/" + stockname + "?" + apikey)
+      .then((result) {
+    stockinfo = json.decode(result.body);
+  });
 }

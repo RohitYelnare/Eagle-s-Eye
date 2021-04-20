@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'cryptodata.dart';
 import '../main.dart';
 import 'stockdata.dart';
+import 'search.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:horizontal_data_table/horizontal_data_table.dart';
@@ -258,9 +259,9 @@ class _WatchScreenState extends State<WatchScreen> {
                 return SpinKitWave(color: Colors.white, size: 25.0);
               },
             );
-            await _loadquote(stock.stockinfo[index].sym);
-            await _loadnews(stock.stockinfo[index].sym);
-            await _loadinfo(stock.stockinfo[index].sym);
+            await loadquote(stock.stockinfo[index].sym);
+            await loadnews(stock.stockinfo[index].sym);
+            await loadinfo(stock.stockinfo[index].sym);
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -276,7 +277,7 @@ class _WatchScreenState extends State<WatchScreen> {
                 return SpinKitWave(color: Colors.white, size: 25.0);
               },
             );
-            await _loadquote(stock.stockinfo[index].sym);
+            await loadquote(stock.stockinfo[index].sym);
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -419,33 +420,6 @@ class _WatchScreenState extends State<WatchScreen> {
         stock.pe +
         "\n";
     Clipboard.setData(new ClipboardData(text: stockclipboard));
-  }
-
-  Future<void> _loadquote(stockname) async {
-    await http
-        .get("https://fmpcloud.io/api/v3/quote/" + stockname + '?' + apikey)
-        .then((result) {
-      stockquote = json.decode(result.body);
-    });
-  }
-
-  Future<void> _loadnews(stockname) async {
-    await http
-        .get("https://fmpcloud.io/api/v3/stock_news?tickers=" +
-            stockname +
-            "&limit=5&" +
-            apikey)
-        .then((result) {
-      stocknews = json.decode(result.body);
-    });
-  }
-
-  Future<void> _loadinfo(stockname) async {
-    await http
-        .get("https://fmpcloud.io/api/v3/profile/" + stockname + "?" + apikey)
-        .then((result) {
-      stockinfo = json.decode(result.body);
-    });
   }
 }
 

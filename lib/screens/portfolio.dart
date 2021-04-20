@@ -2,8 +2,9 @@ import 'cryptodata.dart';
 import '../helper/stockdata.dart';
 import 'package:flutter/material.dart';
 import '../helper/add.dart';
-import '../main.dart';
 import 'stockdata.dart';
+import 'search.dart';
+import '../main.dart';
 import 'package:share/share.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../widgets/drawer.dart';
@@ -377,13 +378,13 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                                       size: 25.0);
                                                 },
                                               );
-                                              await _loadquote(
+                                              await loadquote(
                                                   portfoliolist[index]
                                                       .stockName);
-                                              await _loadnews(
+                                              await loadnews(
                                                   portfoliolist[index]
                                                       .stockName);
-                                              await _loadinfo(
+                                              await loadinfo(
                                                   portfoliolist[index]
                                                       .stockName);
                                               Navigator.pushReplacement(
@@ -404,7 +405,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                                       size: 25.0);
                                                 },
                                               );
-                                              await _loadquote(
+                                              await loadquote(
                                                   portfoliolist[index]
                                                       .stockName);
                                               Navigator.pushReplacement(
@@ -562,36 +563,6 @@ Future<void> portfolioquerymaker() async {
 
 Future<void> deletestockbysym(String name) async {
   await dbHelper.deleteStockSym(name);
-}
-
-Future<int> _loadquote(stockname) async {
-  await http
-      .get("https://fmpcloud.io/api/v3/quote/" + stockname + '?' + apikey)
-      .then((result) {
-    stockquote = json.decode(result.body);
-  });
-  return 1;
-}
-
-Future<int> _loadnews(stockname) async {
-  await http
-      .get("https://fmpcloud.io/api/v3/stock_news?tickers=" +
-          stockname +
-          "&limit=5&" +
-          apikey)
-      .then((result) {
-    stocknews = json.decode(result.body);
-  });
-  return 1;
-}
-
-Future<int> _loadinfo(stockname) async {
-  await http
-      .get("https://fmpcloud.io/api/v3/profile/" + stockname + "?" + apikey)
-      .then((result) {
-    stockinfo = json.decode(result.body);
-  });
-  return 1;
 }
 
 String shareString() {

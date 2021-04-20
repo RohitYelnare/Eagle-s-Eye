@@ -33,6 +33,7 @@ dependencies:
   horizontal_data_table: ^2.5.1
   flutter_spinkit: "^4.1.2"
   expansion_tile_card: ^1.1.0
+  fluttertoast: ^7.1.8
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
