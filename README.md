@@ -68,5 +68,5 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Authors
 
-**Rohit Yelnare** - [RohitYelnare](http://rohit.yelnare.com/)
+**Rohit Yelnare** - [RohitYelnare](http://rohit.yelnare.com/)<br>
 **Esha Srivastav** - [EshaSrivastav](https://github.com/esha123802)
