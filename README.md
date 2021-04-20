@@ -14,11 +14,31 @@ Mobile Application that will keep real-time track of your investments in the sto
 <img  align="left" src="https://user-images.githubusercontent.com/51207928/115415521-9b17b580-a214-11eb-9565-9b7793ba3423.jpeg" alt="drawing" width="350"/> <img  align="center" src="https://user-images.githubusercontent.com/51207928/115415527-9c48e280-a214-11eb-876f-4e8a9f13a119.jpeg" alt="drawing" width="350"/>
 </p>
 
-A new Flutter project.
+## How to Use 
 
-## Getting Started
+**Step 1:**
 
-This project is a starting point for a Flutter application.
+Download or clone this repo:
+
+```
+$ git clone https://github.com/RohitYelnare/Investigeek.git
+```
+
+**Step 2:**
+
+Go to project root and execute the following command in console to get the required dependencies: 
+
+```
+$ flutter pub get 
+```
+
+**Step 3:**
+
+Go to project root and execute the following command in console to run the app: 
+
+```
+$ flutter run
+```
 
 A few resources to get you started if this is your first Flutter project:
 
@@ -28,3 +48,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## Authors
+
+**Rohit Yelnare** - [RohitYelnare](http://rohit.yelnare.com/)
