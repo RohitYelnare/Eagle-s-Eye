@@ -4,11 +4,15 @@ Mobile Application that will keep real-time track of your investments in the sto
 
 ## Features
 
+### Select among stocks listed on NYSE, NASDAQ and various cryptocurrencies
 <p align="center">
-<img  align="left" src="https://user-images.githubusercontent.com/51207928/115415403-83d8c800-a214-11eb-9972-ddba84af4b34.jpeg" alt="drawing" width="400"/> <img  align="center" src="https://user-images.githubusercontent.com/51207928/115415394-820f0480-a214-11eb-8103-e7acaef96520.jpeg" alt="drawing" width="400"/>
+<img  align="left" src="https://user-images.githubusercontent.com/51207928/115415403-83d8c800-a214-11eb-9972-ddba84af4b34.jpeg" alt="drawing" width="350"/> <img  align="center" src="https://user-images.githubusercontent.com/51207928/115415394-820f0480-a214-11eb-8103-e7acaef96520.jpeg" alt="drawing" width="350"/>
 </p>
 
-### Select among stocks listed on NYSE, NASDAQ and various cryptocurrencies
+### Get to know real-time quotes and news 
+<p align="center">
+<img  align="left" src="https://user-images.githubusercontent.com/51207928/115415521-9b17b580-a214-11eb-9565-9b7793ba3423.jpeg" alt="drawing" width="350"/> <img  align="center" src="https://user-images.githubusercontent.com/51207928/115415527-9c48e280-a214-11eb-876f-4e8a9f13a119.jpeg" alt="drawing" width="350"/>
+</p>
 
 A new Flutter project.
 
